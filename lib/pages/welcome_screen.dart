@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-class Welcome extends StatefulWidget {
+class WelcomeScreen extends StatefulWidget {
+  static String id = 'welcome_screen';
   @override
-  _WelcomeState createState() => _WelcomeState();
+  _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
-class _WelcomeState extends State<Welcome> {
+class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +25,7 @@ class _WelcomeState extends State<Welcome> {
                   padding: EdgeInsets.only(top: 50),
                 ),
                 Text(
-                  'Your Personal',
+                  'Estas preparado?',
                   style: TextStyle(
                     color: Theme.of(context).accentColor,
                     fontSize: 18,
@@ -32,7 +33,7 @@ class _WelcomeState extends State<Welcome> {
                   ),
                 ),
                 Text(
-                  'Fitness Trainer'.toUpperCase(),
+                  'Lets run!'.toUpperCase(),
                   style: TextStyle(
                     fontSize: 48,
                     color: Theme.of(context).primaryColor,
@@ -44,7 +45,7 @@ class _WelcomeState extends State<Welcome> {
                   padding: EdgeInsets.only(top: 30),
                 ),
                 Text(
-                  'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard.',
+                  'Bienvenido a la ultima aplicacion para ponerte en forma. Aqui vas a poder encontrar entrenadores y gente con pasion por la actividad fisica. Empecemos cuando estes listo!',
                   style: TextStyle(
                     color: Colors.grey,
                   ),
@@ -63,7 +64,7 @@ class _WelcomeState extends State<Welcome> {
                   minWidth: double.infinity,
                   height: 50,
                   child: Text(
-                    'Get Started'.toUpperCase(),
+                    'Registrate'.toUpperCase(),
                   ),
                   color: Theme.of(context).primaryColor,
                   textColor: Colors.white,
@@ -77,7 +78,7 @@ class _WelcomeState extends State<Welcome> {
                   height: 50,
                   textColor: Theme.of(context).primaryColor,
                   child: Text(
-                    'Sign In'.toUpperCase(),
+                    'Iniciar sesion'.toUpperCase(),
                   ),
                 ),
               ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:letsrun/pages/welcome.dart';
+import 'package:letsrun/pages/welcome_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,7 +15,13 @@ class MyApp extends StatelessWidget {
         accentColor: Color(0XFF233C63),
         fontFamily: 'Poppins',
       ),
-      home: Welcome(),
+      initialRoute: WelcomeScreen.id,
+      routes: {
+        WelcomeScreen.id: (context) => WelcomeScreen(),
+        //LoginScreen.id: (context) => LoginScreen(),
+        //RegistrationScreen.id: (context) => RegistrationScreen(),
+        //ChatScreen.id: (context) => ChatScreen(),
+      },
     );
   }
 }
