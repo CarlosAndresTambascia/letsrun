@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:letsrun/pages/registration_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static String id = 'welcome_screen';
+
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
@@ -56,10 +58,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
                 MaterialButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (BuildContext context) {}),
-                    );
+                    Navigator.pushNamed(context, RegistrationScreen.id);
                   },
                   minWidth: double.infinity,
                   height: 50,
