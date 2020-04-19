@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:nice_button/NiceButton.dart';
+
+import 'coach_register_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static String id = 'registration_screen';
@@ -18,63 +21,51 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
         Expanded(
-          child: Center(
-            child: Card(
-              margin: EdgeInsets.all(15.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  ListTile(
-                    leading: Icon(Icons.fitness_center),
-                    title: Text('Soy Entrenador'),
-                    subtitle: Text('Si eres entrenador y deseas ensenar registrate aqui'),
-                  ),
-                  ButtonBar(
-                    children: <Widget>[
-                      FlatButton(
-                        child: Text(
-                          'Registrate',
-                          style: TextStyle(color: Theme.of(context).primaryColor),
-                        ),
-                        onPressed: () {
-                          /* ... */
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                width: 70,
+                height: 70,
+                padding: EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: Theme.of(context).primaryColor.withAlpha(50),
+                ),
+                child: Image.asset(
+                  'assets/img/shoe.png',
+                  width: 60,
+                ),
               ),
-            ),
-          ),
-        ),
-        Expanded(
-          child: Center(
-            child: Card(
-              margin: EdgeInsets.all(15.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  ListTile(
-                    leading: Icon(Icons.person),
-                    title: Text('Quiero entrenar'),
-                    subtitle: Text('Para usuarios que deseen ponerse en forma'),
-                  ),
-                  ButtonBar(
-                    children: <Widget>[
-                      FlatButton(
-                        child: Text(
-                          'Registrate',
-                          style: TextStyle(color: Theme.of(context).primaryColor),
-                        ),
-                        onPressed: () {
-                          /* ... */
-                        },
-                      ),
-                    ],
-                  ),
-                ],
+              Padding(
+                padding: EdgeInsets.only(top: 130),
               ),
-            ),
+              NiceButton(
+                elevation: 5,
+                mini: false,
+                icon: Icons.fitness_center,
+                onPressed: () {
+                  Navigator.pushNamed(context, CoachRegisterScreen.id);
+                },
+                text: 'Soy Profesor',
+                background: Theme.of(context).primaryColor,
+                padding: EdgeInsets.all(15.0),
+                radius: 30.0,
+              ),
+              SizedBox(
+                height: 60,
+              ),
+              NiceButton(
+                padding: EdgeInsets.all(15.0),
+                radius: 30.0,
+                elevation: 5,
+                mini: false,
+                icon: Icons.person,
+                onPressed: () {},
+                text: 'Quiero entrenar',
+                background: Theme.of(context).primaryColor,
+              ),
+            ],
           ),
         ),
       ]),
