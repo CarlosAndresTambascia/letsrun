@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "400741817545",
+    "firebase_url": "https://letsrun-ff753.firebaseio.com",
+    "project_id": "letsrun-ff753",
+    "storage_bucket": "letsrun-ff753.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:400741817545:android:bda94d65a396b77ce3c118",
+        "android_client_info": {
+          "package_name": "com.carlostambascia.letsrun"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "400741817545-lgl1p3oc8jes5p2nl1fpvjkrniqga5an.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUaLtl7ABvncqyFpEfeIlKBb71Ttxa-dU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "400741817545-lgl1p3oc8jes5p2nl1fpvjkrniqga5an.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
