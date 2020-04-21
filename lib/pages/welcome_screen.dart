@@ -20,9 +20,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           child: Center(
             child: Column(
               children: <Widget>[
-                Image.asset(
-                  'assets/img/illustration.png',
-                  width: 300,
+                Hero(
+                  child: Image.asset(
+                    'assets/img/illustration.png',
+                    width: 300,
+                  ),
+                  tag: 'logo',
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 50),

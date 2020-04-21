@@ -33,120 +33,123 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Padding(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () => showDialog(context: context, builder: (_) => _askForSource()),
-                  child: AvatarGlow(
-                    endRadius: 90,
-                    duration: Duration(seconds: 2),
-                    glowColor: Colors.white24,
-                    repeat: true,
-                    repeatPauseDuration: Duration(seconds: 2),
-                    startDelay: Duration(seconds: 1),
-                    child: Material(
-                        elevation: 8.0,
-                        shape: CircleBorder(),
-                        child: CircleAvatar(
-                          backgroundColor: Colors.grey[100],
-                          child: Icon(
-                            Icons.add_a_photo,
-                            size: 35.0,
-                            color: Colors.black54,
-                          ),
-                          radius: 50.0,
-                        )),
-                  ),
-                ),
-                TextField(
-                  style: TextStyle(color: Colors.black),
-                  keyboardType: TextInputType.text,
-                  textAlign: TextAlign.center,
-                  onChanged: (value) {
-                    _name = value;
-                  },
-                  //Todo: add validation for the fields
-                  decoration: kTextFieldDecoration.copyWith(hintText: 'Nombre Completo'),
-                ),
-                SizedBox(
-                  height: 25.0,
-                ),
-                TextField(
-                  style: TextStyle(color: Colors.black),
-                  keyboardType: TextInputType.emailAddress,
-                  textAlign: TextAlign.center,
-                  onChanged: (value) {
-                    _email = value;
-                  },
-                  decoration: kTextFieldDecoration.copyWith(hintText: 'Email'),
-                ),
-                SizedBox(
-                  height: 25.0,
-                ),
-                TextField(
-                  style: TextStyle(color: Colors.black),
-                  keyboardType: TextInputType.text,
-                  obscureText: _passwordVisible ? true : false,
-                  textAlign: TextAlign.center,
-                  onChanged: (value) {
-                    _password = value;
-                  },
-                  decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'Contrasena',
-                    suffixIcon: IconButton(
-                        icon: Icon(
-                          _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                          semanticLabel: _passwordVisible ? 'hide password' : 'show password',
-                        ),
-                        onPressed: () => setState(() => _passwordVisible ^= true)),
-                  ),
-                ),
-                SizedBox(
-                  height: 25.0,
-                ),
-                Card(
-                  elevation: 15.0,
-                  margin: EdgeInsets.all(7.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ListTile(
-                        title: Text('Adjunta tu titulo o certificado de entrenador'),
-                      ),
-                      ButtonBar(
-                        children: <Widget>[
-                          FlatButton(
-                            child: Text(
-                              'Adjuntar',
-                              style: TextStyle(color: Theme.of(context).primaryColor),
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            child: Padding(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () => showDialog(context: context, builder: (_) => _askForSource()),
+                    child: AvatarGlow(
+                      endRadius: 90,
+                      duration: Duration(seconds: 2),
+                      glowColor: Colors.white24,
+                      repeat: true,
+                      repeatPauseDuration: Duration(seconds: 2),
+                      startDelay: Duration(seconds: 1),
+                      child: Material(
+                          elevation: 8.0,
+                          shape: CircleBorder(),
+                          child: CircleAvatar(
+                            backgroundColor: Colors.grey[100],
+                            child: Icon(
+                              Icons.add_a_photo,
+                              size: 35.0,
+                              color: Colors.black54,
                             ),
-                            onPressed: () {
-                              /* ... */
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
+                            radius: 50.0,
+                          )),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 25.0,
-                ),
-                NiceButton(
-                  padding: EdgeInsets.all(15.0),
-                  radius: 30.0,
-                  elevation: 5,
-                  mini: false,
-                  icon: Icons.person,
-                  onPressed: () {},
-                  text: 'Registrame',
-                  background: Theme.of(context).primaryColor,
-                ),
-              ],
+                  TextField(
+                    style: TextStyle(color: Colors.black),
+                    keyboardType: TextInputType.text,
+                    textAlign: TextAlign.center,
+                    onChanged: (value) {
+                      _name = value;
+                    },
+                    //Todo: add validation for the fields
+                    decoration: kTextFieldDecoration.copyWith(hintText: 'Nombre Completo'),
+                  ),
+                  SizedBox(
+                    height: 25.0,
+                  ),
+                  TextField(
+                    style: TextStyle(color: Colors.black),
+                    keyboardType: TextInputType.emailAddress,
+                    textAlign: TextAlign.center,
+                    onChanged: (value) {
+                      _email = value;
+                    },
+                    decoration: kTextFieldDecoration.copyWith(hintText: 'Email'),
+                  ),
+                  SizedBox(
+                    height: 25.0,
+                  ),
+                  TextField(
+                    style: TextStyle(color: Colors.black),
+                    keyboardType: TextInputType.text,
+                    obscureText: _passwordVisible ? true : false,
+                    textAlign: TextAlign.center,
+                    onChanged: (value) {
+                      _password = value;
+                    },
+                    decoration: kTextFieldDecoration.copyWith(
+                      hintText: 'Contrasena',
+                      suffixIcon: IconButton(
+                          icon: Icon(
+                            _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                            semanticLabel: _passwordVisible ? 'hide password' : 'show password',
+                          ),
+                          onPressed: () => setState(() => _passwordVisible ^= true)),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 25.0,
+                  ),
+                  Card(
+                    elevation: 15.0,
+                    margin: EdgeInsets.all(7.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          title: Text('Adjunta tu titulo o certificado de entrenador'),
+                        ),
+                        ButtonBar(
+                          children: <Widget>[
+                            FlatButton(
+                              child: Text(
+                                'Adjuntar',
+                                style: TextStyle(color: Theme.of(context).primaryColor),
+                              ),
+                              onPressed: () {
+                                /* ... */
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 25.0,
+                  ),
+                  NiceButton(
+                    padding: EdgeInsets.all(15.0),
+                    radius: 30.0,
+                    elevation: 5,
+                    mini: false,
+                    icon: Icons.person,
+                    onPressed: () {},
+                    text: 'Registrame',
+                    background: Theme.of(context).primaryColor,
+                  ),
+                ],
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
             ),
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
           ),
         ),
       ),
