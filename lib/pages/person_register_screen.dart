@@ -33,8 +33,7 @@ class _PersonRegisterScreen extends State<PersonRegisterScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height,
+          child: Padding(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -119,6 +118,7 @@ class _PersonRegisterScreen extends State<PersonRegisterScreen> {
                 ),
               ],
             ),
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
           ),
         ),
       ),

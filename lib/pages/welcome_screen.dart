@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:letsrun/pages/login_screen.dart';
 import 'package:letsrun/pages/registration_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -72,7 +73,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   padding: EdgeInsets.only(top: 10),
                 ),
                 MaterialButton(
-                  onPressed: () {},
+                  onPressed: () => Navigator.pushNamed(context, LoginScreen.id),
                   minWidth: double.infinity,
                   height: 50,
                   textColor: Theme.of(context).primaryColor,

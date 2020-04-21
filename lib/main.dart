@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:letsrun/pages/coach_register_screen.dart';
+import 'package:letsrun/pages/login_screen.dart';
 import 'package:letsrun/pages/person_register_screen.dart';
 import 'package:letsrun/pages/registration_screen.dart';
 import 'package:letsrun/pages/welcome_screen.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
       initialRoute: WelcomeScreen.id,
       routes: {
         WelcomeScreen.id: (context) => WelcomeScreen(),
-        //LoginScreen.id: (context) => LoginScreen(),
+        LoginScreen.id: (context) => LoginScreen(),
         RegistrationScreen.id: (context) => RegistrationScreen(),
         CoachRegisterScreen.id: (context) => CoachRegisterScreen(),
         PersonRegisterScreen.id: (context) => PersonRegisterScreen(),

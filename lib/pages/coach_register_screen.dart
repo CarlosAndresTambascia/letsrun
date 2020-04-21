@@ -33,8 +33,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height,
+          child: Padding(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -109,7 +108,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
                 ),
                 Card(
                   elevation: 15.0,
-                  margin: EdgeInsets.all(15.0),
+                  margin: EdgeInsets.all(7.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -147,6 +146,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
                 ),
               ],
             ),
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
           ),
         ),
       ),
