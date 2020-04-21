@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:letsrun/pages/person_register_screen.dart';
 import 'package:nice_button/NiceButton.dart';
 
 import 'coach_register_screen.dart';
@@ -25,8 +26,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                width: 70,
-                height: 70,
+                width: 100.0,
+                height: 100.0,
                 padding: EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
@@ -34,7 +35,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
                 child: Image.asset(
                   'assets/img/shoe.png',
-                  width: 60,
+                  width: 60.0,
                 ),
               ),
               Padding(
@@ -44,9 +45,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 elevation: 5,
                 mini: false,
                 icon: Icons.fitness_center,
-                onPressed: () {
-                  Navigator.pushNamed(context, CoachRegisterScreen.id);
-                },
+                onPressed: () => Navigator.pushNamed(context, CoachRegisterScreen.id),
                 text: 'Soy Profesor',
                 background: Theme.of(context).primaryColor,
                 padding: EdgeInsets.all(15.0),
@@ -61,7 +60,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 elevation: 5,
                 mini: false,
                 icon: Icons.person,
-                onPressed: () {},
+                onPressed: () => Navigator.pushNamed(context, PersonRegisterScreen.id),
                 text: 'Quiero entrenar',
                 background: Theme.of(context).primaryColor,
               ),

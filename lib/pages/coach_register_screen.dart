@@ -15,12 +15,12 @@ class CoachRegisterScreen extends StatefulWidget {
 }
 
 class _CoachRegisterScreen extends State<CoachRegisterScreen> {
-  String email;
-  String password;
-  String name;
-  String surname;
-  File profilePicture;
-  bool _passwordVisible = false;
+  String _email;
+  String _password;
+  String _name;
+  String _surname;
+  File _profilePicture;
+  bool _passwordVisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 GestureDetector(
-                  onTap: () => showDialog(context: context, builder: (_) => askForSource()),
+                  onTap: () => showDialog(context: context, builder: (_) => _askForSource()),
                   child: AvatarGlow(
                     endRadius: 90,
                     duration: Duration(seconds: 2),
@@ -52,7 +52,11 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
                         shape: CircleBorder(),
                         child: CircleAvatar(
                           backgroundColor: Colors.grey[100],
-                          child: Image.asset('assets/img/cam2.png'),
+                          child: Icon(
+                            Icons.add_a_photo,
+                            size: 35.0,
+                            color: Colors.black54,
+                          ),
                           radius: 50.0,
                         )),
                   ),
@@ -62,7 +66,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
                   keyboardType: TextInputType.text,
                   textAlign: TextAlign.center,
                   onChanged: (value) {
-                    name = value;
+                    _name = value;
                   },
                   //Todo: add validation for the fields
                   decoration: kTextFieldDecoration.copyWith(hintText: 'Nombre Completo'),
@@ -75,7 +79,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
                   keyboardType: TextInputType.emailAddress,
                   textAlign: TextAlign.center,
                   onChanged: (value) {
-                    email = value;
+                    _email = value;
                   },
                   decoration: kTextFieldDecoration.copyWith(hintText: 'Email'),
                 ),
@@ -88,7 +92,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
                   obscureText: _passwordVisible ? true : false,
                   textAlign: TextAlign.center,
                   onChanged: (value) {
-                    password = value;
+                    _password = value;
                   },
                   decoration: kTextFieldDecoration.copyWith(
                     hintText: 'Contrasena',
@@ -104,13 +108,13 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
                   height: 25.0,
                 ),
                 Card(
+                  elevation: 15.0,
+                  margin: EdgeInsets.all(15.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       ListTile(
-                        leading: Icon(Icons.camera_alt),
-                        title: Text('Adjunta tu certificado'),
-                        subtitle: Text('Para comprobar que eres un entrenador por favor adjunta tu certificacion.'),
+                        title: Text('Adjunta tu titulo o certificado de entrenador'),
                       ),
                       ButtonBar(
                         children: <Widget>[
@@ -149,7 +153,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
     );
   }
 
-  AlertDialog askForSource() {
+  AlertDialog _askForSource() {
     return AlertDialog(
       title: Text('De donde quieres tomar la fotografia?'),
       actions: <Widget>[
@@ -174,6 +178,6 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
 
   Future<void> _pickImage(ImageSource source) async {
     File selected = await ImagePicker.pickImage(source: source);
-    setState(() => profilePicture = selected);
+    setState(() => _profilePicture = selected);
   }
 }
