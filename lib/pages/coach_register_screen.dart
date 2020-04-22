@@ -124,9 +124,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
                                 'Adjuntar',
                                 style: TextStyle(color: Theme.of(context).primaryColor),
                               ),
-                              onPressed: () {
-                                /* ... */
-                              },
+                              onPressed: () => showDialog(context: context, builder: (_) => _askForSource()),
                             ),
                           ],
                         ),

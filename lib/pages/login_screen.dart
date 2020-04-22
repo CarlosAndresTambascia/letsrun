@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:letsrun/pages/home_screen.dart';
 import 'package:letsrun/plugins/constants.dart';
 import 'package:nice_button/NiceButton.dart';
 
@@ -79,7 +80,7 @@ class _LoginScreen extends State<LoginScreen> {
                   radius: 30.0,
                   elevation: 5,
                   mini: false,
-                  onPressed: () {},
+                  onPressed: () => Navigator.pushNamed(context, HomeScreen.id),
                   text: 'Iniciar sesion',
                   background: Theme.of(context).primaryColor,
                 ),
