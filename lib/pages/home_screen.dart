@@ -1,6 +1,9 @@
 import 'package:animated_card/animated_card.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:letsrun/pages/settings_screen.dart';
+
+import 'news_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   static String id = 'home_screen';
@@ -10,7 +13,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Widget _currentView = new MenuOption();
+  Widget _currentView = new NewPost();
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _getCorrespondingPage(int index) {
     switch (index) {
       case 0:
-        return MenuOption();
+        return NewPost();
         break;
       case 1:
         print('this should be an add thing');
@@ -47,51 +50,15 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       case 2:
         print('this should be notif');
-        return MenuOption();
+        return NewPost();
         break;
       case 3:
         print('this should be settings');
-        return MenuOption();
+        return Settings();
         break;
       default:
-        return MenuOption();
+        return NewPost();
     }
-  }
-}
-
-class MenuOption extends StatelessWidget {
-  final lista = List.generate(50, (index) => index);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: lista.length,
-      itemBuilder: (context, index) {
-        return AnimatedCard(
-          direction: AnimatedCardDirection.left,
-          //Initial animation direction
-          initDelay: Duration(milliseconds: 0),
-          //Delay to initial animation
-          duration: Duration(seconds: 1),
-          //Initial animation duration
-          curve: Curves.bounceOut,
-          //Animation curve
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Card(
-              color: Colors.black45,
-              elevation: 5,
-              child: ListTile(
-                title: Container(
-                  height: 150,
-                  child: Center(child: Text("$index")),
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
   }
 }
 
