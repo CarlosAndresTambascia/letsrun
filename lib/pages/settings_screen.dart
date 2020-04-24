@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -42,6 +43,26 @@ class _SettingsState extends State<Settings> {
                           ),
                           radius: 50.0,
                         )),
+                  ),
+                ),
+                Text(
+                  'Carlos Tambascia',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontFamily: 'Lobster', fontSize: 28.0, color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+                GestureDetector(
+                  child: Card(
+                    elevation: 15.0,
+                    margin: EdgeInsets.all(20.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          title: Text('Editar Perfil', textAlign: TextAlign.center),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

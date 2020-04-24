@@ -18,6 +18,7 @@ dependencies:
   image_picker: ^0.6.5+2
   curved_navigation_bar: ^0.3.2
   animated_card: ^1.0.0+8
+  like_button: ^0.2.0
 
 dev_dependencies:
   flutter_test:
@@ -43,4 +44,8 @@ flutter:
       fonts:
         - asset: assets/fonts/poppins_regular.ttf
         - asset: assets/fonts/poppins_bold.ttf
+          weight: 700
+    - family: Lobster
+      fonts:
+        - asset: assets/fonts/lobster-regular.ttf
           weight: 700

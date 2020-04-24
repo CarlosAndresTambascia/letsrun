@@ -1,6 +1,7 @@
 import 'package:animated_card/animated_card.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:letsrun/pages/notifications_screen.dart';
 import 'package:letsrun/pages/settings_screen.dart';
 
 import 'news_screen.dart';
@@ -45,15 +46,12 @@ class _HomeScreenState extends State<HomeScreen> {
         return NewPost();
         break;
       case 1:
-        print('this should be an add thing');
         return MenuOption1();
         break;
       case 2:
-        print('this should be notif');
-        return NewPost();
+        return NotificationsScreen();
         break;
       case 3:
-        print('this should be settings');
         return Settings();
         break;
       default:
