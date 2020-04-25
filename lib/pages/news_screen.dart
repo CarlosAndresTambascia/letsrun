@@ -4,10 +4,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
 
-class NewPost extends StatelessWidget {
+class News extends StatefulWidget {
+  @override
+  _NewsState createState() => _NewsState();
+}
+
+class _NewsState extends State<News> {
   final _lista = List.generate(50, (index) => index);
-  final double circleRadius = 75.0;
-  final double circleBorderWidth = 5.0;
+  final double _circleRadius = 75.0;
+  final double _circleBorderWidth = 5.0;
 
   @override
   Widget build(BuildContext context) {
@@ -31,28 +36,25 @@ class NewPost extends StatelessWidget {
                   children: <Widget>[
                     Stack(alignment: Alignment.topCenter, children: <Widget>[
                       Padding(
-                        padding: EdgeInsets.only(top: circleRadius / 2.0),
+                        padding: EdgeInsets.only(top: _circleRadius / 2.0),
                         child: Material(
                           child: Padding(
                             child: Text('ssssss'),
                             padding: EdgeInsets.symmetric(vertical: 75.0, horizontal: 150.0),
                           ),
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(25.0),
-                            topLeft: Radius.circular(25.0),
-                            bottomLeft: Radius.circular(25.0),
-                            bottomRight: Radius.circular(25.0),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(25.0),
                           ),
                           elevation: 5.0,
                           color: Colors.white,
                         ),
                       ),
                       Container(
-                        width: circleRadius,
-                        height: circleRadius,
+                        width: _circleRadius,
+                        height: _circleRadius,
                         decoration: ShapeDecoration(shape: CircleBorder(), color: Colors.white),
                         child: Padding(
-                          padding: EdgeInsets.all(circleBorderWidth),
+                          padding: EdgeInsets.all(_circleBorderWidth),
                           child: DecoratedBox(
                             decoration: ShapeDecoration(
                               shape: CircleBorder(),
@@ -67,22 +69,58 @@ class NewPost extends StatelessWidget {
                         ),
                       )
                     ]),
+                    SizedBox(
+                      height: 8.0,
+                    ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Column(
                           children: <Widget>[
-                            LikeButton(
-                              likeBuilder: (bool isLiked) {
-                                return Icon(
-                                  Icons.fitness_center,
-                                  color: isLiked ? Colors.deepPurpleAccent : Colors.grey,
-                                );
-                              },
+                            Material(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(25.0),
+                              ),
+                              elevation: 5.0,
+                              color: Colors.white,
+                              child: Padding(
+                                child: LikeButton(
+                                  likeBuilder: (bool isLiked) {
+                                    return Icon(
+                                      Icons.directions_run,
+                                      color: isLiked ? Colors.deepPurpleAccent : Colors.grey,
+                                    );
+                                  },
+                                ),
+                                padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 3.0),
+                              ),
                             )
                           ],
                         ),
+                        SizedBox(
+                          width: 5.0,
+                        ),
                         Column(
-                          children: <Widget>[LikeButton()],
+                          children: <Widget>[
+                            Material(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(25.0),
+                              ),
+                              elevation: 5.0,
+                              color: Colors.white,
+                              child: Padding(
+                                child: LikeButton(
+                                  likeBuilder: (bool isLiked) {
+                                    return Icon(
+                                      Icons.location_on,
+                                      color: isLiked ? Colors.deepPurpleAccent : Colors.grey,
+                                    );
+                                  },
+                                ),
+                                padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 3.0),
+                              ),
+                            )
+                          ],
                         ),
                       ],
                     )
