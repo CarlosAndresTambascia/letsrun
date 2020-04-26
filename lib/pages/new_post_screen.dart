@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:like_button/like_button.dart';
+import 'package:letsrun/plugins/constants.dart';
 
 class NewPost extends StatefulWidget {
   @override
@@ -8,29 +8,71 @@ class NewPost extends StatefulWidget {
 }
 
 class _NewPostState extends State<NewPost> {
-  final double _circleRadius = 75.0;
+  final double _circleRadius = 100.0;
   final double _circleBorderWidth = 5.0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: Card(
-          color: Colors.white70,
-          elevation: 5,
+      backgroundColor: Theme.of(context).primaryColor,
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          padding: EdgeInsets.symmetric(horizontal: 10),
           child: Container(
             padding: EdgeInsets.all(8.0),
             height: 280.0,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Stack(alignment: Alignment.topCenter, children: <Widget>[
                   Padding(
                     padding: EdgeInsets.only(top: _circleRadius / 2.0),
                     child: Material(
-                      child: Padding(
-                        child: Text('ssssss'),
-                        padding: EdgeInsets.symmetric(vertical: 75.0, horizontal: 150.0),
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 50.0, horizontal: 20.0),
+                            child: Container(
+                              child: TextField(
+                                style: TextStyle(color: Colors.black),
+                                textAlign: TextAlign.center,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: 9,
+                                decoration: kDescriptionDecoration,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 3.0, left: 50.0, right: 50.0),
+                            child: Material(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(25.0),
+                              ),
+                              elevation: 5.0,
+                              color: Colors.white,
+                              child: GestureDetector(
+                                onTap: () => print('donde fue?'),
+                                child: Padding(
+                                  child: Row(
+                                    children: <Widget>[
+                                      Text('Indicanos la ruta'),
+                                      Icon(
+                                        Icons.map,
+                                        color: Colors.grey,
+                                      ),
+                                    ],
+                                  ),
+                                  padding: EdgeInsets.symmetric(horizontal: 55.0, vertical: 5.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 300.0),
+                          ),
+                        ],
                       ),
                       borderRadius: BorderRadius.all(
                         Radius.circular(25.0),
@@ -67,49 +109,17 @@ class _NewPostState extends State<NewPost> {
                   children: <Widget>[
                     Column(
                       children: <Widget>[
-                        Material(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(25.0),
+                        MaterialButton(
+                          onPressed: () {},
+                          minWidth: 20,
+                          height: 50,
+                          child: Text(
+                            'Publicar'.toUpperCase(),
+                            style: TextStyle(color: Colors.black),
                           ),
-                          elevation: 5.0,
                           color: Colors.white,
-                          child: Padding(
-                            child: LikeButton(
-                              likeBuilder: (bool isLiked) {
-                                return Icon(
-                                  Icons.directions_run,
-                                  color: isLiked ? Colors.deepPurpleAccent : Colors.grey,
-                                );
-                              },
-                            ),
-                            padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 3.0),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      width: 5.0,
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Material(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(25.0),
-                          ),
-                          elevation: 5.0,
-                          color: Colors.white,
-                          child: Padding(
-                            child: LikeButton(
-                              likeBuilder: (bool isLiked) {
-                                return Icon(
-                                  Icons.location_on,
-                                  color: isLiked ? Colors.deepPurpleAccent : Colors.grey,
-                                );
-                              },
-                            ),
-                            padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 3.0),
-                          ),
-                        )
+                          textColor: Colors.white,
+                        ),
                       ],
                     ),
                   ],
