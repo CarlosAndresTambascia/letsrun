@@ -15,7 +15,9 @@ dependencies:
   avatar_glow: ^1.1.0
   firebase_core: ^0.4.4+3
   firebase_storage: ^3.1.5
-  image_picker: ^0.6.5+2
+  cloud_firestore: ^0.13.5
+  firebase_auth: ^0.16.0
+  image_picker: ^0.6.5+3
   curved_navigation_bar: ^0.3.2
   animated_card: ^1.0.0+8
   like_button: ^0.2.0

@@ -1,10 +1,13 @@
 import 'dart:io';
 
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:letsrun/models/user.dart';
 import 'package:letsrun/plugins/constants.dart';
+import 'package:letsrun/services/userManagement.dart';
 import 'package:nice_button/NiceButton.dart';
 
 class CoachRegisterScreen extends StatefulWidget {
@@ -15,12 +18,10 @@ class CoachRegisterScreen extends StatefulWidget {
 }
 
 class _CoachRegisterScreen extends State<CoachRegisterScreen> {
-  String _email;
-  String _password;
-  String _name;
-  String _surname;
-  File _profilePicture;
+  User _user = new User('', '', '', '');
   bool _passwordVisible = true;
+  File _profilePicture;
+  final _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -62,38 +63,35 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
                           )),
                     ),
                   ),
-                  TextField(
+                  TextFormField(
                     style: TextStyle(color: Colors.black),
                     keyboardType: TextInputType.text,
                     textAlign: TextAlign.center,
-                    onChanged: (value) {
-                      _name = value;
-                    },
-                    //Todo: add validation for the fields
+                    onChanged: (value) => _user.fullName = value,
+                    validator: (value) => 'Por favor completar este campo.',
                     decoration: kTextFieldDecoration.copyWith(hintText: 'Nombre Completo'),
                   ),
                   SizedBox(
                     height: 25.0,
                   ),
-                  TextField(
+                  TextFormField(
                     style: TextStyle(color: Colors.black),
                     keyboardType: TextInputType.emailAddress,
                     textAlign: TextAlign.center,
-                    onChanged: (value) {
-                      _email = value;
-                    },
+                    onChanged: (value) => _user.email = value,
+                    validator: (value) => 'Por favor completar este campo.',
                     decoration: kTextFieldDecoration.copyWith(hintText: 'Email'),
                   ),
                   SizedBox(
                     height: 25.0,
                   ),
-                  TextField(
+                  TextFormField(
                     style: TextStyle(color: Colors.black),
                     keyboardType: TextInputType.text,
                     obscureText: _passwordVisible ? true : false,
                     textAlign: TextAlign.center,
                     onChanged: (value) {
-                      _password = value;
+                      _user.password = value;
                     },
                     decoration: kTextFieldDecoration.copyWith(
                       hintText: 'Contrasena',
@@ -140,7 +138,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
                     elevation: 5,
                     mini: false,
                     icon: Icons.person,
-                    onPressed: () {},
+                    onPressed: () => _register(),
                     text: 'Registrame',
                     background: Theme.of(context).primaryColor,
                   ),
@@ -180,5 +178,23 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
   Future<void> _pickImage(ImageSource source) async {
     File selected = await ImagePicker.pickImage(source: source);
     setState(() => _profilePicture = selected);
+  }
+
+  _register() {
+    _auth
+        .createUserWithEmailAndPassword(email: _user.email, password: _user.password)
+        .then(_validateFields())
+        .then((createdUser) => UserManagement().addUser(createdUser.user, context))
+        .catchError((e) => print(e));
+  }
+
+  _validateFields() {
+    if (_profilePicture == null ||
+        _user.email == "" ||
+        _user.password == "" ||
+        _user.profilePictureUrl == "" ||
+        _user.fullName == "") {
+      throw (new Exception('Por favor complete todos los datos'));
+    }
   }
 }
