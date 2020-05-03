@@ -25,8 +25,10 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
   bool _passwordVisible = true;
   bool _loading = false;
   File _profilePicture;
+  File _certificatePicture;
   final _auth = FirebaseAuth.instance;
   final _store = FirebaseStorage.instance;
+  var _randomPicsId = Random(25).nextInt(5000).toString();
 
   @override
   void initState() {
@@ -55,7 +57,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     GestureDetector(
-                      onTap: () => showDialog(context: context, builder: (_) => _askForSource()),
+                      onTap: () => showDialog(context: context, builder: (_) => _askForSource(true)),
                       child: AvatarGlow(
                         endRadius: 90.0,
                         duration: Duration(seconds: 2),
@@ -135,7 +137,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
                                   'Adjuntar',
                                   style: TextStyle(color: Theme.of(context).primaryColor),
                                 ),
-                                onPressed: () => showDialog(context: context, builder: (_) => _askForSource()),
+                                onPressed: () => showDialog(context: context, builder: (_) => _askForSource(false)),
                               ),
                             ],
                           ),
@@ -165,19 +167,19 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
     );
   }
 
-  AlertDialog _askForSource() {
+  AlertDialog _askForSource(bool isProfile) {
     return AlertDialog(
       title: Text('De donde quieres tomar la fotografia?'),
       actions: <Widget>[
         FlatButton(
-          onPressed: () => _pickImage(ImageSource.camera),
+          onPressed: () => _pickImage(ImageSource.camera, isProfile),
           child: Text(
             'Camara',
             style: TextStyle(color: Theme.of(context).primaryColor),
           ),
         ),
         FlatButton(
-          onPressed: () => _pickImage(ImageSource.gallery),
+          onPressed: () => _pickImage(ImageSource.gallery, isProfile),
           child: Text(
             'Galeria',
             style: TextStyle(color: Theme.of(context).primaryColor),
@@ -188,23 +190,40 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
     );
   }
 
-  Future<void> _pickImage(ImageSource source) async {
+  Future<void> _pickImage(ImageSource source, bool isProfile) async {
     File selected = await ImagePicker.pickImage(source: source);
-    setState(() => _profilePicture = selected);
-    _uploadImage().whenComplete(() {
-      setState(() {});
-    });
+    if (isProfile) {
+      setState(() => _profilePicture = selected);
+      _uploadProfileImage().whenComplete(() {
+        setState(() {});
+      });
+    } else {
+      setState(() => _certificatePicture = selected);
+      _uploadCertificate().whenComplete(() {
+        setState(() {});
+      });
+    }
   }
 
-  Future _uploadImage() async {
-    var random = Random(25);
-    var storageReference = _store.ref().child('profilePics/${random.nextInt(5000).toString()}.jpg');
+  Future _uploadProfileImage() async {
+    var storageReference = _store.ref().child('profilePics/$_randomPicsId.jpg');
     setState(() {
       Navigator.pop(context);
       _loading = true;
     });
     StorageUploadTask task = storageReference.putFile(_profilePicture);
     UserManagement().uploadProfilePic(await (await task.onComplete).ref.getDownloadURL(), _user);
+    setState(() => _loading = false);
+  }
+
+  Future _uploadCertificate() async {
+    var storageReference = _store.ref().child('certificatePics/$_randomPicsId.jpg');
+    setState(() {
+      Navigator.pop(context);
+      _loading = true;
+    });
+    StorageUploadTask task = storageReference.putFile(_certificatePicture);
+    _user.certificateUrl = (await (await task.onComplete).ref.getDownloadURL());
     setState(() => _loading = false);
   }
 
@@ -222,7 +241,8 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
         _user.email == "" ||
         _user.password == "" ||
         _user.profilePictureUrl == "" ||
-        _user.fullName == "") {
+        _user.fullName == "" ||
+        _certificatePicture == "") {
       throw (new Exception('Por favor complete todos los datos'));
     }
   }

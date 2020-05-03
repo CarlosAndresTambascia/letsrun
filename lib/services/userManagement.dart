@@ -2,24 +2,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letsrun/models/user.dart';
-import 'package:letsrun/pages/coach_register_screen.dart';
+import 'package:letsrun/pages/home_screen.dart';
 
 class UserManagement {
   final _store = Firestore.instance;
   final _auth = FirebaseAuth.instance;
 
   void addUser(FirebaseUser user, BuildContext context, User appUser) {
-    _store
-        .collection('/users')
-        .add({
-          'email': user.email,
-          'uid': user.uid,
-          'fullName': appUser.fullName,
-          'profilePictureUrl': appUser.profilePictureUrl,
-          'certificateUrl': appUser.certificateUrl
-        })
-        .then((val) => Navigator.pushNamed(context, CoachRegisterScreen.id))
-        .catchError((e) => print(e));
+    _store.collection('/users').add({
+      'email': user.email,
+      'uid': user.uid,
+      'fullName': appUser.fullName,
+      'profilePictureUrl': appUser.profilePictureUrl,
+      'certificateUrl': appUser.certificateUrl
+    }).then((val) {
+      Navigator.pop(context);
+      Navigator.pushNamed(context, HomeScreen.id);
+    }).catchError((e) => print(e));
   }
 
   uploadProfilePic(String picUrl, User user) {
