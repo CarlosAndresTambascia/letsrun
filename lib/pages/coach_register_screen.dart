@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,10 +20,19 @@ class CoachRegisterScreen extends StatefulWidget {
 }
 
 class _CoachRegisterScreen extends State<CoachRegisterScreen> {
-  User _user = new User('', '', '', '');
+  User _user = new User('', '', '', '', '');
   bool _passwordVisible = true;
   File _profilePicture;
   final _auth = FirebaseAuth.instance;
+  final _store = FirebaseStorage.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    _auth.currentUser().then((user) {
+      _user.profilePictureUrl = user.photoUrl;
+    }).catchError((e) => print(e));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,11 +65,15 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
                           shape: CircleBorder(),
                           child: CircleAvatar(
                             backgroundColor: Colors.grey[100],
-                            child: Icon(
-                              Icons.add_a_photo,
-                              size: 35.0,
-                              color: Colors.black54,
-                            ),
+                            child: _user.profilePictureUrl == ""
+                                ? Icon(
+                                    Icons.add_a_photo,
+                                    size: 35.0,
+                                    color: Colors.black54,
+                                  )
+                                : Image(
+                                    image: NetworkImage(_user.profilePictureUrl),
+                                  ),
                             radius: 50.0,
                           )),
                     ),
@@ -178,13 +193,23 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
   Future<void> _pickImage(ImageSource source) async {
     File selected = await ImagePicker.pickImage(source: source);
     setState(() => _profilePicture = selected);
+    _uploadImage();
+  }
+
+  _uploadImage() async {
+    var random = Random(25);
+    var storageReference = _store.ref().child('profilePics/${random.nextInt(5000).toString()}.jpg');
+    StorageUploadTask task = storageReference.putFile(_profilePicture);
+
+    UserManagement().uploadProfilePic(await (await task.onComplete).ref.getDownloadURL(), _user);
   }
 
   _register() {
     _auth
         .createUserWithEmailAndPassword(email: _user.email, password: _user.password)
-        .then(_validateFields())
-        .then((createdUser) => UserManagement().addUser(createdUser.user, context))
+        //.then(_validateFields())
+        //.catchError((e) => print(e))
+        .then((createdUser) => UserManagement().addUser(createdUser.user, context, _user))
         .catchError((e) => print(e));
   }
 

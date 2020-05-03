@@ -1,16 +1,51 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:letsrun/models/user.dart';
 import 'package:letsrun/pages/coach_register_screen.dart';
 
 class UserManagement {
-  final _auth = Firestore.instance;
+  final _store = Firestore.instance;
+  final _auth = FirebaseAuth.instance;
 
-  void addUser(FirebaseUser user, BuildContext context) {
-    _auth
+  void addUser(FirebaseUser user, BuildContext context, User appUser) {
+    _store
         .collection('/users')
-        .add({'email': user.email, 'uid': user.uid})
+        .add({
+          'email': user.email,
+          'uid': user.uid,
+          'fullName': appUser.fullName,
+          'profilePictureUrl': appUser.profilePictureUrl,
+          'certificateUrl': appUser.certificateUrl
+        })
         .then((val) => Navigator.pushNamed(context, CoachRegisterScreen.id))
         .catchError((e) => print(e));
+  }
+
+  Future uploadProfilePic(String picUrl, User user) async {
+    var userInfo = new UserUpdateInfo();
+    userInfo.photoUrl = picUrl;
+    user.profilePictureUrl = picUrl;
+
+    /* await _auth.currentUser().then((user) {
+      _store.collection('users').where('uid', isEqualTo: user.uid).getDocuments().then((docs) => Firestore.instance
+          .document('users/${docs.documents[0].documentID}')
+          .updateData({'profilePictureUrl': picUrl})
+          .then((val) => print('the file got updated'))
+          .catchError((e) => print(e)));
+    });*/
+  }
+
+  Future updateProfilePic(String picUrl) async {
+    var userInfo = new UserUpdateInfo();
+    userInfo.photoUrl = picUrl;
+
+    /*await _auth.currentUser().then((user) {
+      _store.collection('users').where('uid', isEqualTo: user.uid).getDocuments().then((docs) => Firestore.instance
+          .document('users/${docs.documents[0].documentID}')
+          .updateData({'profilePictureUrl': picUrl})
+          .then((val) => print('the file got updated'))
+          .catchError((e) => print(e)));
+    });*/
   }
 }

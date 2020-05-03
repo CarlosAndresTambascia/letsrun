@@ -3,8 +3,15 @@ class User {
   String _password;
   String _fullName;
   String _profilePictureUrl;
+  String _certificateUrl;
 
-  User(this._email, this._password, this._fullName, this._profilePictureUrl);
+  User(this._email, this._password, this._fullName, this._profilePictureUrl, this._certificateUrl);
+
+  String get certificateUrl => _certificateUrl;
+
+  set certificateUrl(String value) {
+    _certificateUrl = value;
+  }
 
   String get email => _email;
 
