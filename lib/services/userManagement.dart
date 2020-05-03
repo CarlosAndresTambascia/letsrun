@@ -22,7 +22,7 @@ class UserManagement {
         .catchError((e) => print(e));
   }
 
-  Future uploadProfilePic(String picUrl, User user) async {
+  uploadProfilePic(String picUrl, User user) {
     var userInfo = new UserUpdateInfo();
     userInfo.photoUrl = picUrl;
     user.profilePictureUrl = picUrl;
