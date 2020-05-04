@@ -26,6 +26,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
   bool _loading = false;
   File _profilePicture;
   File _certificatePicture;
+  final _formKey = GlobalKey<FormState>();
   final _auth = FirebaseAuth.instance;
   final _store = FirebaseStorage.instance;
   var _randomPicsId = Random(25).nextInt(5000).toString();
@@ -52,112 +53,116 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
           child: SingleChildScrollView(
             child: Container(
               height: MediaQuery.of(context).size.height,
-              child: Padding(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () => showDialog(context: context, builder: (_) => _askForSource(true)),
-                      child: AvatarGlow(
-                        endRadius: 90.0,
-                        duration: Duration(seconds: 2),
-                        glowColor: Colors.white24,
-                        repeat: true,
-                        repeatPauseDuration: Duration(seconds: 2),
-                        startDelay: Duration(seconds: 1),
-                        child: Material(
-                            elevation: 8.0,
-                            shape: CircleBorder(),
-                            child: CircleAvatar(
-                              backgroundColor: Colors.grey[100],
-                              child: _user.profilePictureUrl == ""
-                                  ? Icon(
-                                      Icons.add_a_photo,
-                                      size: 35.0,
-                                      color: Colors.black54,
-                                    )
-                                  : CircleAvatar(
-                                      maxRadius: 90,
-                                      backgroundImage: NetworkImage(_user.profilePictureUrl),
-                                    ),
-                              radius: 50.0,
-                            )),
+              child: Form(
+                key: _formKey,
+                child: Padding(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () => showDialog(context: context, builder: (_) => _askForSource(true)),
+                        child: AvatarGlow(
+                          endRadius: 90.0,
+                          duration: Duration(seconds: 2),
+                          glowColor: Colors.white24,
+                          repeat: true,
+                          repeatPauseDuration: Duration(seconds: 2),
+                          startDelay: Duration(seconds: 1),
+                          child: Material(
+                              elevation: 8.0,
+                              shape: CircleBorder(),
+                              child: CircleAvatar(
+                                backgroundColor: Colors.grey[100],
+                                child: _user.profilePictureUrl == "" || _user.profilePictureUrl == null
+                                    ? Icon(
+                                        Icons.add_a_photo,
+                                        size: 35.0,
+                                        color: Colors.black54,
+                                      )
+                                    : CircleAvatar(
+                                        maxRadius: 90,
+                                        backgroundImage: NetworkImage(_user.profilePictureUrl),
+                                      ),
+                                radius: 50.0,
+                              )),
+                        ),
                       ),
-                    ),
-                    TextFormField(
-                      style: TextStyle(color: Colors.black),
-                      keyboardType: TextInputType.text,
-                      textAlign: TextAlign.center,
-                      onChanged: (value) => _user.fullName = value,
-                      validator: (value) => 'Por favor completar este campo.',
-                      decoration: kTextFieldDecoration.copyWith(hintText: 'Nombre Completo'),
-                    ),
-                    Divider(),
-                    TextFormField(
-                      style: TextStyle(color: Colors.black),
-                      keyboardType: TextInputType.emailAddress,
-                      textAlign: TextAlign.center,
-                      onChanged: (value) => _user.email = value,
-                      validator: (value) => 'Por favor completar este campo.',
-                      decoration: kTextFieldDecoration.copyWith(hintText: 'Email'),
-                    ),
-                    Divider(),
-                    TextFormField(
-                      style: TextStyle(color: Colors.black),
-                      keyboardType: TextInputType.text,
-                      obscureText: _passwordVisible ? true : false,
-                      textAlign: TextAlign.center,
-                      onChanged: (value) {
-                        _user.password = value;
-                      },
-                      decoration: kTextFieldDecoration.copyWith(
-                        hintText: 'Contrasena',
-                        suffixIcon: IconButton(
-                            icon: Icon(
-                              _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                              semanticLabel: _passwordVisible ? 'hide password' : 'show password',
-                            ),
-                            onPressed: () => setState(() => _passwordVisible ^= true)),
+                      TextFormField(
+                        style: TextStyle(color: Colors.black),
+                        keyboardType: TextInputType.text,
+                        textAlign: TextAlign.center,
+                        onChanged: (value) => _user.fullName = value,
+                        validator: _validateField,
+                        decoration: kTextFieldDecoration.copyWith(hintText: 'Nombre Completo'),
                       ),
-                    ),
-                    Divider(),
-                    Card(
-                      elevation: 15.0,
-                      margin: EdgeInsets.all(7.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          ListTile(
-                            title: Text('Adjunta tu titulo o certificado de entrenador'),
-                          ),
-                          ButtonBar(
-                            children: <Widget>[
-                              FlatButton(
-                                child: Text(
-                                  'Adjuntar',
-                                  style: TextStyle(color: Theme.of(context).primaryColor),
-                                ),
-                                onPressed: () => showDialog(context: context, builder: (_) => _askForSource(false)),
+                      Divider(),
+                      TextFormField(
+                        style: TextStyle(color: Colors.black),
+                        keyboardType: TextInputType.emailAddress,
+                        textAlign: TextAlign.center,
+                        onChanged: (value) => _user.email = value,
+                        validator: _validateField,
+                        decoration: kTextFieldDecoration.copyWith(hintText: 'Email'),
+                      ),
+                      Divider(),
+                      TextFormField(
+                        style: TextStyle(color: Colors.black),
+                        keyboardType: TextInputType.text,
+                        obscureText: _passwordVisible ? true : false,
+                        textAlign: TextAlign.center,
+                        validator: _validateField,
+                        onChanged: (value) {
+                          _user.password = value;
+                        },
+                        decoration: kTextFieldDecoration.copyWith(
+                          hintText: 'Contrasena',
+                          suffixIcon: IconButton(
+                              icon: Icon(
+                                _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                                semanticLabel: _passwordVisible ? 'hide password' : 'show password',
                               ),
-                            ],
-                          ),
-                        ],
+                              onPressed: () => setState(() => _passwordVisible ^= true)),
+                        ),
                       ),
-                    ),
-                    Divider(),
-                    NiceButton(
-                      padding: EdgeInsets.all(15.0),
-                      radius: 30.0,
-                      elevation: 5,
-                      mini: false,
-                      icon: Icons.person,
-                      onPressed: () => _register(),
-                      text: 'Registrame',
-                      background: Theme.of(context).primaryColor,
-                    ),
-                  ],
+                      Divider(),
+                      Card(
+                        elevation: 15.0,
+                        margin: EdgeInsets.all(7.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ListTile(
+                              title: Text('Adjunta tu titulo o certificado de entrenador'),
+                            ),
+                            ButtonBar(
+                              children: <Widget>[
+                                FlatButton(
+                                  child: Text(
+                                    'Adjuntar',
+                                    style: TextStyle(color: Theme.of(context).primaryColor),
+                                  ),
+                                  onPressed: () => showDialog(context: context, builder: (_) => _askForSource(false)),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Divider(),
+                      NiceButton(
+                        padding: EdgeInsets.all(15.0),
+                        radius: 30.0,
+                        elevation: 5,
+                        mini: false,
+                        icon: Icons.person,
+                        onPressed: () => _register(),
+                        text: 'Registrame',
+                        background: Theme.of(context).primaryColor,
+                      ),
+                    ],
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
               ),
             ),
           ),
@@ -165,6 +170,13 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
       ),
       inAsyncCall: _loading,
     );
+  }
+
+  String _validateField(value) {
+    if (value.isEmpty) {
+      return 'Por favor completa este campo';
+    }
+    return null;
   }
 
   AlertDialog _askForSource(bool isProfile) {
@@ -228,12 +240,14 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
   }
 
   _register() {
-    _auth
-        .createUserWithEmailAndPassword(email: _user.email, password: _user.password)
-        //.then(_validateFields())
-        //.catchError((e) => print(e))
-        .then((createdUser) => UserManagement().addUser(createdUser.user, context, _user))
-        .catchError((e) => print(e));
+    if (_formKey.currentState.validate()) {
+      _auth
+          .createUserWithEmailAndPassword(email: _user.email, password: _user.password)
+          //.then(_validateFields())
+          //.catchError((e) => print(e))
+          .then((createdUser) => UserManagement().addUser(createdUser.user, context, _user))
+          .catchError((e) => print(e));
+    }
   }
 
   _validateFields() {
