@@ -30,6 +30,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
   final _auth = FirebaseAuth.instance;
   final _store = FirebaseStorage.instance;
   var _randomPicsId = Random(25).nextInt(5000).toString();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -43,6 +44,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
   Widget build(BuildContext context) {
     return ModalProgressHUD(
       child: Scaffold(
+        key: _scaffoldKey,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           centerTitle: true,
@@ -155,7 +157,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
                         elevation: 5,
                         mini: false,
                         icon: Icons.person,
-                        onPressed: () => _register(),
+                        onPressed: () => _register(context),
                         text: 'Registrame',
                         background: Theme.of(context).primaryColor,
                       ),
@@ -239,26 +241,35 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
     setState(() => _loading = false);
   }
 
-  _register() {
+  _register(BuildContext context) {
     if (_formKey.currentState.validate()) {
       _auth
           .createUserWithEmailAndPassword(email: _user.email, password: _user.password)
-          //.then(_validateFields())
-          //.catchError((e) => print(e))
+          .catchError((e) => showExceptionError(context))
+          .then(_validateFields(context))
           .then((createdUser) => UserManagement().addUser(createdUser.user, context, _user))
-          .catchError((e) => print(e));
+          .catchError((e) => showExceptionError(context));
     }
   }
 
-  _validateFields() {
+  _validateFields(BuildContext context) {
     if (_profilePicture == null ||
         _user.email == "" ||
         _user.password == "" ||
         _user.profilePictureUrl == "" ||
         _user.fullName == "" ||
-        _certificatePicture == "") {
-      throw (new Exception('Por favor complete todos los datos'));
+        _user.certificateUrl == "" ||
+        _certificatePicture == null) {
+      return showExceptionError(context);
     }
+    return null;
+  }
+
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showExceptionError(BuildContext context) {
+    return _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text('Por favor ingrese todos los datos y adjunte ambas imagenes'),
+      duration: Duration(seconds: 3),
+    ));
   }
 }
 
