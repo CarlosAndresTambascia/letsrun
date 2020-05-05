@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:letsrun/models/user.dart';
 import 'package:letsrun/plugins/constants.dart';
@@ -29,8 +30,14 @@ class _PersonRegisterScreen extends State<PersonRegisterScreen> {
   final _auth = FirebaseAuth.instance;
   final _store = FirebaseStorage.instance;
   final _formKey = GlobalKey<FormState>();
-  var _randomPicsId = Random(25).nextInt(5000).toString();
+  final _random = new Random();
+  var _randomPicsId;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    _randomPicsId = 0 + _random.nextInt(5000 - 0);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +63,7 @@ class _PersonRegisterScreen extends State<PersonRegisterScreen> {
                       GestureDetector(
                         onTap: () => showDialog(context: context, builder: (_) => _askForSource()),
                         child: AvatarGlow(
-                          endRadius: 90,
+                          endRadius: 90.0,
                           duration: Duration(seconds: 2),
                           glowColor: Colors.white24,
                           repeat: true,
@@ -192,32 +199,50 @@ class _PersonRegisterScreen extends State<PersonRegisterScreen> {
   }
 
   _register(BuildContext context) {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState.validate() && _validateFields()) {
       _auth
           .createUserWithEmailAndPassword(email: _user.email, password: _user.password)
-          .catchError((e) => showExceptionError(context))
-          .then(_validateFields(context))
-          .then((createdUser) => UserManagement().addUser(createdUser.user, context, _user))
-          .catchError((e) => showExceptionError(context));
+          .catchError((e) => showExceptionError(context, _handleAuthError(e)))
+          .then((createdUser) async {
+        setState(() => _loading = true);
+        await (UserManagement().addUser(createdUser.user, context, _user));
+        setState(() => _loading = false);
+      }).catchError((e) => showExceptionError(context, 'Hubo un problema al registrar al usuario'));
+    } else {
+      showExceptionError(context, null);
     }
   }
 
-  _validateFields(BuildContext context) {
-    if (_profilePicture == null ||
-        _user.email == "" ||
-        _user.password == "" ||
-        _user.profilePictureUrl == "" ||
-        _user.fullName == "") {
-      return showExceptionError(context);
+  bool _validateFields() {
+    if (_user.email == "" || _user.password == "" || _user.profilePictureUrl == "" || _user.fullName == "") {
+      return false;
     }
-    return null;
+    return true;
   }
 
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showExceptionError(BuildContext context) {
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showExceptionError(BuildContext context, String errorMsg) {
+    final defaultMsg = 'Por favor ingrese todos los datos y adjunte la/s imagene/s';
     return _scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text('Por favor ingrese todos los datos y adjunte su imagen de perfil'),
+      content: Text(errorMsg == null ? defaultMsg : errorMsg),
       duration: Duration(seconds: 3),
     ));
+  }
+
+  String _handleAuthError(PlatformException e) {
+    print(e);
+    switch (e.code) {
+      case "ERROR_INVALID_EMAIL":
+        return 'Formato de email invalido';
+        break;
+      case "ERROR_WEAK_PASSWORD":
+        return 'La contrasena es demasiado debil';
+        break;
+      case "ERROR_EMAIL_ALREADY_IN_USE":
+        return 'El email ingresado ya esta registrado';
+        break;
+      default:
+        return null;
+    }
   }
 }
 
