@@ -8,9 +8,8 @@ class UserManagement {
   final _store = Firestore.instance;
   final _auth = FirebaseAuth.instance;
 
-  void addUser(FirebaseUser user, BuildContext context, User appUser) {
-    print('shit');
-    _store.collection('/users').add({
+  Future addUser(FirebaseUser user, BuildContext context, User appUser) {
+    return _store.collection('/users').add({
       'email': user.email,
       'uid': user.uid,
       'fullName': appUser.fullName,

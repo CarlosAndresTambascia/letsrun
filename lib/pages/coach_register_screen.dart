@@ -245,9 +245,9 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
       _auth
           .createUserWithEmailAndPassword(email: _user.email, password: _user.password)
           .catchError((e) => showExceptionError(context, _handleAuthError(e)))
-          .then((createdUser) {
+          .then((createdUser) async {
         setState(() => _loading = true);
-        UserManagement().addUser(createdUser.user, context, _user);
+        await (UserManagement().addUser(createdUser.user, context, _user));
         setState(() => _loading = false);
       }).catchError((e) => showExceptionError(context, 'Hubo un problema al registrar al usuario'));
     } else {
