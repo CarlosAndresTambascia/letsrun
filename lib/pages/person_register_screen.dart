@@ -26,7 +26,6 @@ class _PersonRegisterScreen extends State<PersonRegisterScreen> {
   bool _passwordVisible = true;
   bool _loading = false;
   File _profilePicture;
-  File _certificatePicture;
   final _auth = FirebaseAuth.instance;
   final _store = FirebaseStorage.instance;
   final _formKey = GlobalKey<FormState>();

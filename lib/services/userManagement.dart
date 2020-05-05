@@ -15,6 +15,7 @@ class UserManagement {
       'fullName': appUser.fullName,
       'profilePictureUrl': appUser.profilePictureUrl,
       'certificateUrl': appUser.certificateUrl,
+      'password': appUser.password,
       'isCoach': appUser.isCoach
     }).then((val) {
       Navigator.pop(context);
