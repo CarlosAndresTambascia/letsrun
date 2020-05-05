@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:letsrun/models/user.dart';
 import 'package:letsrun/plugins/constants.dart';
@@ -21,7 +22,7 @@ class CoachRegisterScreen extends StatefulWidget {
 }
 
 class _CoachRegisterScreen extends State<CoachRegisterScreen> {
-  User _user = new User('', '', '', '', '');
+  User _user = new User('', '', '', '', '', true);
   bool _passwordVisible = true;
   bool _loading = false;
   File _profilePicture;
@@ -29,15 +30,13 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final _auth = FirebaseAuth.instance;
   final _store = FirebaseStorage.instance;
-  var _randomPicsId = Random(25).nextInt(5000).toString();
+  final _random = new Random();
+  var _randomPicsId;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
-    super.initState();
-    _auth.currentUser().then((user) {
-      _user.profilePictureUrl = user.photoUrl;
-    }).catchError((e) => print(e));
+    _randomPicsId = 0 + _random.nextInt(5000 - 0);
   }
 
   @override
@@ -242,34 +241,54 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
   }
 
   _register(BuildContext context) {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState.validate() && _validateFields()) {
       _auth
           .createUserWithEmailAndPassword(email: _user.email, password: _user.password)
-          .catchError((e) => showExceptionError(context))
-          .then(_validateFields(context))
-          .then((createdUser) => UserManagement().addUser(createdUser.user, context, _user))
-          .catchError((e) => showExceptionError(context));
+          .catchError((e) => showExceptionError(context, _handleAuthError(e)))
+          .then((createdUser) {
+        setState(() => _loading = true);
+        UserManagement().addUser(createdUser.user, context, _user);
+        setState(() => _loading = false);
+      }).catchError((e) => showExceptionError(context, 'Hubo un problema al registrar al usuario'));
+    } else {
+      showExceptionError(context, null);
     }
   }
 
-  _validateFields(BuildContext context) {
-    if (_profilePicture == null ||
-        _user.email == "" ||
+  bool _validateFields() {
+    if (_user.email == "" ||
         _user.password == "" ||
         _user.profilePictureUrl == "" ||
         _user.fullName == "" ||
-        _user.certificateUrl == "" ||
-        _certificatePicture == null) {
-      return showExceptionError(context);
+        _user.certificateUrl == "") {
+      return false;
     }
-    return null;
+    return true;
   }
 
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showExceptionError(BuildContext context) {
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showExceptionError(BuildContext context, String errorMsg) {
+    final defaultMsg = 'Por favor ingrese todos los datos y adjunte ambas imagenes';
     return _scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text('Por favor ingrese todos los datos y adjunte ambas imagenes'),
+      content: Text(errorMsg == null ? defaultMsg : errorMsg),
       duration: Duration(seconds: 3),
     ));
+  }
+
+  String _handleAuthError(PlatformException e) {
+    print(e);
+    switch (e.code) {
+      case "ERROR_INVALID_EMAIL":
+        return 'Formato de email invalido';
+        break;
+      case "ERROR_WEAK_PASSWORD":
+        return 'La contrasena es demasiado debil';
+        break;
+      case "ERROR_EMAIL_ALREADY_IN_USE":
+        return 'El email ingresado ya esta registrado';
+        break;
+      default:
+        return null;
+    }
   }
 }
 

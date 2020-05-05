@@ -21,7 +21,7 @@ class PersonRegisterScreen extends StatefulWidget {
 }
 
 class _PersonRegisterScreen extends State<PersonRegisterScreen> {
-  User _user = new User('', '', '', '', '');
+  User _user = new User('', '', '', '', '', false);
   bool _passwordVisible = true;
   bool _loading = false;
   File _profilePicture;
@@ -207,9 +207,7 @@ class _PersonRegisterScreen extends State<PersonRegisterScreen> {
         _user.email == "" ||
         _user.password == "" ||
         _user.profilePictureUrl == "" ||
-        _user.fullName == "" ||
-        _user.certificateUrl == "" ||
-        _certificatePicture == null) {
+        _user.fullName == "") {
       return showExceptionError(context);
     }
     return null;

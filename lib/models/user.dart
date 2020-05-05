@@ -4,8 +4,9 @@ class User {
   String _fullName;
   String _profilePictureUrl;
   String _certificateUrl;
+  bool isCoach;
 
-  User(this._email, this._password, this._fullName, this._profilePictureUrl, this._certificateUrl);
+  User(this._email, this._password, this._fullName, this._profilePictureUrl, this._certificateUrl, this.isCoach);
 
   String get certificateUrl => _certificateUrl;
 
