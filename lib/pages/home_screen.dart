@@ -1,5 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:letsrun/models/user.dart';
 import 'package:letsrun/pages/notifications_screen.dart';
 import 'package:letsrun/pages/settings_screen.dart';
 
@@ -8,6 +9,7 @@ import 'news_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   static String id = 'home_screen';
+  static User currentAppUser;
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -21,17 +23,20 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: Theme.of(context).primaryColor,
-        items: <Widget>[
-          Icon(Icons.menu, size: 30),
-          Icon(Icons.add, size: 30),
-          Icon(Icons.notifications, size: 30),
-          Icon(Icons.settings, size: 30),
-        ],
+        items: HomeScreen.currentAppUser.isCoach
+            ? <Widget>[
+                Icon(Icons.menu, size: 30),
+                Icon(Icons.add, size: 30),
+                Icon(Icons.notifications, size: 30),
+                Icon(Icons.settings, size: 30),
+              ]
+            : <Widget>[
+                Icon(Icons.menu, size: 30),
+                Icon(Icons.notifications, size: 30),
+                Icon(Icons.settings, size: 30),
+              ],
         onTap: (index) {
-          print(index);
-          setState(() {
-            _currentView = _getCorrespondingPage(index);
-          });
+          setState(() => _currentView = _getCorrespondingPage(index));
         },
       ),
       body: Container(

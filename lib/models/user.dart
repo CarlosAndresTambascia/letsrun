@@ -10,6 +10,32 @@ class User {
 
   String get certificateUrl => _certificateUrl;
 
+  @override
+  String toString() {
+    return 'User{_email: $_email, _password: $_password, _fullName: $_fullName, _profilePictureUrl: $_profilePictureUrl, _certificateUrl: $_certificateUrl, isCoach: $isCoach}';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is User &&
+          runtimeType == other.runtimeType &&
+          _email == other._email &&
+          _password == other._password &&
+          _fullName == other._fullName &&
+          _profilePictureUrl == other._profilePictureUrl &&
+          _certificateUrl == other._certificateUrl &&
+          isCoach == other.isCoach;
+
+  @override
+  int get hashCode =>
+      _email.hashCode ^
+      _password.hashCode ^
+      _fullName.hashCode ^
+      _profilePictureUrl.hashCode ^
+      _certificateUrl.hashCode ^
+      isCoach.hashCode;
+
   set certificateUrl(String value) {
     _certificateUrl = value;
   }

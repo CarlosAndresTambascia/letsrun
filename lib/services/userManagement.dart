@@ -49,4 +49,28 @@ class UserManagement {
           .catchError((e) => print(e)));
     });*/
   }
+
+  Future<User> getAppUser(Future<FirebaseUser> currentUser) async {
+    User appUser = new User('', '', '', '', '', false);
+    DocumentSnapshot databaseUser;
+    databaseUser = await getCurrentUser(currentUser);
+
+    if (databaseUser.exists) {
+      var data = databaseUser.data;
+      appUser = new User(data['email'], data['password'], data['fullName'], data['profilePictureUrl'],
+          data['certificateUrl'], data['isCoach']);
+    }
+    return appUser;
+  }
+
+  Future<DocumentSnapshot> getCurrentUser(Future<FirebaseUser> currentUser) {
+    return currentUser.then((user) async {
+      return await _store
+          .collection('users')
+          .where('uid', isEqualTo: user.uid)
+          .getDocuments()
+          .then((docs) async => await _store.document('users/${docs.documents[0].documentID}').get())
+          .catchError((e) => print(e));
+    });
+  }
 }

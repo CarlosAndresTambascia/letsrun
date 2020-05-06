@@ -4,6 +4,7 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:letsrun/pages/home_screen.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -12,6 +13,7 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   File _profilePicture;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -36,17 +38,23 @@ class _SettingsState extends State<Settings> {
                         shape: CircleBorder(),
                         child: CircleAvatar(
                           backgroundColor: Colors.grey[100],
-                          child: Icon(
-                            Icons.add_a_photo,
-                            size: 35.0,
-                            color: Colors.black54,
-                          ),
+                          child: HomeScreen.currentAppUser.profilePictureUrl == "" ||
+                                  HomeScreen.currentAppUser.profilePictureUrl == null
+                              ? Icon(
+                                  Icons.add_a_photo,
+                                  size: 35.0,
+                                  color: Colors.black54,
+                                )
+                              : CircleAvatar(
+                                  maxRadius: 90,
+                                  backgroundImage: NetworkImage(HomeScreen.currentAppUser.profilePictureUrl),
+                                ),
                           radius: 50.0,
                         )),
                   ),
                 ),
                 Text(
-                  'Carlos Tambascia',
+                  HomeScreen.currentAppUser.fullName,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontFamily: 'Lobster', fontSize: 28.0, color: Colors.white, fontWeight: FontWeight.bold),

@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:letsrun/plugins/constants.dart';
 
+import 'home_screen.dart';
+
 class NewPost extends StatefulWidget {
   @override
   _NewPostState createState() => _NewPostState();
@@ -93,7 +95,7 @@ class _NewPostState extends State<NewPost> {
                           image: DecorationImage(
                             fit: BoxFit.cover,
                             image: NetworkImage(
-                              'https://upload.wikimedia.org/wikipedia/commons/a/a0/Bill_Gates_2018.jpg',
+                              HomeScreen.currentAppUser.profilePictureUrl,
                             ),
                           ),
                         ),
