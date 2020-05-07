@@ -1,7 +1,6 @@
 import 'package:animated_card/animated_card.dart';
 import 'package:animated_card/animated_card_direction.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:letsrun/pages/home_screen.dart';
 import 'package:letsrun/services/userManagement.dart';

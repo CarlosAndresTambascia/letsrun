@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:letsrun/models/post.dart';
 import 'package:letsrun/models/user.dart';
 import 'package:letsrun/pages/home_screen.dart';
 
@@ -20,6 +21,17 @@ class UserManagement {
     }).then((val) {
       Navigator.pop(context);
       Navigator.pushNamed(context, HomeScreen.id);
+    }).catchError((e) => print(e));
+  }
+
+  Future addPost(FirebaseUser user, BuildContext context, Post post) {
+    return _store.collection('/users').add({
+      'uid': post.uid,
+      'pid': post.pid,
+      'description': post.description,
+      'coordinates': post.coordinates,
+    }).then((val) {
+      //TODO: try to move into news screen
     }).catchError((e) => print(e));
   }
 

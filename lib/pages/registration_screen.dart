@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:letsrun/pages/person_register_screen.dart';
 import 'package:nice_button/NiceButton.dart';

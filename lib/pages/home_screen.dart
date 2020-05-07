@@ -23,18 +23,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       bottomNavigationBar: CurvedNavigationBar(
         backgroundColor: Theme.of(context).primaryColor,
-        items: HomeScreen.currentAppUser.isCoach
-            ? <Widget>[
-                Icon(Icons.menu, size: 30),
-                Icon(Icons.add, size: 30),
-                Icon(Icons.notifications, size: 30),
-                Icon(Icons.settings, size: 30),
-              ]
-            : <Widget>[
-                Icon(Icons.menu, size: 30),
-                Icon(Icons.notifications, size: 30),
-                Icon(Icons.settings, size: 30),
-              ],
+        items: <Widget>[
+          Icon(Icons.menu, size: 30),
+          Icon(Icons.add, size: 30),
+          Icon(Icons.notifications, size: 30),
+          Icon(Icons.settings, size: 30),
+        ],
         onTap: (index) {
           setState(() => _currentView = _getCorrespondingPage(index));
         },

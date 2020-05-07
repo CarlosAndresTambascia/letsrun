@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:avatar_glow/avatar_glow.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:letsrun/pages/home_screen.dart';

@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:letsrun/plugins/constants.dart';
 
 import 'home_screen.dart';
+import 'maps.dart';
 
 class NewPost extends StatefulWidget {
   @override
@@ -57,14 +57,17 @@ class _NewPostState extends State<NewPost> {
                               child: GestureDetector(
                                 onTap: () => print('donde fue?'),
                                 child: Padding(
-                                  child: Row(
-                                    children: <Widget>[
-                                      Text('Indicanos la ruta'),
-                                      Icon(
-                                        Icons.map,
-                                        color: Colors.grey,
-                                      ),
-                                    ],
+                                  child: GestureDetector(
+                                    onTap: () => Navigator.pushNamed(context, Maps.id),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Text('Indicanos la ruta'),
+                                        Icon(
+                                          Icons.map,
+                                          color: Colors.grey,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   padding: EdgeInsets.symmetric(horizontal: 55.0, vertical: 5.0),
                                 ),

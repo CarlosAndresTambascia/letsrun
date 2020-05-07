@@ -1,6 +1,5 @@
 import 'package:animated_card/animated_card.dart';
 import 'package:animated_card/animated_card_direction.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NotificationsScreen extends StatelessWidget {
