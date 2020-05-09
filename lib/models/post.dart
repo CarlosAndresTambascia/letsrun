@@ -7,9 +7,10 @@ class Post {
   String _description;
   String _email;
   String _profilePicUrl;
+  DateTime dateTime;
 
   Post(this._pid, this._latitudeStarting, this._latitudeEnd, this._longitudeStarting, this._longitudeEnd,
-      this._description, this._email, this._profilePicUrl);
+      this._description, this._email, this._profilePicUrl, this.dateTime);
 
   String get email => _email;
 

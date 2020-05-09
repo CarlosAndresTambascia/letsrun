@@ -26,21 +26,20 @@ class FirestoreManagement {
   Future addPost(BuildContext context, Post post) {
     return _store.collection('/posts').add({
       'email': post.email,
-      //'pid': post.pid,
       'latitudeStarting': post.latitudeStarting,
       'latitudeEnd': post.latitudeEnd,
       'longitudeStarting': post.longitudeStarting,
       'longitudeEnd': post.longitudeEnd,
       'description': post.description,
       'profilePicUrl': post.profilePicUrl,
+      'dateTime': post.dateTime,
     }).then((val) {
-      Navigator.pop(context);
       Navigator.pushNamed(context, HomeScreen.id);
     }).catchError((e) => print(e));
   }
 
   Stream<QuerySnapshot> getPostsSnapshots() {
-    return _store.collection('posts').snapshots();
+    return _store.collection('posts').orderBy("dateTime", descending: true).snapshots();
   }
 
   uploadProfilePic(String picUrl, User user) {
