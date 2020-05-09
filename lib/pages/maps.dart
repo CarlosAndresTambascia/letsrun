@@ -7,6 +7,8 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class Maps extends StatefulWidget {
   static String id = 'maps';
+  static String startingPositionMsg = 'Principio del recorrido';
+  static String finalPositionMsg = 'Final del recorrido';
 
   @override
   _MapsState createState() => _MapsState();
@@ -21,8 +23,6 @@ class _MapsState extends State<Maps> {
   final Set<Marker> _markers = {};
   MapType _currentMapType = MapType.normal;
   bool _loading = false;
-  final String _startingPositionMsg = 'Principio del recorrido';
-  final String _finalPositionMsg = 'Final del recorrido';
   bool _showMoveBack = false;
 
   @override
@@ -100,25 +100,25 @@ class _MapsState extends State<Maps> {
     bool hasFinalPosition = false;
 
     Marker startingMarker = Marker(
-      markerId: MarkerId(_startingPositionMsg),
+      markerId: MarkerId(Maps.startingPositionMsg),
       position: point,
       infoWindow: InfoWindow(
-        title: _startingPositionMsg,
+        title: Maps.startingPositionMsg,
       ),
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
     );
 
     Marker finalMarker = Marker(
-      markerId: MarkerId(_finalPositionMsg),
+      markerId: MarkerId(Maps.finalPositionMsg),
       position: point,
       infoWindow: InfoWindow(
-        title: _finalPositionMsg,
+        title: Maps.finalPositionMsg,
       ),
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
     );
 
-    hasStartingPosition = _markers.toString().contains(_startingPositionMsg);
-    hasFinalPosition = _markers.toString().contains(_finalPositionMsg);
+    hasStartingPosition = _markers.toString().contains(Maps.startingPositionMsg);
+    hasFinalPosition = _markers.toString().contains(Maps.finalPositionMsg);
 
     if (!hasStartingPosition) {
       setState(() => _markers.add(startingMarker));

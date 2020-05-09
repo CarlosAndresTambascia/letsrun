@@ -28,8 +28,10 @@ class UserManagement {
     return _store.collection('/users').add({
       'uid': post.uid,
       'pid': post.pid,
-      'description': post.description,
-      'coordinates': post.coordinates,
+      'latitudeStarting': post.latitudeStarting,
+      'latitudeEnd': post.latitudeEnd,
+      'longitudeStarting': post.longitudeStarting,
+      'longitudeEnd': post.longitudeEnd,
     }).then((val) {
       //TODO: try to move into news screen
     }).catchError((e) => print(e));

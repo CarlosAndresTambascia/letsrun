@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:letsrun/models/post.dart';
 import 'package:letsrun/plugins/constants.dart';
 
 import 'home_screen.dart';
@@ -14,6 +15,7 @@ class _NewPostState extends State<NewPost> {
   final double _circleRadius = 100.0;
   final double _circleBorderWidth = 5.0;
   Set<Marker> _markers = {};
+  Post _post;
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +119,7 @@ class _NewPostState extends State<NewPost> {
                     Column(
                       children: <Widget>[
                         MaterialButton(
-                          onPressed: () {},
+                          onPressed: _postIt(),
                           minWidth: 20,
                           height: 50,
                           child: Text(
@@ -141,6 +143,15 @@ class _NewPostState extends State<NewPost> {
 
   pickMapsData(BuildContext context) async {
     _markers = await Navigator.push(context, MaterialPageRoute(builder: (context) => Maps()));
-    print(_markers);
+    if (_markers.isNotEmpty) {
+      var firstMarker = _markers.firstWhere((marker) => marker.markerId.value == Maps.startingPositionMsg);
+      var secondMarker = _markers.firstWhere((marker) => marker.markerId.value == Maps.finalPositionMsg);
+      _post.latitudeStarting = firstMarker.position.latitude;
+      _post.longitudeStarting = firstMarker.position.longitude;
+      _post.latitudeEnd = secondMarker.position.latitude;
+      _post.longitudeEnd = secondMarker.position.longitude;
+    }
   }
+
+  _postIt() {}
 }
