@@ -38,7 +38,7 @@ class FirestoreManagement {
     }).catchError((e) => print(e));
   }
 
-  Stream<QuerySnapshot> getPostsSnapshots(){
+  Stream<QuerySnapshot> getPostsSnapshots() {
     return _store.collection('posts').snapshots();
   }
 
