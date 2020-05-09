@@ -15,11 +15,13 @@ class _NewPostState extends State<NewPost> {
   final double _circleRadius = 100.0;
   final double _circleBorderWidth = 5.0;
   Set<Marker> _markers = {};
-  Post _post;
+  Post _post = new Post('', 0, 0, 0, 0, '', '');
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Theme.of(context).primaryColor,
       body: SingleChildScrollView(
         child: Container(
@@ -119,7 +121,7 @@ class _NewPostState extends State<NewPost> {
                     Column(
                       children: <Widget>[
                         MaterialButton(
-                          onPressed: _postIt(),
+                          onPressed: _postIt,
                           minWidth: 20,
                           height: 50,
                           child: Text(
@@ -153,5 +155,32 @@ class _NewPostState extends State<NewPost> {
     }
   }
 
-  _postIt() {}
+  _postIt() {
+    if (_validatePostFields()) {
+      print('we are good');
+    } else {
+      showExceptionError(context, null);
+    }
+  }
+
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showExceptionError(BuildContext context, String errorMsg) {
+    final defaultMsg = 'Por favor ingrese todos los datos';
+    return _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text(errorMsg == null ? defaultMsg : errorMsg),
+      duration: Duration(seconds: 3),
+    ));
+  }
+
+  bool _validatePostFields() {
+    if (_post.pid == "" ||
+        _post.latitudeStarting == 0 ||
+        _post.latitudeEnd == 0 ||
+        _post.longitudeStarting == 0 ||
+        _post.description == "" ||
+        _post.uid == "" ||
+        _post.longitudeEnd == 0) {
+      return false;
+    }
+    return true;
+  }
 }
