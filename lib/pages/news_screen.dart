@@ -24,9 +24,12 @@ class _NewsState extends State<News> {
       future: UserManagement().getAppUser(_auth.currentUser()),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: LoadingBouncingGrid.square(
-              backgroundColor: Colors.white,
+          return Scaffold(
+            backgroundColor: Theme.of(context).primaryColor,
+            body: Center(
+              child: LoadingBouncingGrid.square(
+                backgroundColor: Colors.white,
+              ),
             ),
           );
         } else {

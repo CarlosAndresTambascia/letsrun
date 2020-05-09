@@ -113,9 +113,11 @@ class _LoginScreen extends State<LoginScreen> {
 
   _signIn(BuildContext context) async {
     if (_formKey.currentState.validate()) {
+      setState(() => _loading = true);
       var signInUser = await _auth
           .signInWithEmailAndPassword(email: _user.email, password: _user.password)
           .catchError((e) => showExceptionError(context, _handleSingInError(e)));
+      setState(() => _loading = false);
       if (signInUser != null) {
         Navigator.pop(context);
         Navigator.pushNamed(context, HomeScreen.id);
