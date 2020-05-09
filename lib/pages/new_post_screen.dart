@@ -17,7 +17,7 @@ class _NewPostState extends State<NewPost> {
   final double _circleRadius = 100.0;
   final double _circleBorderWidth = 5.0;
   Set<Marker> _markers = {};
-  Post _post = new Post('', 0, 0, 0, 0, '', '');
+  Post _post = new Post('', 0, 0, 0, 0, '', '', '');
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool _loading = false;
 
@@ -169,6 +169,7 @@ class _NewPostState extends State<NewPost> {
 
   _postIt() {
     _post.email = HomeScreen.currentAppUser.email;
+    _post.profilePicUrl = HomeScreen.currentAppUser.profilePictureUrl;
     if (_validatePostFields()) {
       setState(() => _loading = true);
       UserManagement()
@@ -191,10 +192,11 @@ class _NewPostState extends State<NewPost> {
   bool _validatePostFields() {
     if ( //_post.pid == "" ||//TODO: check if i really need this.
         _post.latitudeStarting == 0 ||
+            _post.profilePicUrl == '' ||
             _post.latitudeEnd == 0 ||
             _post.longitudeStarting == 0 ||
-            _post.description == "" ||
-            _post.email == "" ||
+            _post.description == '' ||
+            _post.email == '' ||
             _post.longitudeEnd == 0) {
       return false;
     }

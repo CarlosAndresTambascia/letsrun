@@ -6,9 +6,10 @@ class Post {
   double _longitudeEnd;
   String _description;
   String _email;
+  String _profilePicUrl;
 
   Post(this._pid, this._latitudeStarting, this._latitudeEnd, this._longitudeStarting, this._longitudeEnd,
-      this._description, this._email);
+      this._description, this._email, this._profilePicUrl);
 
   String get email => _email;
 
@@ -23,6 +24,12 @@ class Post {
   }
 
   double get longitudeEnd => _longitudeEnd;
+
+  String get profilePicUrl => _profilePicUrl;
+
+  set profilePicUrl(String value) {
+    _profilePicUrl = value;
+  }
 
   set longitudeEnd(double value) {
     _longitudeEnd = value;
@@ -62,6 +69,7 @@ class Post {
           _latitudeEnd == other._latitudeEnd &&
           _longitudeStarting == other._longitudeStarting &&
           _longitudeEnd == other._longitudeEnd &&
+          profilePicUrl == other.profilePicUrl &&
           _description == other._description &&
           _email == other._email;
 
@@ -73,10 +81,11 @@ class Post {
       _longitudeStarting.hashCode ^
       _longitudeEnd.hashCode ^
       _description.hashCode ^
+      _profilePicUrl.hashCode ^
       _email.hashCode;
 
   @override
   String toString() {
-    return 'Post{_pid: $_pid, _latitudeStarting: $_latitudeStarting, _latitudeEnd: $_latitudeEnd, _longitudeStarting: $_longitudeStarting, _longitudeEnd: $_longitudeEnd, _description: $_description, _email: $_email}';
+    return 'Post{_pid: $_pid, _latitudeStarting: $_latitudeStarting, _latitudeEnd: $_latitudeEnd, _longitudeStarting: $_longitudeStarting, _longitudeEnd: $_longitudeEnd, _description: $_description, _email: $_email, _profilePicUrl: $_profilePicUrl}';
   }
 }
