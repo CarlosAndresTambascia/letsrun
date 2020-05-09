@@ -3,7 +3,7 @@ import 'package:animated_card/animated_card_direction.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letsrun/pages/home_screen.dart';
-import 'package:letsrun/services/userManagement.dart';
+import 'package:letsrun/services/firestoreManagement.dart';
 import 'package:like_button/like_button.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:readmore/readmore.dart';
@@ -21,7 +21,7 @@ class _NewsState extends State<News> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: UserManagement().getAppUser(_auth.currentUser()),
+      future: FirestoreManagement().getAppUser(_auth.currentUser()),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(

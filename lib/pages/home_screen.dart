@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letsrun/models/user.dart';
+import 'package:letsrun/services/firestoreManagement.dart';
 import 'package:letsrun/services/homeScreenRoute.dart';
-import 'package:letsrun/services/userManagement.dart';
 import 'package:loading_animations/loading_animations.dart';
 
 import 'news_screen.dart';
@@ -20,13 +21,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _currentView = new News();
   final _auth = FirebaseAuth.instance;
   Future<User> futureUser;
+
   @override
   void initState() {
-    futureUser = UserManagement()
+    futureUser = FirestoreManagement()
         .getAppUser(_auth.currentUser())
         .then((data) => HomeScreen.currentAppUser = data)
         .catchError((e) => print(e));
 
+    Stream<QuerySnapshot> postsSnapshots = FirestoreManagement().getPostsSnapshots();
   }
 
   @override

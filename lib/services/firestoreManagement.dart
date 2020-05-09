@@ -5,9 +5,8 @@ import 'package:letsrun/models/post.dart';
 import 'package:letsrun/models/user.dart';
 import 'package:letsrun/pages/home_screen.dart';
 
-class UserManagement {
+class FirestoreManagement {
   final _store = Firestore.instance;
-  final _auth = FirebaseAuth.instance;
 
   Future addUser(FirebaseUser user, BuildContext context, User appUser) {
     return _store.collection('/users').add({
@@ -37,6 +36,10 @@ class UserManagement {
       Navigator.pop(context);
       Navigator.pushNamed(context, HomeScreen.id);
     }).catchError((e) => print(e));
+  }
+
+  Stream<QuerySnapshot> getPostsSnapshots(){
+    return _store.collection('posts').snapshots();
   }
 
   uploadProfilePic(String picUrl, User user) {

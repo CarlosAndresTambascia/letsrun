@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:letsrun/models/user.dart';
 import 'package:letsrun/plugins/constants.dart';
-import 'package:letsrun/services/userManagement.dart';
+import 'package:letsrun/services/firestoreManagement.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:nice_button/NiceButton.dart';
 
@@ -222,7 +222,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
       _loading = true;
     });
     StorageUploadTask task = storageReference.putFile(_profilePicture);
-    UserManagement().uploadProfilePic(await (await task.onComplete).ref.getDownloadURL(), _user);
+    FirestoreManagement().uploadProfilePic(await (await task.onComplete).ref.getDownloadURL(), _user);
     setState(() => _loading = false);
   }
 
@@ -244,7 +244,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
           .catchError((e) => showExceptionError(context, _handleAuthError(e)))
           .then((createdUser) async {
         setState(() => _loading = true);
-        await (UserManagement().addUser(createdUser.user, context, _user));
+        await (FirestoreManagement().addUser(createdUser.user, context, _user));
         setState(() => _loading = false);
       }).catchError((e) => showExceptionError(context, 'Hubo un problema al registrar al usuario'));
     } else {

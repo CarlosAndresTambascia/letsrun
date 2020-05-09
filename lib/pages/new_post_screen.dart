@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:letsrun/models/post.dart';
 import 'package:letsrun/plugins/constants.dart';
-import 'package:letsrun/services/userManagement.dart';
+import 'package:letsrun/services/firestoreManagement.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 import 'home_screen.dart';
@@ -172,7 +172,7 @@ class _NewPostState extends State<NewPost> {
     _post.profilePicUrl = HomeScreen.currentAppUser.profilePictureUrl;
     if (_validatePostFields()) {
       setState(() => _loading = true);
-      UserManagement()
+      FirestoreManagement()
           .addPost(context, _post)
           .catchError(() => showExceptionError(context, 'Hubo un problema al crear el post, intente mas tarde.'));
       setState(() => _loading = false);
