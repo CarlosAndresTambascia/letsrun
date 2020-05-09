@@ -44,16 +44,21 @@ class _NewPostState extends State<NewPost> {
                       child: Material(
                         child: Column(
                           children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 50.0, horizontal: 20.0),
+                            SizedBox(
+                              width: 350,
+                              height: 300,
                               child: Container(
-                                child: TextField(
-                                  style: TextStyle(color: Colors.black),
-                                  textAlign: TextAlign.center,
-                                  keyboardType: TextInputType.multiline,
-                                  maxLength: 260,
-                                  decoration: kDescriptionDecoration,
-                                  onChanged: (value) => _post.description = value,
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 35.0, left: 10.0, right: 10.0),
+                                  child: TextField(
+                                    style: TextStyle(color: Colors.black),
+                                    textAlign: TextAlign.center,
+                                    keyboardType: TextInputType.multiline,
+                                    maxLength: 260,
+                                    maxLines: 8,
+                                    decoration: kDescriptionDecoration,
+                                    onChanged: (value) => _post.description = value,
+                                  ),
                                 ),
                               ),
                             ),
