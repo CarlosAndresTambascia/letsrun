@@ -25,6 +25,7 @@ dependencies:
   loading_animations: ^2.1.0
   google_maps_flutter: ^0.5.27+1
   geolocator: ^5.3.1
+  readmore: ^1.0.0
 
 dev_dependencies:
   flutter_test:

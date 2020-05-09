@@ -6,6 +6,7 @@ import 'package:letsrun/pages/home_screen.dart';
 import 'package:letsrun/services/userManagement.dart';
 import 'package:like_button/like_button.dart';
 import 'package:loading_animations/loading_animations.dart';
+import 'package:readmore/readmore.dart';
 
 class News extends StatefulWidget {
   @override
@@ -50,18 +51,25 @@ class _NewsState extends State<News> {
                         children: <Widget>[
                           Stack(alignment: Alignment.topCenter, children: <Widget>[
                             Padding(
-                              padding: EdgeInsets.only(top: _circleRadius / 2.0),
-                              child: Material(
-                                child: Padding(
-                                  child: Text(HomeScreen.currentAppUser.email),
-                                  padding: EdgeInsets.symmetric(vertical: 75.0, horizontal: 150.0),
+                              child: SizedBox(
+                                width: 350.0,
+                                height: 180.0,
+                                child: Card(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(top: 35.0, left: 10.0, right: 10.0),
+                                    child: ReadMoreText(
+                                      'lksajdölksajdlklksadjlksajdlksajdlksajdlksajdlksajdlksajdlksajdsalkdjsalkdjsalkdjsalkdjsalkdjsalkdjsadlkdsj,msandlsandlksajdjlksajdlksajdlksajdlksajdlksajdlksajdsalkdjalksdjlkdsalksajdsajdölksajdölsajdölsakdjsaölkdnjlkdjölkcadjsaöljdaslkjdasldjsaldjsalkdjksadsa31s',
+                                      //HomeScreen.currentAppUser.email,
+                                      trimLines: 5,
+                                      colorClickableText: Theme.of(context).primaryColor,
+                                      trimMode: TrimMode.Line,
+                                      trimCollapsedText: '...ver mas',
+                                      trimExpandedText: ' ver menos',
+                                    ),
+                                  ),
                                 ),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(25.0),
-                                ),
-                                elevation: 5.0,
-                                color: Colors.white,
                               ),
+                              padding: EdgeInsets.only(top: _circleRadius / 2.0),
                             ),
                             Container(
                               width: _circleRadius,

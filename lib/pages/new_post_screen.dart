@@ -51,7 +51,7 @@ class _NewPostState extends State<NewPost> {
                                   style: TextStyle(color: Colors.black),
                                   textAlign: TextAlign.center,
                                   keyboardType: TextInputType.multiline,
-                                  maxLines: 9,
+                                  maxLength: 260,
                                   decoration: kDescriptionDecoration,
                                   onChanged: (value) => _post.description = value,
                                 ),
