@@ -5,15 +5,15 @@ class Post {
   double _longitudeStarting;
   double _longitudeEnd;
   String _description;
-  String _uid;
+  String _email;
 
   Post(this._pid, this._latitudeStarting, this._latitudeEnd, this._longitudeStarting, this._longitudeEnd,
-      this._description, this._uid);
+      this._description, this._email);
 
-  String get uid => _uid;
+  String get email => _email;
 
-  set uid(String value) {
-    _uid = value;
+  set email(String value) {
+    _email = value;
   }
 
   String get description => _description;
@@ -63,7 +63,7 @@ class Post {
           _longitudeStarting == other._longitudeStarting &&
           _longitudeEnd == other._longitudeEnd &&
           _description == other._description &&
-          _uid == other._uid;
+          _email == other._email;
 
   @override
   int get hashCode =>
@@ -73,10 +73,10 @@ class Post {
       _longitudeStarting.hashCode ^
       _longitudeEnd.hashCode ^
       _description.hashCode ^
-      _uid.hashCode;
+      _email.hashCode;
 
   @override
   String toString() {
-    return 'Post{_pid: $_pid, _latitudeStarting: $_latitudeStarting, _latitudeEnd: $_latitudeEnd, _longitudeStarting: $_longitudeStarting, _longitudeEnd: $_longitudeEnd, _description: $_description, _uid: $_uid}';
+    return 'Post{_pid: $_pid, _latitudeStarting: $_latitudeStarting, _latitudeEnd: $_latitudeEnd, _longitudeStarting: $_longitudeStarting, _longitudeEnd: $_longitudeEnd, _description: $_description, _email: $_email}';
   }
 }

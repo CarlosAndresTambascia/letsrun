@@ -24,16 +24,18 @@ class UserManagement {
     }).catchError((e) => print(e));
   }
 
-  Future addPost(FirebaseUser user, BuildContext context, Post post) {
-    return _store.collection('/users').add({
-      'uid': post.uid,
-      'pid': post.pid,
+  Future addPost(BuildContext context, Post post) {
+    return _store.collection('/posts').add({
+      'email': post.email,
+      //'pid': post.pid,
       'latitudeStarting': post.latitudeStarting,
       'latitudeEnd': post.latitudeEnd,
       'longitudeStarting': post.longitudeStarting,
       'longitudeEnd': post.longitudeEnd,
+      'description': post.description,
     }).then((val) {
-      //TODO: try to move into news screen
+      Navigator.pop(context);
+      Navigator.pushNamed(context, HomeScreen.id);
     }).catchError((e) => print(e));
   }
 

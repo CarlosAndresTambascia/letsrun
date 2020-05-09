@@ -19,7 +19,7 @@ class _MapsState extends State<Maps> {
   double longitude;
   Completer<GoogleMapController> _controller = Completer();
   GoogleMapController _googleMapController;
-  static LatLng _center = LatLng(45.512563, -122.677433);
+  static LatLng _center = LatLng(-37.979858, -57.589794);
   final Set<Marker> _markers = {};
   MapType _currentMapType = MapType.normal;
   bool _loading = false;

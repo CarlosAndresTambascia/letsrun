@@ -111,9 +111,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
                         obscureText: _passwordVisible ? true : false,
                         textAlign: TextAlign.center,
                         validator: _validateField,
-                        onChanged: (value) {
-                          _user.password = value;
-                        },
+                        onChanged: (value) => _user.password = value,
                         decoration: kTextFieldDecoration.copyWith(
                           hintText: 'Contrasena',
                           suffixIcon: IconButton(

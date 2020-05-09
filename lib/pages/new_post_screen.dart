@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:letsrun/models/post.dart';
 import 'package:letsrun/plugins/constants.dart';
+import 'package:letsrun/services/userManagement.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 import 'home_screen.dart';
 import 'maps.dart';
@@ -17,129 +19,134 @@ class _NewPostState extends State<NewPost> {
   Set<Marker> _markers = {};
   Post _post = new Post('', 0, 0, 0, 0, '', '');
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: Theme.of(context).primaryColor,
-      body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          padding: EdgeInsets.symmetric(horizontal: 10),
+    return ModalProgressHUD(
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: Theme.of(context).primaryColor,
+        body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.all(8.0),
-            height: 280.0,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Stack(alignment: Alignment.topCenter, children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(top: _circleRadius / 2.0),
-                    child: Material(
-                      child: Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 50.0, horizontal: 20.0),
-                            child: Container(
-                              child: TextField(
-                                style: TextStyle(color: Colors.black),
-                                textAlign: TextAlign.center,
-                                keyboardType: TextInputType.multiline,
-                                maxLines: 9,
-                                decoration: kDescriptionDecoration,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 3.0, left: 50.0, right: 50.0),
-                            child: Material(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(25.0),
-                              ),
-                              elevation: 5.0,
-                              color: Colors.white,
-                              child: GestureDetector(
-                                onTap: () => print('donde fue?'),
-                                child: Padding(
-                                  child: GestureDetector(
-                                    onTap: () => pickMapsData(context),
-                                    child: Row(
-                                      children: <Widget>[
-                                        Text('Indicanos la ruta'),
-                                        Icon(
-                                          Icons.map,
-                                          color: Colors.grey,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  padding: EdgeInsets.symmetric(horizontal: 55.0, vertical: 5.0),
+            height: MediaQuery.of(context).size.height,
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Container(
+              padding: EdgeInsets.all(8.0),
+              height: 280.0,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Stack(alignment: Alignment.topCenter, children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(top: _circleRadius / 2.0),
+                      child: Material(
+                        child: Column(
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 50.0, horizontal: 20.0),
+                              child: Container(
+                                child: TextField(
+                                  style: TextStyle(color: Colors.black),
+                                  textAlign: TextAlign.center,
+                                  keyboardType: TextInputType.multiline,
+                                  maxLines: 9,
+                                  decoration: kDescriptionDecoration,
+                                  onChanged: (value) => _post.description = value,
                                 ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 300.0),
-                          ),
-                        ],
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 3.0, left: 50.0, right: 50.0),
+                              child: Material(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(25.0),
+                                ),
+                                elevation: 5.0,
+                                color: Colors.white,
+                                child: GestureDetector(
+                                  onTap: () => print('donde fue?'),
+                                  child: Padding(
+                                    child: GestureDetector(
+                                      onTap: () => pickMapsData(context),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Text('Indicanos la ruta'),
+                                          Icon(
+                                            Icons.map,
+                                            color: Colors.grey,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    padding: EdgeInsets.symmetric(horizontal: 55.0, vertical: 5.0),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 300.0),
+                            ),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(25.0),
+                        ),
+                        elevation: 5.0,
+                        color: Colors.white,
                       ),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(25.0),
-                      ),
-                      elevation: 5.0,
-                      color: Colors.white,
                     ),
-                  ),
-                  Container(
-                    width: _circleRadius,
-                    height: _circleRadius,
-                    decoration: ShapeDecoration(shape: CircleBorder(), color: Colors.white),
-                    child: Padding(
-                      padding: EdgeInsets.all(_circleBorderWidth),
-                      child: DecoratedBox(
-                        decoration: ShapeDecoration(
-                          shape: CircleBorder(),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(
-                              HomeScreen.currentAppUser.profilePictureUrl,
+                    Container(
+                      width: _circleRadius,
+                      height: _circleRadius,
+                      decoration: ShapeDecoration(shape: CircleBorder(), color: Colors.white),
+                      child: Padding(
+                        padding: EdgeInsets.all(_circleBorderWidth),
+                        child: DecoratedBox(
+                          decoration: ShapeDecoration(
+                            shape: CircleBorder(),
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(
+                                HomeScreen.currentAppUser.profilePictureUrl,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  )
-                ]),
-                SizedBox(
-                  height: 8.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        MaterialButton(
-                          onPressed: _postIt,
-                          minWidth: 20,
-                          height: 50,
-                          child: Text(
-                            'Publicar'.toUpperCase(),
-                            style: TextStyle(color: Colors.black),
+                    )
+                  ]),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          MaterialButton(
+                            onPressed: _postIt,
+                            minWidth: 20,
+                            height: 50,
+                            child: Text(
+                              'Publicar'.toUpperCase(),
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            color: Colors.white,
+                            textColor: Colors.white,
                           ),
-                          color: Colors.white,
-                          textColor: Colors.white,
-                        ),
-                      ],
-                    ),
-                  ],
-                )
-              ],
+                        ],
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
       ),
+      inAsyncCall: _loading,
     );
   }
 
@@ -156,8 +163,13 @@ class _NewPostState extends State<NewPost> {
   }
 
   _postIt() {
+    _post.email = HomeScreen.currentAppUser.email;
     if (_validatePostFields()) {
-      print('we are good');
+      setState(() => _loading = true);
+      UserManagement()
+          .addPost(context, _post)
+          .catchError(() => showExceptionError(context, 'Hubo un problema al crear el post, intente mas tarde.'));
+      setState(() => _loading = false);
     } else {
       showExceptionError(context, null);
     }
@@ -172,13 +184,13 @@ class _NewPostState extends State<NewPost> {
   }
 
   bool _validatePostFields() {
-    if (_post.pid == "" ||
+    if ( //_post.pid == "" ||//TODO: check if i really need this.
         _post.latitudeStarting == 0 ||
-        _post.latitudeEnd == 0 ||
-        _post.longitudeStarting == 0 ||
-        _post.description == "" ||
-        _post.uid == "" ||
-        _post.longitudeEnd == 0) {
+            _post.latitudeEnd == 0 ||
+            _post.longitudeStarting == 0 ||
+            _post.description == "" ||
+            _post.email == "" ||
+            _post.longitudeEnd == 0) {
       return false;
     }
     return true;
