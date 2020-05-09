@@ -155,6 +155,7 @@ class _LoginScreen extends State<LoginScreen> {
 
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showExceptionError(BuildContext context, String errorMsg) {
     final defaultMsg = 'Por favor ingrese todos los datos';
+    setState(() => _loading = false);
     return _scaffoldKey.currentState.showSnackBar(SnackBar(
       content: Text(errorMsg == null ? defaultMsg : errorMsg),
       duration: Duration(seconds: 3),

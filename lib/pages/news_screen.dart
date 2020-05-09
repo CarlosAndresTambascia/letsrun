@@ -1,8 +1,8 @@
 import 'package:animated_card/animated_card.dart';
 import 'package:animated_card/animated_card_direction.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:letsrun/pages/home_screen.dart';
 import 'package:letsrun/services/firestoreManagement.dart';
 import 'package:like_button/like_button.dart';
 import 'package:loading_animations/loading_animations.dart';
@@ -17,13 +17,19 @@ class _NewsState extends State<News> {
   final double _circleRadius = 75.0;
   final double _circleBorderWidth = 5.0;
   final _auth = FirebaseAuth.instance;
+  Stream<QuerySnapshot> postsSnapshots;
+
+  @override
+  void initState() {
+    postsSnapshots = FirestoreManagement().getPostsSnapshots();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: FirestoreManagement().getAppUser(_auth.currentUser()),
-      builder: (_, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: postsSnapshots,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
           return Scaffold(
             backgroundColor: Theme.of(context).primaryColor,
             body: Center(
@@ -33,9 +39,9 @@ class _NewsState extends State<News> {
             ),
           );
         } else {
-          HomeScreen.currentAppUser = snapshot.data;
+          final posts = snapshot.data.documents.reversed;
           return ListView.builder(
-            itemCount: 1,
+            itemCount: snapshot.data.documents.length,
             itemBuilder: (context, index) {
               return AnimatedCard(
                 direction: AnimatedCardDirection.left,
@@ -61,7 +67,7 @@ class _NewsState extends State<News> {
                                   child: Padding(
                                     padding: EdgeInsets.only(top: 35.0, left: 10.0, right: 10.0),
                                     child: ReadMoreText(
-                                      'lksajdölksajdlklksadjlksajdlksajdlksajdlksajdlksajdlksajdlksajdsalkdjsalkdjsalkdjsalkdjsalkdjsalkdjsadlkdsj,msandlsandlksajdjlksajdlksajdlksajdlksajdlksajdlksajdsalkdjalksdjlkdsalksajdsajdölksajdölsajdölsakdjsaölkdnjlkdjölkcadjsaöljdaslkjdasldjsaldjsalkdjksadsa31s',
+                                      snapshot.data.documents[index].data['description'],
                                       //HomeScreen.currentAppUser.email,
                                       trimLines: 5,
                                       colorClickableText: Theme.of(context).primaryColor,
@@ -86,7 +92,7 @@ class _NewsState extends State<News> {
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
                                       image: NetworkImage(
-                                        'https://upload.wikimedia.org/wikipedia/commons/a/a0/Bill_Gates_2018.jpg',
+                                        snapshot.data.documents[index].data['profilePicUrl'],
                                       ),
                                     ),
                                   ),

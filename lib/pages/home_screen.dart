@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -28,8 +27,6 @@ class _HomeScreenState extends State<HomeScreen> {
         .getAppUser(_auth.currentUser())
         .then((data) => HomeScreen.currentAppUser = data)
         .catchError((e) => print(e));
-
-    Stream<QuerySnapshot> postsSnapshots = FirestoreManagement().getPostsSnapshots();
   }
 
   @override

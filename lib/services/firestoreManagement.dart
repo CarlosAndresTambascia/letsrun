@@ -32,6 +32,7 @@ class FirestoreManagement {
       'longitudeStarting': post.longitudeStarting,
       'longitudeEnd': post.longitudeEnd,
       'description': post.description,
+      'profilePicUrl': post.profilePicUrl,
     }).then((val) {
       Navigator.pop(context);
       Navigator.pushNamed(context, HomeScreen.id);
