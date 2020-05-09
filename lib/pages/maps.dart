@@ -19,12 +19,11 @@ class _MapsState extends State<Maps> {
   GoogleMapController _googleMapController;
   static LatLng _center = LatLng(45.512563, -122.677433);
   final Set<Marker> _markers = {};
-  final Set<Marker> _myLocationMarker = {};
-  LatLng _lastMapPosition = _center;
   MapType _currentMapType = MapType.normal;
   bool _loading = false;
   final String _startingPositionMsg = 'Principio del recorrido';
   final String _finalPositionMsg = 'Final del recorrido';
+  bool _showMoveBack = false;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +45,6 @@ class _MapsState extends State<Maps> {
                 initialCameraPosition: CameraPosition(target: _center, zoom: 15.0),
                 mapType: _currentMapType,
                 markers: _markers,
-                onCameraMove: _onCameraMove,
                 onTap: _handleTap,
               ),
               Padding(
@@ -59,7 +57,10 @@ class _MapsState extends State<Maps> {
                       SizedBox(height: 16.0),
                       button(_clearMarker, Icons.delete, 'erase'),
                       SizedBox(height: 16.0),
-                      button(_getCurrentLocation, Icons.check_circle, 'done'),
+                      Visibility(
+                        visible: _showMoveBack,
+                        child: button(() => Navigator.pop(context, _markers), Icons.check_circle, 'done'),
+                      )
                     ],
                   ),
                 ),
@@ -75,16 +76,13 @@ class _MapsState extends State<Maps> {
   _clearMarker() {
     setState(() {
       _markers.clear();
+      _showMoveBack = false;
     });
   }
 
   void _onMapCreated(GoogleMapController controller) {
     _googleMapController = controller;
     _controller.complete(controller);
-  }
-
-  void _onCameraMove(CameraPosition position) {
-    _lastMapPosition = position.target;
   }
 
   Widget button(Function function, IconData icon, String heroTag) {
@@ -125,7 +123,10 @@ class _MapsState extends State<Maps> {
     if (!hasStartingPosition) {
       setState(() => _markers.add(startingMarker));
     } else if (!hasFinalPosition) {
-      setState(() => _markers.add(finalMarker));
+      setState(() {
+        _showMoveBack = true;
+        return _markers.add(finalMarker);
+      });
     } else {
       return null;
     }
@@ -136,16 +137,12 @@ class _MapsState extends State<Maps> {
     var currentLocation = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     setState(() {
       _markers.clear();
+      _showMoveBack = false;
       _center = LatLng(currentLocation.latitude, currentLocation.longitude);
       _markers.add(
           Marker(position: _center, infoWindow: InfoWindow(title: 'Tu ubicacion'), markerId: MarkerId('myLocaiton')));
       _loading = false;
       _googleMapController.moveCamera(CameraUpdate.newLatLng(_center));
     });
-  }
-
-  _removeMarker(MarkerId markerId) {
-    var toRemove = _markers.firstWhere((marker) => marker.markerId == markerId);
-    _markers.remove(toRemove);
   }
 }

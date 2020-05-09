@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:letsrun/plugins/constants.dart';
 
 import 'home_screen.dart';
@@ -12,6 +13,7 @@ class NewPost extends StatefulWidget {
 class _NewPostState extends State<NewPost> {
   final double _circleRadius = 100.0;
   final double _circleBorderWidth = 5.0;
+  Set<Marker> _markers = {};
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +60,7 @@ class _NewPostState extends State<NewPost> {
                                 onTap: () => print('donde fue?'),
                                 child: Padding(
                                   child: GestureDetector(
-                                    onTap: () => Navigator.pushNamed(context, Maps.id),
+                                    onTap: () => pickMapsData(context),
                                     child: Row(
                                       children: <Widget>[
                                         Text('Indicanos la ruta'),
@@ -135,5 +137,10 @@ class _NewPostState extends State<NewPost> {
         ),
       ),
     );
+  }
+
+  pickMapsData(BuildContext context) async {
+    _markers = await Navigator.push(context, MaterialPageRoute(builder: (context) => Maps()));
+    print(_markers);
   }
 }
