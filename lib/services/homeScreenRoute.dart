@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:letsrun/pages/home_screen.dart';
 import 'package:letsrun/pages/new_post_screen.dart';
 import 'package:letsrun/pages/news_screen.dart';
 import 'package:letsrun/pages/notifications_screen.dart';
@@ -11,10 +12,10 @@ class HomeScreenRoute {
         return News();
         break;
       case 1:
-        return NewPost();
+        return HomeScreen.currentAppUser.isCoach ? NewPost() : NotificationsScreen();
         break;
       case 2:
-        return NotificationsScreen();
+        return HomeScreen.currentAppUser.isCoach ? NotificationsScreen() : Settings();
         break;
       case 3:
         return Settings();
