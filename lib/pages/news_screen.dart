@@ -1,7 +1,6 @@
 import 'package:animated_card/animated_card.dart';
 import 'package:animated_card/animated_card_direction.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letsrun/services/firestoreManagement.dart';
 import 'package:like_button/like_button.dart';
@@ -16,7 +15,6 @@ class News extends StatefulWidget {
 class _NewsState extends State<News> {
   final double _circleRadius = 75.0;
   final double _circleBorderWidth = 5.0;
-  final _auth = FirebaseAuth.instance;
   Stream<QuerySnapshot> postsSnapshots;
 
   @override
@@ -39,7 +37,6 @@ class _NewsState extends State<News> {
             ),
           );
         } else {
-          final posts = snapshot.data.documents.reversed;
           return ListView.builder(
             itemCount: snapshot.data.documents.length,
             itemBuilder: (context, index) {
