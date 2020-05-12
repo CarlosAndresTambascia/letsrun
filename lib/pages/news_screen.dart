@@ -2,6 +2,7 @@ import 'package:animated_card/animated_card.dart';
 import 'package:animated_card/animated_card_direction.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:letsrun/pages/home_screen.dart';
 import 'package:letsrun/services/firestoreManagement.dart';
 import 'package:like_button/like_button.dart';
 import 'package:loading_animations/loading_animations.dart';
@@ -16,6 +17,8 @@ class _NewsState extends State<News> {
   final double _circleRadius = 75.0;
   final double _circleBorderWidth = 5.0;
   Stream<QuerySnapshot> postsSnapshots;
+  List assistants;
+  String currentUserFullName = HomeScreen.currentAppUser.fullName;
 
   @override
   void initState() {
@@ -40,6 +43,8 @@ class _NewsState extends State<News> {
           return ListView.builder(
             itemCount: snapshot.data.documents.length,
             itemBuilder: (context, index) {
+              assistants = snapshot.data.documents[index].data['assistants'];
+              String pid = snapshot.data.documents[index].data['pid'];
               return AnimatedCard(
                 direction: AnimatedCardDirection.left,
                 initDelay: Duration(milliseconds: 0),
@@ -105,22 +110,39 @@ class _NewsState extends State<News> {
                             children: <Widget>[
                               Column(
                                 children: <Widget>[
-                                  Material(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(25.0),
-                                    ),
-                                    elevation: 5.0,
-                                    color: Colors.white,
-                                    child: Padding(
-                                      child: LikeButton(
-                                        likeBuilder: (bool isLiked) {
-                                          return Icon(
-                                            Icons.directions_run,
-                                            color: isLiked ? Colors.deepPurpleAccent : Colors.grey,
-                                          );
-                                        },
+                                  SizedBox(
+                                    height: 35.0,
+                                    width: 100.0,
+                                    child: Material(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(25.0),
                                       ),
-                                      padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 3.0),
+                                      elevation: 5.0,
+                                      color: Colors.white,
+                                      child: Container(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(left: 25.0),
+                                          child: Row(
+                                            children: <Widget>[
+                                              Column(
+                                                children: <Widget>[
+                                                  LikeButton(
+                                                    likeCount: assistants.length,
+                                                    likeBuilder: (bool isLiked) => Icon(
+                                                      Icons.directions_run,
+                                                      color: isLiked || assistants.contains(currentUserFullName)
+                                                          ? Colors.deepPurpleAccent
+                                                          : Colors.grey,
+                                                    ),
+                                                    onTap: (isLiked) => _addAssistants(pid, isLiked),
+                                                    //onTap: (bool isLiked) => _addAssistants(pid, isLiked),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   )
                                 ],
@@ -128,28 +150,36 @@ class _NewsState extends State<News> {
                               SizedBox(
                                 width: 5.0,
                               ),
-                              Column(
-                                children: <Widget>[
-                                  Material(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(25.0),
-                                    ),
-                                    elevation: 5.0,
-                                    color: Colors.white,
+                              SizedBox(
+                                height: 35.0,
+                                width: 100.0,
+                                child: Material(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(25.0),
+                                  ),
+                                  elevation: 5.0,
+                                  color: Colors.white,
+                                  child: Container(
                                     child: Padding(
-                                      child: LikeButton(
-                                        likeBuilder: (bool isLiked) {
-                                          return Icon(
-                                            Icons.location_on,
-                                            color: isLiked ? Colors.deepPurpleAccent : Colors.grey,
-                                          );
-                                        },
+                                      padding: const EdgeInsets.only(left: 25.0),
+                                      child: Row(
+                                        children: <Widget>[
+                                          Column(
+                                            children: <Widget>[
+                                              LikeButton(
+                                                likeBuilder: (bool isLiked) => Icon(
+                                                  Icons.location_on,
+                                                  color: isLiked ? Colors.deepPurpleAccent : Colors.grey,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
-                                      padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 3.0),
                                     ),
-                                  )
-                                ],
-                              ),
+                                  ),
+                                ),
+                              )
                             ],
                           )
                         ],
@@ -163,5 +193,16 @@ class _NewsState extends State<News> {
         }
       },
     );
+  }
+
+  Future<bool> _addAssistants(String pid, bool val) async {
+    if (!assistants.contains(currentUserFullName)) {
+      assistants.add(currentUserFullName);
+      FirestoreManagement().addListener(pid, assistants);
+    } else {
+      assistants.remove(currentUserFullName);
+      FirestoreManagement().removeListener(pid, assistants);
+    }
+    return !val;
   }
 }

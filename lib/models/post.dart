@@ -8,9 +8,10 @@ class Post {
   String _email;
   String _profilePicUrl;
   DateTime dateTime;
+  List<String> assistants;
 
   Post(this._pid, this._latitudeStarting, this._latitudeEnd, this._longitudeStarting, this._longitudeEnd,
-      this._description, this._email, this._profilePicUrl, this.dateTime);
+      this._description, this._email, this._profilePicUrl, this.dateTime, this.assistants);
 
   String get email => _email;
 
@@ -61,6 +62,11 @@ class Post {
   }
 
   @override
+  String toString() {
+    return 'Post{_pid: $_pid, _latitudeStarting: $_latitudeStarting, _latitudeEnd: $_latitudeEnd, _longitudeStarting: $_longitudeStarting, _longitudeEnd: $_longitudeEnd, _description: $_description, _email: $_email, _profilePicUrl: $_profilePicUrl, dateTime: $dateTime, assistants: $assistants}';
+  }
+
+  @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is Post &&
@@ -70,9 +76,11 @@ class Post {
           _latitudeEnd == other._latitudeEnd &&
           _longitudeStarting == other._longitudeStarting &&
           _longitudeEnd == other._longitudeEnd &&
-          profilePicUrl == other.profilePicUrl &&
           _description == other._description &&
-          _email == other._email;
+          _email == other._email &&
+          _profilePicUrl == other._profilePicUrl &&
+          dateTime == other.dateTime &&
+          assistants == other.assistants;
 
   @override
   int get hashCode =>
@@ -82,11 +90,8 @@ class Post {
       _longitudeStarting.hashCode ^
       _longitudeEnd.hashCode ^
       _description.hashCode ^
+      _email.hashCode ^
       _profilePicUrl.hashCode ^
-      _email.hashCode;
-
-  @override
-  String toString() {
-    return 'Post{_pid: $_pid, _latitudeStarting: $_latitudeStarting, _latitudeEnd: $_latitudeEnd, _longitudeStarting: $_longitudeStarting, _longitudeEnd: $_longitudeEnd, _description: $_description, _email: $_email, _profilePicUrl: $_profilePicUrl}';
-  }
+      dateTime.hashCode ^
+      assistants.hashCode;
 }

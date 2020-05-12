@@ -4,6 +4,7 @@ import 'package:letsrun/models/post.dart';
 import 'package:letsrun/plugins/constants.dart';
 import 'package:letsrun/services/firestoreManagement.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:uuid/uuid.dart';
 
 import 'home_screen.dart';
 import 'maps.dart';
@@ -17,9 +18,10 @@ class _NewPostState extends State<NewPost> {
   final double _circleRadius = 100.0;
   final double _circleBorderWidth = 5.0;
   Set<Marker> _markers = {};
-  Post _post = new Post('', 0, 0, 0, 0, '', '', '', DateTime.now());
+  Post _post = new Post('', 0, 0, 0, 0, '', '', '', DateTime.now(), []);
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool _loading = false;
+  final uuid = Uuid();
 
   @override
   Widget build(BuildContext context) {
@@ -171,6 +173,8 @@ class _NewPostState extends State<NewPost> {
     _post.email = HomeScreen.currentAppUser.email;
     _post.profilePicUrl = HomeScreen.currentAppUser.profilePictureUrl;
     _post.dateTime = DateTime.now();
+    _post.assistants = [];
+    _post.pid = uuid.v1();
     if (_validatePostFields()) {
       setState(() => _loading = true);
       FirestoreManagement()
@@ -191,14 +195,13 @@ class _NewPostState extends State<NewPost> {
   }
 
   bool _validatePostFields() {
-    if ( //_post.pid == "" ||//TODO: check if i really need this.
-        _post.latitudeStarting == 0 ||
-            _post.profilePicUrl == '' ||
-            _post.latitudeEnd == 0 ||
-            _post.longitudeStarting == 0 ||
-            _post.description == '' ||
-            _post.email == '' ||
-            _post.longitudeEnd == 0) {
+    if (_post.latitudeStarting == 0 ||
+        _post.profilePicUrl == '' ||
+        _post.latitudeEnd == 0 ||
+        _post.longitudeStarting == 0 ||
+        _post.description == '' ||
+        _post.email == '' ||
+        _post.longitudeEnd == 0) {
       return false;
     }
     return true;

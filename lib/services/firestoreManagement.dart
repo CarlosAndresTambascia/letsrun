@@ -33,9 +33,23 @@ class FirestoreManagement {
       'description': post.description,
       'profilePicUrl': post.profilePicUrl,
       'dateTime': post.dateTime,
+      'assistants': post.assistants,
+      'pid': post.pid
     }).then((val) {
       Navigator.pushNamed(context, HomeScreen.id);
     }).catchError((e) => print(e));
+  }
+
+  addListener(String pid, List assistants) async {
+    await _store.collection('posts').where('pid', isEqualTo: pid).getDocuments().then((docs) => _store
+        .document(('posts/${docs.documents[0].documentID}'))
+        .updateData({'assistants': assistants}).catchError((e) => print(e)));
+  }
+
+  removeListener(String pid, List assistants) async {
+    await _store.collection('posts').where('pid', isEqualTo: pid).getDocuments().then((docs) => _store
+        .document(('posts/${docs.documents[0].documentID}'))
+        .updateData({'assistants': assistants}).catchError((e) => print(e)));
   }
 
   Stream<QuerySnapshot> getPostsSnapshots() {
