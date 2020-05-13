@@ -72,20 +72,17 @@ class _NewPostState extends State<NewPost> {
                                 ),
                                 elevation: 5.0,
                                 color: Colors.white,
-                                child: GestureDetector(
-                                  onTap: () => print('donde fue?'),
+                                child: InkWell(
+                                  onTap: () => pickMapsData(context),
                                   child: Padding(
-                                    child: GestureDetector(
-                                      onTap: () => pickMapsData(context),
-                                      child: Row(
-                                        children: <Widget>[
-                                          Text('Indicanos la ruta'),
-                                          Icon(
-                                            Icons.map,
-                                            color: Colors.grey,
-                                          ),
-                                        ],
-                                      ),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Text('Indicanos la ruta'),
+                                        Icon(
+                                          Icons.map,
+                                          color: Colors.grey,
+                                        ),
+                                      ],
                                     ),
                                     padding: EdgeInsets.symmetric(horizontal: 55.0, vertical: 5.0),
                                   ),

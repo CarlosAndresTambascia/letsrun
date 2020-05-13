@@ -2,7 +2,9 @@ import 'package:animated_card/animated_card.dart';
 import 'package:animated_card/animated_card_direction.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:letsrun/models/post.dart';
 import 'package:letsrun/pages/home_screen.dart';
+import 'package:letsrun/pages/post_map.dart';
 import 'package:letsrun/services/firestoreManagement.dart';
 import 'package:like_button/like_button.dart';
 import 'package:loading_animations/loading_animations.dart';
@@ -19,6 +21,7 @@ class _NewsState extends State<News> {
   Stream<QuerySnapshot> postsSnapshots;
   List assistants;
   String currentUserFullName = HomeScreen.currentAppUser.fullName;
+  Post _post;
 
   @override
   void initState() {
@@ -43,8 +46,13 @@ class _NewsState extends State<News> {
           return ListView.builder(
             itemCount: snapshot.data.documents.length,
             itemBuilder: (context, index) {
-              assistants = snapshot.data.documents[index].data['assistants'];
-              String pid = snapshot.data.documents[index].data['pid'];
+              var currentPost = snapshot.data.documents[index].data;
+              assistants = currentPost['assistants'];
+              String pid = currentPost['pid'];
+              double latitudeStarting = currentPost['latitudeStarting'];
+              double longitudeStarting = currentPost['longitudeStarting'];
+              double latitudeEnd = currentPost['latitudeEnd'];
+              double longitudeEnd = currentPost['longitudeEnd'];
               return AnimatedCard(
                 direction: AnimatedCardDirection.left,
                 initDelay: Duration(milliseconds: 0),
@@ -69,7 +77,7 @@ class _NewsState extends State<News> {
                                   child: Padding(
                                     padding: EdgeInsets.only(top: 35.0, left: 10.0, right: 10.0),
                                     child: ReadMoreText(
-                                      snapshot.data.documents[index].data['description'],
+                                      currentPost['description'],
                                       //HomeScreen.currentAppUser.email,
                                       trimLines: 5,
                                       colorClickableText: Theme.of(context).primaryColor,
@@ -94,7 +102,7 @@ class _NewsState extends State<News> {
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
                                       image: NetworkImage(
-                                        snapshot.data.documents[index].data['profilePicUrl'],
+                                        currentPost['profilePicUrl'],
                                       ),
                                     ),
                                   ),
@@ -134,8 +142,7 @@ class _NewsState extends State<News> {
                                                           ? Colors.deepPurpleAccent
                                                           : Colors.grey,
                                                     ),
-                                                    onTap: (isLiked) => _addAssistants(pid, isLiked),
-                                                    //onTap: (bool isLiked) => _addAssistants(pid, isLiked),
+                                                    onTap: (isLiked) async => await _addAssistants(pid, isLiked),
                                                   ),
                                                 ],
                                               ),
@@ -159,22 +166,24 @@ class _NewsState extends State<News> {
                                   ),
                                   elevation: 5.0,
                                   color: Colors.white,
-                                  child: Container(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 25.0),
-                                      child: Row(
-                                        children: <Widget>[
-                                          Column(
-                                            children: <Widget>[
-                                              LikeButton(
-                                                likeBuilder: (bool isLiked) => Icon(
+                                  child: InkWell(
+                                    onTap: () => _goToMapWithCoordinates(
+                                        context, latitudeStarting, longitudeStarting, latitudeEnd, longitudeEnd),
+                                    child: Container(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 35.0, top: 3.0),
+                                        child: Row(
+                                          children: <Widget>[
+                                            Column(
+                                              children: <Widget>[
+                                                Icon(
                                                   Icons.location_on,
-                                                  color: isLiked ? Colors.deepPurpleAccent : Colors.grey,
+                                                  color: Colors.grey,
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -204,5 +213,15 @@ class _NewsState extends State<News> {
       FirestoreManagement().removeListener(pid, assistants);
     }
     return !val;
+  }
+
+  _goToMapWithCoordinates(
+      context, double latitudeStarting, double longitudeStarting, double latitudeEnd, double longitudeEnd) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PostMap(latitudeStarting, longitudeStarting, latitudeEnd, longitudeEnd),
+      ),
+    );
   }
 }

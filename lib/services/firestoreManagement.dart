@@ -41,7 +41,7 @@ class FirestoreManagement {
   }
 
   addListener(String pid, List assistants) async {
-    await _store.collection('posts').where('pid', isEqualTo: pid).getDocuments().then((docs) => _store
+    _store.collection('posts').where('pid', isEqualTo: pid).getDocuments().then((docs) => _store
         .document(('posts/${docs.documents[0].documentID}'))
         .updateData({'assistants': assistants}).catchError((e) => print(e)));
   }
