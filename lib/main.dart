@@ -33,9 +33,11 @@ class _MyAppState extends State<MyApp> {
         future: _getCurrentUser(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: LoadingBouncingGrid.square(
-                backgroundColor: Colors.white,
+            return Scaffold(
+              body: Center(
+                child: LoadingBouncingGrid.square(
+                  backgroundColor: Colors.white,
+                ),
               ),
             );
           } else {

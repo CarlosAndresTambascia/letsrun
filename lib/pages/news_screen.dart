@@ -2,7 +2,6 @@ import 'package:animated_card/animated_card.dart';
 import 'package:animated_card/animated_card_direction.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:letsrun/models/post.dart';
 import 'package:letsrun/pages/home_screen.dart';
 import 'package:letsrun/pages/post_map.dart';
 import 'package:letsrun/services/firestoreManagement.dart';
@@ -21,7 +20,6 @@ class _NewsState extends State<News> {
   Stream<QuerySnapshot> postsSnapshots;
   List assistants;
   String currentUserFullName = HomeScreen.currentAppUser.fullName;
-  Post _post;
 
   @override
   void initState() {

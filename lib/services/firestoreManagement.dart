@@ -7,6 +7,7 @@ import 'package:letsrun/pages/home_screen.dart';
 
 class FirestoreManagement {
   final _store = Firestore.instance;
+  final _auth = FirebaseAuth.instance;
 
   Future addUser(FirebaseUser user, BuildContext context, User appUser) {
     return _store.collection('/users').add({
@@ -41,9 +42,13 @@ class FirestoreManagement {
   }
 
   addListener(String pid, List assistants) async {
-    _store.collection('posts').where('pid', isEqualTo: pid).getDocuments().then((docs) => _store
-        .document(('posts/${docs.documents[0].documentID}'))
-        .updateData({'assistants': assistants}).catchError((e) => print(e)));
+    _store
+        .collection('posts')
+        .where('pid', isEqualTo: pid)
+        .getDocuments()
+        .then((docs) => _store.document(('posts/${docs.documents[0].documentID}')).updateData({
+              'assistants': assistants,
+            }).catchError((e) => print(e)));
   }
 
   removeListener(String pid, List assistants) async {
@@ -56,31 +61,24 @@ class FirestoreManagement {
     return _store.collection('posts').orderBy("dateTime", descending: true).snapshots();
   }
 
+  Stream<QuerySnapshot> getNotificationsSnapshots() {
+    return _store.collection('posts').where('email', isEqualTo: HomeScreen.currentAppUser.email).snapshots();
+  }
+
   uploadProfilePic(String picUrl, User user) {
     var userInfo = new UserUpdateInfo();
     userInfo.photoUrl = picUrl;
     user.profilePictureUrl = picUrl;
-
-    /* await _auth.currentUser().then((user) {
-      _store.collection('users').where('uid', isEqualTo: user.uid).getDocuments().then((docs) => Firestore.instance
-          .document('users/${docs.documents[0].documentID}')
-          .updateData({'profilePictureUrl': picUrl})
-          .then((val) => print('the file got updated'))
-          .catchError((e) => print(e)));
-    });*/
   }
 
-  Future updateProfilePic(String picUrl) async {
+  Future updateUserData(String picUrl, String fullName) async {
     var userInfo = new UserUpdateInfo();
     userInfo.photoUrl = picUrl;
-
-    /*await _auth.currentUser().then((user) {
+    await _auth.currentUser().then((user) {
       _store.collection('users').where('uid', isEqualTo: user.uid).getDocuments().then((docs) => Firestore.instance
           .document('users/${docs.documents[0].documentID}')
-          .updateData({'profilePictureUrl': picUrl})
-          .then((val) => print('the file got updated'))
-          .catchError((e) => print(e)));
-    });*/
+          .updateData({'profilePictureUrl': picUrl, 'fullName': fullName}).catchError((e) => print(e)));
+    });
   }
 
   Future<User> getAppUser(Future<FirebaseUser> currentUser) async {
