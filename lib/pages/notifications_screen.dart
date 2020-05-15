@@ -5,13 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:letsrun/services/firestoreManagement.dart';
 import 'package:loading_animations/loading_animations.dart';
 
-class NotificationsScreen extends StatelessWidget {
+class NotificationsScreen extends StatefulWidget {
+  @override
+  _NotificationsScreenState createState() => _NotificationsScreenState();
+}
+
+class _NotificationsScreenState extends State<NotificationsScreen> {
   Stream<QuerySnapshot> notificationsSnapshots;
+  List<String> assistantsNames = new List();
 
   @override
   void initState() {
     notificationsSnapshots = FirestoreManagement().getNotificationsSnapshots();
-    print(notificationsSnapshots);
   }
 
   @override
@@ -29,8 +34,9 @@ class NotificationsScreen extends StatelessWidget {
             ),
           );
         } else {
+          _createAssistantsList(snapshot);
           return ListView.builder(
-            itemCount: snapshot.data.documents.length,
+            itemCount: assistantsNames.length,
             itemBuilder: (context, index) {
               return AnimatedCard(
                 direction: AnimatedCardDirection.top,
@@ -41,11 +47,31 @@ class NotificationsScreen extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
                   child: ListTile(
                     title: Container(
-                      height: 100,
+                      height: 70,
                       child: Padding(
                         child: Card(
-                          child: Center(
-                            child: Text("$index"),
+                          child: Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Row(
+                              children: <Widget>[
+                                Column(
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.directions_run,
+                                      color: Theme.of(context).primaryColor,
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 15.0,
+                                ),
+                                Column(
+                                  children: <Widget>[
+                                    Text(assistantsNames[index] + ' asistira'),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         padding: EdgeInsets.all(2.5),
@@ -59,5 +85,18 @@ class NotificationsScreen extends StatelessWidget {
         }
       },
     );
+  }
+
+  _createAssistantsList(AsyncSnapshot<QuerySnapshot> snapshot) {
+    List<List> assistants = new List();
+
+    snapshot.data.documents.forEach((el) {
+      assistants.add(el.data['assistants']);
+    });
+    assistants.forEach((el) {
+      el.forEach((userName) {
+        assistantsNames.add(userName);
+      });
+    });
   }
 }
