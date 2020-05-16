@@ -55,9 +55,9 @@ class _MapsState extends State<Maps> {
                   child: Column(
                     children: <Widget>[
                       button(_getCurrentLocation, Icons.my_location, 'myLocaiton'),
-                      SizedBox(height: 16.0),
+                      Divider(),
                       button(_clearMarker, Icons.delete, 'erase'),
-                      SizedBox(height: 16.0),
+                      Divider(),
                       Visibility(
                         visible: _showMoveBack,
                         child: button(() => Navigator.pop(context, _markers), Icons.check_circle, 'done'),
@@ -145,5 +145,16 @@ class _MapsState extends State<Maps> {
       _loading = false;
       _googleMapController.moveCamera(CameraUpdate.newLatLng(_center));
     });
+  }
+}
+
+class Divider extends StatelessWidget {
+  const Divider({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(height: 16.0);
   }
 }
