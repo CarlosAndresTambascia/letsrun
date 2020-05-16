@@ -2,8 +2,8 @@ import 'package:animated_card/animated_card.dart';
 import 'package:animated_card/animated_card_direction.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:letsrun/plugins/loading_widget.dart';
 import 'package:letsrun/services/firestoreManagement.dart';
-import 'package:loading_animations/loading_animations.dart';
 
 class NotificationsScreen extends StatefulWidget {
   @override
@@ -26,14 +26,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       stream: notificationsSnapshots,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Scaffold(
-            backgroundColor: Theme.of(context).primaryColor,
-            body: Center(
-              child: LoadingBouncingGrid.square(
-                backgroundColor: Colors.white,
-              ),
-            ),
-          );
+          return LoadingWidget();
         } else {
           _createAssistantsList(snapshot);
           return ListView.builder(

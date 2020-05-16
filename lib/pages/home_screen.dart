@@ -2,9 +2,9 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:letsrun/models/user.dart';
+import 'package:letsrun/plugins/loading_widget.dart';
 import 'package:letsrun/services/firestoreManagement.dart';
 import 'package:letsrun/services/homeScreenRoute.dart';
-import 'package:loading_animations/loading_animations.dart';
 
 import 'news_screen.dart';
 
@@ -35,14 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
         future: futureUser,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Scaffold(
-              backgroundColor: Colors.black,
-              body: Center(
-                child: LoadingBouncingGrid.square(
-                  backgroundColor: Colors.white,
-                ),
-              ),
-            );
+            return LoadingWidget();
           } else {
             return Scaffold(
               bottomNavigationBar: CurvedNavigationBar(
