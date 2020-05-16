@@ -25,6 +25,7 @@ class _LoginScreen extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
+      color: Theme.of(context).primaryColor,
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(

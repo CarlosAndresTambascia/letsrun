@@ -40,6 +40,7 @@ class _PersonRegisterScreen extends State<PersonRegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
+      color: Theme.of(context).primaryColor,
       child: Scaffold(
         key: _scaffoldKey,
         resizeToAvoidBottomInset: false,

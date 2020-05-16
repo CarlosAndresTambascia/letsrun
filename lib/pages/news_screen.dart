@@ -206,7 +206,7 @@ class PostDateTime extends StatelessWidget {
       padding: EdgeInsets.only(right: 230.0, top: 20.0),
       child: Text(
         date.format(post.dateTime),
-        style: TextStyle(fontSize: 11.0, color: Colors.grey),
+        style: TextStyle(fontSize: 11.0, color: Colors.black54),
       ),
     );
   }

@@ -28,6 +28,7 @@ class _MapsState extends State<Maps> {
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
+      color: Theme.of(context).primaryColor,
       child: MaterialApp(
         home: Scaffold(
           appBar: AppBar(
