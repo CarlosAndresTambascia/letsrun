@@ -16,6 +16,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   @override
   void initState() {
+    assistantsNames = new List();
     notificationsSnapshots = FirestoreManagement().getNotificationsSnapshots();
   }
 
@@ -88,8 +89,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
 
   _createAssistantsList(AsyncSnapshot<QuerySnapshot> snapshot) {
+    assistantsNames = new List();
     List<List> assistants = new List();
-
     snapshot.data.documents.forEach((el) {
       assistants.add(el.data['assistants']);
     });

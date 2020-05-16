@@ -35,9 +35,12 @@ class _HomeScreenState extends State<HomeScreen> {
         future: futureUser,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: LoadingBouncingGrid.square(
-                backgroundColor: Colors.white,
+            return Scaffold(
+              backgroundColor: Colors.black,
+              body: Center(
+                child: LoadingBouncingGrid.square(
+                  backgroundColor: Colors.white,
+                ),
               ),
             );
           } else {

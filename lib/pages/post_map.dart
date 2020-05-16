@@ -135,7 +135,6 @@ class _PostMapState extends State<PostMap> {
     setState(() => _loading = true);
     var currentLocation = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     setState(() {
-      _markers.clear();
       _center = LatLng(currentLocation.latitude, currentLocation.longitude);
       _markers.add(
           Marker(position: _center, infoWindow: InfoWindow(title: 'Tu ubicacion'), markerId: MarkerId('myLocaiton')));

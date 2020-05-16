@@ -43,7 +43,8 @@ class _NewsState extends State<News> {
           return ListView.builder(
             itemCount: snapshot.data.documents.length,
             itemBuilder: (context, index) {
-              return PostWidget(post: Post.fromData(snapshot.data.documents[index].data), currentUserFullName: currentUserFullName);
+              return PostWidget(
+                  post: Post.fromData(snapshot.data.documents[index].data), currentUserFullName: currentUserFullName);
             },
           );
         }
@@ -92,7 +93,6 @@ class PostWidget extends StatelessWidget {
                           padding: EdgeInsets.only(top: 35.0, left: 10.0, right: 10.0),
                           child: ReadMoreText(
                             post.description,
-                            //HomeScreen.currentAppUser.email,
                             trimLines: 5,
                             colorClickableText: Theme.of(context).primaryColor,
                             trimMode: TrimMode.Line,
@@ -148,7 +148,10 @@ class PostWidget extends StatelessWidget {
                                   children: <Widget>[
                                     Column(
                                       children: <Widget>[
-                                        SubscribeWidget(isSubscribed: _isSubscribed, subscribedCount: _subscribedCount, onTapped: _onSubscribe),
+                                        SubscribeWidget(
+                                            isSubscribed: _isSubscribed,
+                                            subscribedCount: _subscribedCount,
+                                            onTapped: _onSubscribe),
                                       ],
                                     ),
                                   ],
@@ -172,7 +175,8 @@ class PostWidget extends StatelessWidget {
                         elevation: 5.0,
                         color: Colors.white,
                         child: InkWell(
-                          onTap: () => _goToMapWithCoordinates(context, post.latitudeStarting, post.longitudeStarting, post.latitudeEnd, post.longitudeEnd),
+                          onTap: () => _goToMapWithCoordinates(context, post.latitudeStarting, post.longitudeStarting,
+                              post.latitudeEnd, post.longitudeEnd),
                           child: Container(
                             child: Padding(
                               padding: EdgeInsets.only(left: 35.0, top: 3.0),
@@ -203,7 +207,8 @@ class PostWidget extends StatelessWidget {
     );
   }
 
-  _goToMapWithCoordinates(context, double latitudeStarting, double longitudeStarting, double latitudeEnd, double longitudeEnd) {
+  _goToMapWithCoordinates(
+      context, double latitudeStarting, double longitudeStarting, double latitudeEnd, double longitudeEnd) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -226,7 +231,8 @@ class PostWidget extends StatelessWidget {
 }
 
 class SubscribeWidget extends StatelessWidget {
-  SubscribeWidget({Key key, this.isSubscribed: false, this.subscribedCount: 0, @required this.onTapped}) : super(key: key);
+  SubscribeWidget({Key key, this.isSubscribed: false, this.subscribedCount: 0, @required this.onTapped})
+      : super(key: key);
 
   final bool isSubscribed;
   final int subscribedCount;

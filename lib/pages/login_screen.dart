@@ -128,7 +128,6 @@ class _LoginScreen extends State<LoginScreen> {
   }
 
   String _handleSingInError(PlatformException e) {
-    print(e);
     switch (e.code) {
       case "ERROR_INVALID_EMAIL":
         return 'Formato de email invalido';
