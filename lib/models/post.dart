@@ -1,69 +1,53 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Post {
-  String _pid;
-  double _latitudeStarting;
-  double _latitudeEnd;
-  double _longitudeStarting;
-  double _longitudeEnd;
-  String _description;
-  String _email;
-  String _profilePicUrl;
+  String pid;
+  double latitudeStarting;
+  double latitudeEnd;
+  double longitudeStarting;
+  double longitudeEnd;
+  String description;
+  String email;
+  String profilePicUrl;
   DateTime dateTime;
   List<String> assistants;
 
-  Post(this._pid, this._latitudeStarting, this._latitudeEnd, this._longitudeStarting, this._longitudeEnd,
-      this._description, this._email, this._profilePicUrl, this.dateTime, this.assistants);
+  Post.fromData(Map<String, dynamic> data)
+      : pid = data['pid'],
+        latitudeStarting = data['latitudeStarting'],
+        latitudeEnd = data['latitudeEnd'],
+        longitudeStarting = data['longitudeStarting'],
+        longitudeEnd = data['longitudeEnd'],
+        description = data['description'],
+        email = data['email'],
+        profilePicUrl = data['profilePicUrl'],
+        dateTime = (data['dateTime'] as Timestamp).toDate(),
+        assistants = data['assistants'].cast<String>();
 
-  String get email => _email;
-
-  set email(String value) {
-    _email = value;
-  }
-
-  String get description => _description;
-
-  set description(String value) {
-    _description = value;
-  }
-
-  double get longitudeEnd => _longitudeEnd;
-
-  String get profilePicUrl => _profilePicUrl;
-
-  set profilePicUrl(String value) {
-    _profilePicUrl = value;
-  }
-
-  set longitudeEnd(double value) {
-    _longitudeEnd = value;
-  }
-
-  double get longitudeStarting => _longitudeStarting;
-
-  set longitudeStarting(double value) {
-    _longitudeStarting = value;
-  }
-
-  double get latitudeEnd => _latitudeEnd;
-
-  set latitudeEnd(double value) {
-    _latitudeEnd = value;
-  }
-
-  double get latitudeStarting => _latitudeStarting;
-
-  set latitudeStarting(double value) {
-    _latitudeStarting = value;
-  }
-
-  String get pid => _pid;
-
-  set pid(String value) {
-    _pid = value;
-  }
+  Post(
+      this.pid,
+      this.latitudeStarting,
+      this.latitudeEnd,
+      this.longitudeStarting,
+      this.longitudeEnd,
+      this.description,
+      this.email,
+      this.profilePicUrl,
+      this.dateTime,
+      this.assistants);
 
   @override
   String toString() {
-    return 'Post{_pid: $_pid, _latitudeStarting: $_latitudeStarting, _latitudeEnd: $_latitudeEnd, _longitudeStarting: $_longitudeStarting, _longitudeEnd: $_longitudeEnd, _description: $_description, _email: $_email, _profilePicUrl: $_profilePicUrl, dateTime: $dateTime, assistants: $assistants}';
+    return 'Post{pid:$pid,'
+        'latitudeStarting:$latitudeStarting,'
+        'latitudeEnd:$latitudeEnd,'
+        'longitudeStarting:$longitudeStarting,'
+        'longitudeEnd:$longitudeEnd,'
+        'description: $description,'
+        'email:$email,'
+        'profilePicUrl:$profilePicUrl,'
+        'dateTime:$dateTime,'
+        'assistants:$assistants}';
   }
 
   @override
@@ -71,27 +55,27 @@ class Post {
       identical(this, other) ||
       other is Post &&
           runtimeType == other.runtimeType &&
-          _pid == other._pid &&
-          _latitudeStarting == other._latitudeStarting &&
-          _latitudeEnd == other._latitudeEnd &&
-          _longitudeStarting == other._longitudeStarting &&
-          _longitudeEnd == other._longitudeEnd &&
-          _description == other._description &&
-          _email == other._email &&
-          _profilePicUrl == other._profilePicUrl &&
+          pid == other.pid &&
+          latitudeStarting == other.latitudeStarting &&
+          latitudeEnd == other.latitudeEnd &&
+          longitudeStarting == other.longitudeStarting &&
+          longitudeEnd == other.longitudeEnd &&
+          description == other.description &&
+          email == other.email &&
+          profilePicUrl == other.profilePicUrl &&
           dateTime == other.dateTime &&
           assistants == other.assistants;
 
   @override
   int get hashCode =>
-      _pid.hashCode ^
-      _latitudeStarting.hashCode ^
-      _latitudeEnd.hashCode ^
-      _longitudeStarting.hashCode ^
-      _longitudeEnd.hashCode ^
-      _description.hashCode ^
-      _email.hashCode ^
-      _profilePicUrl.hashCode ^
+      pid.hashCode ^
+      latitudeStarting.hashCode ^
+      latitudeEnd.hashCode ^
+      longitudeStarting.hashCode ^
+      longitudeEnd.hashCode ^
+      description.hashCode ^
+      email.hashCode ^
+      profilePicUrl.hashCode ^
       dateTime.hashCode ^
       assistants.hashCode;
 }
