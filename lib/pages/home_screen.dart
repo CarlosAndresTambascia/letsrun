@@ -25,18 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    _fbm.requestNotificationPermissions();
-    _fbm.subscribeToTopic('posts');
-    _fbm.configure(onMessage: (msg) {
-      print(msg);
-      return;
-    }, onLaunch: (msg) {
-      print(msg);
-      return;
-    }, onResume: (msg) {
-      print(msg);
-      return;
-    });
     super.initState();
     futureUser = FirestoreManagement()
         .getAppUser(_auth.currentUser())
@@ -52,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return LoadingWidget();
           } else {
+            _setupPushNotifications();
             return Scaffold(
               bottomNavigationBar: CurvedNavigationBar(
                 backgroundColor: Theme.of(context).primaryColor,
@@ -76,5 +65,20 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
         });
+  }
+
+  void _setupPushNotifications() {
+    _fbm.requestNotificationPermissions();
+    if (!HomeScreen.currentAppUser.isCoach) {
+      _fbm.subscribeToTopic('posts');
+    }
+    _fbm.configure(onMessage: (msg) {
+      setState(() => _currentView = HomeScreenRoute().getCorrespondingPage(1));
+      return;
+    }, onLaunch: (msg) {
+      return;
+    }, onResume: (msg) {
+      return;
+    });
   }
 }
