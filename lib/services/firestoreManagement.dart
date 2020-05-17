@@ -62,8 +62,12 @@ class FirestoreManagement {
     return _store.collection('posts').orderBy("dateTime", descending: true).snapshots();
   }
 
-  Stream<QuerySnapshot> getNotificationsSnapshots() {
+  Stream<QuerySnapshot> getCoachNotificationsSnapshots() {
     return _store.collection('posts').where('email', isEqualTo: HomeScreen.currentAppUser.email).snapshots();
+  }
+
+  Stream<QuerySnapshot> getNonCoachNotificationsSnapshots() {
+    return _store.collection('posts').snapshots();
   }
 
   uploadProfilePic(String picUrl, User user) {
