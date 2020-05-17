@@ -11,10 +11,10 @@ class PostMap extends StatefulWidget {
   static String id = 'postMap';
   static String startingPositionMsg = 'Principio del recorrido';
   static String finalPositionMsg = 'Final del recorrido';
-  double latitudeStarting;
-  double longitudeStarting;
-  double latitudeEnd;
-  double longitudeEnd;
+  final double latitudeStarting;
+  final double longitudeStarting;
+  final double latitudeEnd;
+  final double longitudeEnd;
 
   PostMap(this.latitudeStarting, this.longitudeStarting, this.latitudeEnd, this.longitudeEnd);
 
@@ -44,6 +44,7 @@ class _PostMapState extends State<PostMap> {
 
   @override
   void initState() {
+    super.initState();
     var startingPlace = LatLng(latitudeStarting, longitudeStarting);
     var endingPlace = LatLng(latitudeEnd, longitudeEnd);
     _center = startingPlace;

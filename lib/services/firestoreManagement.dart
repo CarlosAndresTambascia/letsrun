@@ -35,6 +35,7 @@ class FirestoreManagement {
       'profilePicUrl': post.profilePicUrl,
       'dateTime': post.dateTime,
       'assistants': post.assistants,
+      'fullName': post.fullName,
       'pid': post.pid
     }).then((val) {
       Navigator.pushNamed(context, HomeScreen.id);

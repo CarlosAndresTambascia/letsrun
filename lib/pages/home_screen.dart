@@ -1,5 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:letsrun/models/user.dart';
 import 'package:letsrun/plugins/loading_widget.dart';
@@ -20,9 +21,23 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _currentView = new News();
   final _auth = FirebaseAuth.instance;
   Future<User> futureUser;
+  final _fbm = FirebaseMessaging();
 
   @override
   void initState() {
+    _fbm.requestNotificationPermissions();
+    _fbm.subscribeToTopic('posts');
+    _fbm.configure(onMessage: (msg) {
+      print(msg);
+      return;
+    }, onLaunch: (msg) {
+      print(msg);
+      return;
+    }, onResume: (msg) {
+      print(msg);
+      return;
+    });
+    super.initState();
     futureUser = FirestoreManagement()
         .getAppUser(_auth.currentUser())
         .then((data) => HomeScreen.currentAppUser = data)
