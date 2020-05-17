@@ -25,6 +25,7 @@ class _LoginScreen extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
+      color: Theme.of(context).primaryColor,
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
@@ -49,9 +50,7 @@ class _LoginScreen extends State<LoginScreen> {
                       ),
                       tag: 'logo',
                     ),
-                    SizedBox(
-                      height: 25.0,
-                    ),
+                    Divider(),
                     TextFormField(
                       style: TextStyle(color: Colors.black),
                       keyboardType: TextInputType.emailAddress,
@@ -60,9 +59,7 @@ class _LoginScreen extends State<LoginScreen> {
                       onChanged: (value) => _user.email = value,
                       decoration: kTextFieldDecoration.copyWith(hintText: 'Email'),
                     ),
-                    SizedBox(
-                      height: 25.0,
-                    ),
+                    Divider(),
                     TextFormField(
                       style: TextStyle(color: Colors.black),
                       keyboardType: TextInputType.text,
@@ -80,9 +77,7 @@ class _LoginScreen extends State<LoginScreen> {
                             onPressed: () => setState(() => _passwordVisible ^= true)),
                       ),
                     ),
-                    SizedBox(
-                      height: 25.0,
-                    ),
+                    Divider(),
                     NiceButton(
                       padding: EdgeInsets.all(15.0),
                       radius: 30.0,
@@ -128,7 +123,6 @@ class _LoginScreen extends State<LoginScreen> {
   }
 
   String _handleSingInError(PlatformException e) {
-    print(e);
     switch (e.code) {
       case "ERROR_INVALID_EMAIL":
         return 'Formato de email invalido';
@@ -160,5 +154,18 @@ class _LoginScreen extends State<LoginScreen> {
       content: Text(errorMsg == null ? defaultMsg : errorMsg),
       duration: Duration(seconds: 3),
     ));
+  }
+}
+
+class Divider extends StatelessWidget {
+  const Divider({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 25.0,
+    );
   }
 }

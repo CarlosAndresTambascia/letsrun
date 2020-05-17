@@ -41,6 +41,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
+      color: Theme.of(context).primaryColor,
       child: Scaffold(
         key: _scaffoldKey,
         resizeToAvoidBottomInset: false,

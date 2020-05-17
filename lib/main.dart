@@ -28,17 +28,14 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsFlutterBinding.ensureInitialized();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return FutureBuilder(
         future: _getCurrentUser(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Scaffold(
-              body: Center(
-                child: LoadingBouncingGrid.square(
-                  backgroundColor: Colors.white,
-                ),
-              ),
+            return LoadingBouncingGrid.square(
+              backgroundColor: Colors.white,
             );
           } else {
             return MaterialApp(

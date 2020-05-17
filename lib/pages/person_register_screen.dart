@@ -40,6 +40,7 @@ class _PersonRegisterScreen extends State<PersonRegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
+      color: Theme.of(context).primaryColor,
       child: Scaffold(
         key: _scaffoldKey,
         resizeToAvoidBottomInset: false,
@@ -251,7 +252,7 @@ class Divider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return const SizedBox(
       height: 25.0,
     );
   }
