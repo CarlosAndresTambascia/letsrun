@@ -59,7 +59,7 @@ class PostWidget extends StatelessWidget {
   final int _subscribedCount;
   final double _circleRadius = 75.0;
   final double _circleBorderWidth = 5.0;
-  final DateFormat date = DateFormat('dd/MM/yyyy-hh:mm');
+  final DateFormat date = DateFormat('dd/MM/yyyy-HH:mm');
 
   @override
   Widget build(BuildContext context) {
