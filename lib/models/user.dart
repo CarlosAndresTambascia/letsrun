@@ -1,18 +1,16 @@
 class User {
-  String _email;
-  String _password;
-  String _fullName;
-  String _profilePictureUrl;
-  String _certificateUrl;
+  String email;
+  String password;
+  String fullName;
+  String profilePictureUrl;
+  String certificateUrl;
   bool isCoach;
 
-  User(this._email, this._password, this._fullName, this._profilePictureUrl, this._certificateUrl, this.isCoach);
-
-  String get certificateUrl => _certificateUrl;
+  User(this.email, this.password, this.fullName, this.profilePictureUrl, this.certificateUrl, this.isCoach);
 
   @override
   String toString() {
-    return 'User{_email: $_email, _password: $_password, _fullName: $_fullName, _profilePictureUrl: $_profilePictureUrl, _certificateUrl: $_certificateUrl, isCoach: $isCoach}';
+    return 'User{_email: $email, _password: $password, _fullName: $fullName, _profilePictureUrl: $profilePictureUrl, _certificateUrl: $certificateUrl, isCoach: $isCoach}';
   }
 
   @override
@@ -20,47 +18,19 @@ class User {
       identical(this, other) ||
       other is User &&
           runtimeType == other.runtimeType &&
-          _email == other._email &&
-          _password == other._password &&
-          _fullName == other._fullName &&
-          _profilePictureUrl == other._profilePictureUrl &&
-          _certificateUrl == other._certificateUrl &&
+          email == other.email &&
+          password == other.password &&
+          fullName == other.fullName &&
+          profilePictureUrl == other.profilePictureUrl &&
+          certificateUrl == other.certificateUrl &&
           isCoach == other.isCoach;
 
   @override
   int get hashCode =>
-      _email.hashCode ^
-      _password.hashCode ^
-      _fullName.hashCode ^
-      _profilePictureUrl.hashCode ^
-      _certificateUrl.hashCode ^
+      email.hashCode ^
+      password.hashCode ^
+      fullName.hashCode ^
+      profilePictureUrl.hashCode ^
+      certificateUrl.hashCode ^
       isCoach.hashCode;
-
-  set certificateUrl(String value) {
-    _certificateUrl = value;
-  }
-
-  String get email => _email;
-
-  set email(String value) {
-    _email = value;
-  }
-
-  String get password => _password;
-
-  String get profilePictureUrl => _profilePictureUrl;
-
-  set profilePictureUrl(String value) {
-    _profilePictureUrl = value;
-  }
-
-  String get fullName => _fullName;
-
-  set fullName(String value) {
-    _fullName = value;
-  }
-
-  set password(String value) {
-    _password = value;
-  }
 }

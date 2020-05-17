@@ -4,7 +4,7 @@ description: This application is the final project of our career as developers.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -29,6 +29,7 @@ dependencies:
   uuid: 2.0.4
   flutter_local_notifications: ^1.4.3
   intl: ^0.16.1
+  firebase_messaging: ^6.0.15
 
 dev_dependencies:
   flutter_test:

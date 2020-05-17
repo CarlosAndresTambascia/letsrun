@@ -169,6 +169,7 @@ class _NewPostState extends State<NewPost> {
 
   _postIt() {
     _post.email = HomeScreen.currentAppUser.email;
+    _post.fullName = HomeScreen.currentAppUser.fullName;
     _post.profilePicUrl = HomeScreen.currentAppUser.profilePictureUrl;
     _post.dateTime = DateTime.now();
     _post.assistants = [];

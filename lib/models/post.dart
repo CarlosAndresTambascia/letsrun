@@ -11,6 +11,7 @@ class Post {
   String profilePicUrl;
   DateTime dateTime;
   List<String> assistants;
+  String fullName;
 
   Post.fromData(Map<String, dynamic> data)
       : pid = data['pid'],
@@ -20,21 +21,13 @@ class Post {
         longitudeEnd = data['longitudeEnd'],
         description = data['description'],
         email = data['email'],
+        fullName = data['fullName'],
         profilePicUrl = data['profilePicUrl'],
         dateTime = (data['dateTime'] as Timestamp).toDate(),
         assistants = data['assistants'].cast<String>();
 
-  Post(
-      this.pid,
-      this.latitudeStarting,
-      this.latitudeEnd,
-      this.longitudeStarting,
-      this.longitudeEnd,
-      this.description,
-      this.email,
-      this.profilePicUrl,
-      this.dateTime,
-      this.assistants);
+  Post(this.pid, this.latitudeStarting, this.latitudeEnd, this.longitudeStarting, this.longitudeEnd, this.description,
+      this.email, this.profilePicUrl, this.dateTime, this.assistants);
 
   @override
   String toString() {
@@ -45,6 +38,7 @@ class Post {
         'longitudeEnd:$longitudeEnd,'
         'description: $description,'
         'email:$email,'
+        'fullName:$fullName,'
         'profilePicUrl:$profilePicUrl,'
         'dateTime:$dateTime,'
         'assistants:$assistants}';
@@ -62,6 +56,7 @@ class Post {
           longitudeEnd == other.longitudeEnd &&
           description == other.description &&
           email == other.email &&
+          fullName == other.fullName &&
           profilePicUrl == other.profilePicUrl &&
           dateTime == other.dateTime &&
           assistants == other.assistants;
@@ -75,6 +70,7 @@ class Post {
       longitudeEnd.hashCode ^
       description.hashCode ^
       email.hashCode ^
+      fullName.hashCode ^
       profilePicUrl.hashCode ^
       dateTime.hashCode ^
       assistants.hashCode;

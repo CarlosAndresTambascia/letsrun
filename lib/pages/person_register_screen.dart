@@ -34,6 +34,7 @@ class _PersonRegisterScreen extends State<PersonRegisterScreen> {
 
   @override
   void initState() {
+    super.initState();
     _randomPicsId = 0 + _random.nextInt(5000 - 0);
   }
 

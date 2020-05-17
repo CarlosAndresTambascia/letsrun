@@ -1,5 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:letsrun/models/user.dart';
 import 'package:letsrun/plugins/loading_widget.dart';
@@ -20,9 +21,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _currentView = new News();
   final _auth = FirebaseAuth.instance;
   Future<User> futureUser;
+  final _fbm = FirebaseMessaging();
 
   @override
   void initState() {
+    super.initState();
     futureUser = FirestoreManagement()
         .getAppUser(_auth.currentUser())
         .then((data) => HomeScreen.currentAppUser = data)
@@ -37,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return LoadingWidget();
           } else {
+            _setupPushNotifications();
             return Scaffold(
               bottomNavigationBar: CurvedNavigationBar(
                 backgroundColor: Theme.of(context).primaryColor,
@@ -61,5 +65,20 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
         });
+  }
+
+  void _setupPushNotifications() {
+    _fbm.requestNotificationPermissions();
+    if (!HomeScreen.currentAppUser.isCoach) {
+      _fbm.subscribeToTopic('posts');
+    }
+    _fbm.configure(onMessage: (msg) {
+      setState(() => _currentView = HomeScreenRoute().getCorrespondingPage(1));
+      return;
+    }, onLaunch: (msg) {
+      return;
+    }, onResume: (msg) {
+      return;
+    });
   }
 }

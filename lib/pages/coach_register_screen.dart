@@ -35,6 +35,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
 
   @override
   void initState() {
+    super.initState();
     _randomPicsId = 0 + _random.nextInt(5000 - 0);
   }
 
