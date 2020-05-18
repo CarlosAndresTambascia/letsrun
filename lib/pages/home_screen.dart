@@ -43,18 +43,23 @@ class _HomeScreenState extends State<HomeScreen> {
             _setupPushNotifications();
             return Scaffold(
               bottomNavigationBar: CurvedNavigationBar(
-                backgroundColor: Theme.of(context).primaryColor,
+                buttonBackgroundColor: Colors.white70,
+                backgroundColor: Color(0XFF6a54b0),
                 items: HomeScreen.currentAppUser.isCoach
                     ? <Widget>[
-                        Icon(Icons.menu, size: 30),
-                        Icon(Icons.add, size: 30),
-                        Icon(Icons.notifications, size: 30),
-                        Icon(Icons.settings, size: 30),
+                        Icon(
+                          Icons.menu,
+                          size: 30,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        Icon(Icons.add, size: 30, color: Theme.of(context).primaryColor),
+                        Icon(Icons.notifications, size: 30, color: Theme.of(context).primaryColor),
+                        Icon(Icons.settings, size: 30, color: Theme.of(context).primaryColor),
                       ]
                     : <Widget>[
-                        Icon(Icons.menu, size: 30),
-                        Icon(Icons.notifications, size: 30),
-                        Icon(Icons.settings, size: 30),
+                        Icon(Icons.menu, size: 30, color: Theme.of(context).primaryColor),
+                        Icon(Icons.notifications, size: 30, color: Theme.of(context).primaryColor),
+                        Icon(Icons.settings, size: 30, color: Theme.of(context).primaryColor),
                       ],
                 onTap: (index) => setState(() => _currentView = HomeScreenRoute().getCorrespondingPage(index)),
               ),
