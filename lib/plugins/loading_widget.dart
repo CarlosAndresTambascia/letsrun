@@ -10,9 +10,17 @@ class LoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: Center(
-        child: LoadingBouncingGrid.square(
-          backgroundColor: Colors.white,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(colors: [
+            Color(0XFF6a54b0),
+            Color(0xFF2953a7),
+          ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
+        ),
+        child: Center(
+          child: LoadingBouncingGrid.square(
+            backgroundColor: Colors.white,
+          ),
         ),
       ),
     );

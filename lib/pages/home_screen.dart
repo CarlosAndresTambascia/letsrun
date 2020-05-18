@@ -59,7 +59,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: (index) => setState(() => _currentView = HomeScreenRoute().getCorrespondingPage(index)),
               ),
               body: Container(
-                color: Theme.of(context).primaryColor,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: [
+                    Color(0XFF6a54b0),
+                    Color(0xFF2953a7),
+                  ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
+                ),
                 child: _currentView,
               ),
             );

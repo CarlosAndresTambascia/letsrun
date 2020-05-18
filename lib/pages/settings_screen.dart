@@ -15,6 +15,8 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   File _profilePicture;
   final _auth = FirebaseAuth.instance;
+  final isCoach = HomeScreen.currentAppUser.isCoach;
+  bool editing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,7 @@ class _SettingsState extends State<Settings> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => showDialog(context: context, builder: (_) => _askForSource()),
+                  onTap: () => editing ? showDialog(context: context, builder: (_) => _askForSource()) : null,
                   child: AvatarGlow(
                     endRadius: 90,
                     duration: Duration(seconds: 2),
@@ -51,7 +53,8 @@ class _SettingsState extends State<Settings> {
                         child: CircleAvatar(
                           backgroundColor: Colors.grey[100],
                           child: HomeScreen.currentAppUser.profilePictureUrl == "" ||
-                                  HomeScreen.currentAppUser.profilePictureUrl == null
+                                  HomeScreen.currentAppUser.profilePictureUrl == null ||
+                                  editing
                               ? Icon(
                                   Icons.add_a_photo,
                                   size: 35.0,
@@ -71,17 +74,49 @@ class _SettingsState extends State<Settings> {
                   style: TextStyle(
                       fontFamily: 'Lobster', fontSize: 28.0, color: Colors.white, fontWeight: FontWeight.bold),
                 ),
-                GestureDetector(
-                  child: Card(
-                    elevation: 15.0,
-                    margin: EdgeInsets.all(20.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        ListTile(
-                          title: Text('Editar Perfil', textAlign: TextAlign.center),
+                isCoach
+                    ? Container(
+                        width: 300.0,
+                        height: 300.0,
+                        child: Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: DecoratedBox(
+                            decoration: ShapeDecoration(
+                              shape: RoundedRectangleBorder(),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: HomeScreen.currentAppUser.certificateUrl == "" ||
+                                        HomeScreen.currentAppUser.certificateUrl == null ||
+                                        editing
+                                    ? Icon(
+                                        Icons.add_a_photo,
+                                        size: 35.0,
+                                        color: Colors.black54,
+                                      )
+                                    : NetworkImage(
+                                        HomeScreen.currentAppUser.certificateUrl,
+                                      ),
+                              ),
+                            ),
+                          ),
                         ),
-                      ],
+                      )
+                    : SizedBox(),
+                Visibility(
+                  visible: !editing,
+                  child: InkWell(
+                    onTap: () => setState(() => editing = true),
+                    child: EditProfileButton(
+                      buttonText: 'Editar Perfil',
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: editing,
+                  child: InkWell(
+                    onTap: () => setState(() => editing = false),
+                    child: EditProfileButton(
+                      buttonText: 'Terminado',
                     ),
                   ),
                 ),
@@ -127,5 +162,30 @@ class _SettingsState extends State<Settings> {
       Navigator.pop(context);
       Navigator.pushNamed(context, WelcomeScreen.id);
     }).catchError((e) => print(e));
+  }
+}
+
+class EditProfileButton extends StatelessWidget {
+  final buttonText;
+
+  const EditProfileButton({
+    Key key,
+    @required this.buttonText,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 15.0,
+      margin: EdgeInsets.all(20.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          ListTile(
+            title: Text(buttonText, textAlign: TextAlign.center),
+          ),
+        ],
+      ),
+    );
   }
 }
