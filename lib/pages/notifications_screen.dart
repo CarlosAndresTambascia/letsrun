@@ -48,33 +48,40 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 curve: Curves.bounceOut,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  child: ListTile(
-                    title: Container(
-                      height: 70,
-                      child: Padding(
-                        child: Card(
-                          child: Padding(
-                            padding: EdgeInsets.all(10.0),
-                            child: Row(
-                              children: <Widget>[
-                                Column(
-                                  children: <Widget>[
-                                    Icon(
+                  child: Container(
+                    height: 85,
+                    child: Padding(
+                      child: Card(
+                        color: Colors.white,
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 18.0, left: 15.0),
+                          child: Row(
+                            children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  CircleAvatar(
+                                    backgroundColor: Color(0xFFccc1eb),
+                                    radius: 20,
+                                    child: Icon(
                                       Icons.directions_run,
-                                      color: Theme.of(context).primaryColor,
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 15.0,
-                                ),
-                                Column(
+                                      color: Colors.black,
+                                    ),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                width: 15.0,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Column(
                                   children: <Widget>[
                                     isCoach
                                         ? RichText(
                                             text: TextSpan(
                                               text: namesList[index],
-                                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold, color: Colors.black, fontSize: 18.0),
                                               children: [
                                                 TextSpan(
                                                     text: ' asistira.', style: TextStyle(fontWeight: FontWeight.normal))
@@ -84,7 +91,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                         : RichText(
                                             text: TextSpan(
                                               text: namesList[index],
-                                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold, color: Colors.black, fontSize: 14.0),
                                               children: [
                                                 TextSpan(
                                                     text: ' hizo una nueva publicacion.',
@@ -94,12 +102,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                           )
                                   ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
-                        padding: EdgeInsets.all(2.5),
                       ),
+                      padding: EdgeInsets.all(2.5),
                     ),
                   ),
                 ),

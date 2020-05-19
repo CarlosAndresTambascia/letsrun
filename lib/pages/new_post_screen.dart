@@ -29,9 +29,14 @@ class _NewPostState extends State<NewPost> {
       color: Theme.of(context).primaryColor,
       child: Scaffold(
         key: _scaffoldKey,
-        backgroundColor: Theme.of(context).primaryColor,
         body: SingleChildScrollView(
           child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(colors: [
+                Color(0XFF6a54b0),
+                Color(0xFF2953a7),
+              ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
+            ),
             height: MediaQuery.of(context).size.height,
             padding: EdgeInsets.symmetric(horizontal: 10),
             child: Container(

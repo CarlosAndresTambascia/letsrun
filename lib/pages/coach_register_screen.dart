@@ -32,11 +32,20 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
   final _random = new Random();
   var _randomPicsId;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final _emailFocus = FocusNode();
+  final _passwordFocus = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _randomPicsId = 0 + _random.nextInt(5000 - 0);
+  }
+
+  @override
+  void dispose() {
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
+    super.dispose();
   }
 
   @override
@@ -96,6 +105,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
                         onChanged: (value) => _user.fullName = value,
                         validator: _validateField,
                         decoration: kTextFieldDecoration.copyWith(hintText: 'Nombre Completo'),
+                        onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_emailFocus),
                       ),
                       Divider(),
                       TextFormField(
@@ -105,6 +115,8 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
                         onChanged: (value) => _user.email = value,
                         validator: _validateField,
                         decoration: kTextFieldDecoration.copyWith(hintText: 'Email'),
+                        focusNode: _emailFocus,
+                        onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_passwordFocus),
                       ),
                       Divider(),
                       TextFormField(
@@ -123,6 +135,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
                               ),
                               onPressed: () => setState(() => _passwordVisible ^= true)),
                         ),
+                        focusNode: _passwordFocus,
                       ),
                       Divider(),
                       Card(

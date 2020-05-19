@@ -21,6 +21,13 @@ class _LoginScreen extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _auth = FirebaseAuth.instance;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final _passwordFocus = FocusNode();
+
+  @override
+  void dispose() {
+    _passwordFocus.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +65,7 @@ class _LoginScreen extends State<LoginScreen> {
                       validator: _validateField,
                       onChanged: (value) => _user.email = value,
                       decoration: kTextFieldDecoration.copyWith(hintText: 'Email'),
+                      onFieldSubmitted: (_) => FocusScope.of(context).requestFocus(_passwordFocus),
                     ),
                     Divider(),
                     TextFormField(
@@ -76,6 +84,7 @@ class _LoginScreen extends State<LoginScreen> {
                             ),
                             onPressed: () => setState(() => _passwordVisible ^= true)),
                       ),
+                      focusNode: _passwordFocus,
                     ),
                     Divider(),
                     NiceButton(
