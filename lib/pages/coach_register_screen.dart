@@ -9,12 +9,12 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:letsrun/models/user.dart';
 import 'package:letsrun/plugins/constants.dart';
-import 'package:letsrun/services/firestoreManagement.dart';
+import 'package:letsrun/services/firestore_service.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:nice_button/NiceButton.dart';
 
 class CoachRegisterScreen extends StatefulWidget {
-  static String id = 'coach_register_screen';
+  static const String id = 'coach_register_screen';
 
   @override
   _CoachRegisterScreen createState() => _CoachRegisterScreen();
@@ -237,7 +237,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
       _loading = true;
     });
     StorageUploadTask task = storageReference.putFile(_profilePicture);
-    FirestoreManagement().uploadProfilePic(await (await task.onComplete).ref.getDownloadURL(), _user);
+    FirestoreService().uploadProfilePic(await (await task.onComplete).ref.getDownloadURL(), _user);
     setState(() => _loading = false);
   }
 
@@ -259,7 +259,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
           .catchError((e) => showExceptionError(context, _handleAuthError(e)))
           .then((createdUser) async {
         setState(() => _loading = true);
-        await (FirestoreManagement().addUser(createdUser.user, context, _user));
+        await (FirestoreService().addUser(createdUser.user, context, _user));
         setState(() => _loading = false);
       }).catchError((e) => showExceptionError(context, 'Hubo un problema al registrar al usuario'));
     } else {

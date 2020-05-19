@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:letsrun/pages/home_screen.dart';
 import 'package:letsrun/plugins/loading_widget.dart';
-import 'package:letsrun/services/firestoreManagement.dart';
+import 'package:letsrun/services/firestore_service.dart';
 
 class NotificationsScreen extends StatefulWidget {
   @override
@@ -21,8 +21,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     super.initState();
     namesList = new List();
     notificationsSnapshots = isCoach
-        ? FirestoreManagement().getCoachNotificationsSnapshots()
-        : FirestoreManagement().getNonCoachNotificationsSnapshots();
+        ? FirestoreService().getCoachNotificationsSnapshots()
+        : FirestoreService().getNonCoachNotificationsSnapshots();
   }
 
   @override

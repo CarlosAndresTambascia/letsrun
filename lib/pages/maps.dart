@@ -6,7 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class Maps extends StatefulWidget {
-  static String id = 'maps';
+  static const String id = 'maps';
   static String startingPositionMsg = 'Principio del recorrido';
   static String finalPositionMsg = 'Final del recorrido';
 

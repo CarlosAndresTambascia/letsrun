@@ -8,7 +8,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:nice_button/NiceButton.dart';
 
 class LoginScreen extends StatefulWidget {
-  static String id = 'login_screen';
+  static const String id = 'login_screen';
 
   @override
   _LoginScreen createState() => _LoginScreen();

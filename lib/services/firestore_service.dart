@@ -5,9 +5,8 @@ import 'package:letsrun/models/post.dart';
 import 'package:letsrun/models/user.dart';
 import 'package:letsrun/pages/home_screen.dart';
 
-class FirestoreManagement {
+class FirestoreService {
   final _store = Firestore.instance;
-  final _auth = FirebaseAuth.instance;
 
   Future addUser(FirebaseUser user, BuildContext context, User appUser) {
     return _store.collection('/users').add({
@@ -76,15 +75,15 @@ class FirestoreManagement {
     user.profilePictureUrl = picUrl;
   }
 
-  Future updateUserData(String picUrl, String fullName) async {
+/*  Future updateUserData(String picUrl, String fullName) async {
     var userInfo = new UserUpdateInfo();
     userInfo.photoUrl = picUrl;
-    await _auth.currentUser().then((user) {
+    await _firebaseAuth.currentUser().then((user) {
       _store.collection('users').where('uid', isEqualTo: user.uid).getDocuments().then((docs) => Firestore.instance
           .document('users/${docs.documents[0].documentID}')
           .updateData({'profilePictureUrl': picUrl, 'fullName': fullName}).catchError((e) => print(e)));
     });
-  }
+  }*/
 
   Future<User> getAppUser(Future<FirebaseUser> currentUser) async {
     User appUser = new User('', '', '', '', '', false);

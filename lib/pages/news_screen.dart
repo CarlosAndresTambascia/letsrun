@@ -7,7 +7,7 @@ import 'package:letsrun/models/post.dart';
 import 'package:letsrun/pages/home_screen.dart';
 import 'package:letsrun/pages/post_map.dart';
 import 'package:letsrun/plugins/loading_widget.dart';
-import 'package:letsrun/services/firestoreManagement.dart';
+import 'package:letsrun/services/firestore_service.dart';
 import 'package:like_button/like_button.dart';
 import 'package:readmore/readmore.dart';
 
@@ -23,7 +23,7 @@ class _NewsState extends State<News> {
   @override
   void initState() {
     super.initState();
-    postsSnapshots = FirestoreManagement().getPostsSnapshots();
+    postsSnapshots = FirestoreService().getPostsSnapshots();
   }
 
   @override
@@ -180,11 +180,11 @@ class PostWidget extends StatelessWidget {
   Future<bool> _onSubscribe() async {
     if (_isSubscribed) {
       post.assistants.remove(currentUserFullName);
-      await FirestoreManagement().addListener(post.pid, post.assistants);
+      await FirestoreService().addListener(post.pid, post.assistants);
       return false;
     } else {
       post.assistants.add(currentUserFullName);
-      await FirestoreManagement().addListener(post.pid, post.assistants);
+      await FirestoreService().addListener(post.pid, post.assistants);
       return true;
     }
   }

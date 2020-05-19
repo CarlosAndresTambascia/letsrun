@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:letsrun/models/post.dart';
 import 'package:letsrun/plugins/constants.dart';
-import 'package:letsrun/services/firestoreManagement.dart';
+import 'package:letsrun/services/firestore_service.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:uuid/uuid.dart';
 
@@ -181,7 +181,7 @@ class _NewPostState extends State<NewPost> {
     _post.pid = uuid.v1();
     if (_validatePostFields()) {
       setState(() => _loading = true);
-      FirestoreManagement()
+      FirestoreService()
           .addPost(context, _post)
           .catchError(() => showExceptionError(context, 'Hubo un problema al crear el post, intente mas tarde.'));
       setState(() => _loading = false);

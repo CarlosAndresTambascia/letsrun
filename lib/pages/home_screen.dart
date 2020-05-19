@@ -4,13 +4,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:letsrun/models/user.dart';
 import 'package:letsrun/plugins/loading_widget.dart';
-import 'package:letsrun/services/firestoreManagement.dart';
+import 'package:letsrun/services/firestore_service.dart';
 import 'package:letsrun/services/homeScreenRoute.dart';
 
 import 'news_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  static String id = 'home_screen';
+  static const String id = 'home_screen';
   static User currentAppUser;
 
   @override
@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    futureUser = FirestoreManagement()
+    futureUser = FirestoreService()
         .getAppUser(_auth.currentUser())
         .then((data) => HomeScreen.currentAppUser = data)
         .catchError((e) => print(e));
