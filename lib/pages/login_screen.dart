@@ -16,7 +16,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreen extends State<LoginScreen> {
   bool _loading = false;
-  User _user = new User('', '', '', '', '', false);
+  User _user = new User('', '', '', '', '', false, 0);
   bool _passwordVisible = true;
   final _formKey = GlobalKey<FormState>();
   final _auth = FirebaseAuth.instance;

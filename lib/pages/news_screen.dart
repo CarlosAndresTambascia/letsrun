@@ -180,7 +180,9 @@ class PostWidget extends StatelessWidget {
   Future<bool> _onSubscribe() async {
     if (_isSubscribed) {
       post.assistants.remove(currentUserFullName);
-      await FirestoreManagement().addListener(post.pid, post.assistants);
+      try {
+        await FirestoreManagement().addListener(post.pid, post.assistants);
+      } catch (e) {}
       return false;
     } else {
       post.assistants.add(currentUserFullName);

@@ -22,17 +22,11 @@ class _MyAppState extends State<MyApp> {
   FirebaseUser user;
 
   @override
-  void initState() {
-    super.initState();
-    _getCurrentUser();
-  }
-
-  @override
   Widget build(BuildContext context) {
     WidgetsFlutterBinding.ensureInitialized();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return FutureBuilder(
-        future: _getCurrentUser(),
+        future: _getCurrentUser(context),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return LoadingBouncingGrid.square(
@@ -63,9 +57,25 @@ class _MyAppState extends State<MyApp> {
         });
   }
 
-  Future<FirebaseUser> _getCurrentUser() {
-    return FirebaseAuth.instance.currentUser().then((actualUser) {
+  Future<FirebaseUser> _getCurrentUser(context) async {
+    return await FirebaseAuth.instance.currentUser().then((actualUser) {
       user = actualUser;
-    }).catchError((e) => print(e));
+    }).catchError((e) {
+      setState(() {
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text('oh oh'),
+            content: Text('Hubo un problema, por favor intenta mas tarde'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Entendido'),
+                onPressed: () => Navigator.of(context).pop(),
+              )
+            ],
+          ),
+        );
+      });
+    });
   }
 }

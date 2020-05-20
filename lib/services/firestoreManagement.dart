@@ -9,7 +9,7 @@ class FirestoreManagement {
   final _store = Firestore.instance;
   final _auth = FirebaseAuth.instance;
 
-  Future addUser(FirebaseUser user, BuildContext context, User appUser) {
+  Future<void> addUser(FirebaseUser user, BuildContext context, User appUser) {
     return _store.collection('/users').add({
       'email': user.email,
       'uid': user.uid,
@@ -17,14 +17,15 @@ class FirestoreManagement {
       'profilePictureUrl': appUser.profilePictureUrl,
       'certificateUrl': appUser.certificateUrl,
       'password': appUser.password,
-      'isCoach': appUser.isCoach
+      'isCoach': appUser.isCoach,
+      'picId': appUser.picId
     }).then((val) {
       Navigator.pop(context);
       Navigator.pushNamed(context, HomeScreen.id);
     }).catchError((e) => print(e));
   }
 
-  Future addPost(BuildContext context, Post post) {
+  Future<void> addPost(BuildContext context, Post post) {
     return _store.collection('/posts').add({
       'email': post.email,
       'latitudeStarting': post.latitudeStarting,
@@ -42,17 +43,17 @@ class FirestoreManagement {
     }).catchError((e) => print(e));
   }
 
-  addListener(String pid, List assistants) async {
+  Future<void> addListener(String pid, List assistants) async {
     _store
         .collection('posts')
         .where('pid', isEqualTo: pid)
         .getDocuments()
         .then((docs) => _store.document(('posts/${docs.documents[0].documentID}')).updateData({
               'assistants': assistants,
-            }).catchError((e) => print(e)));
+            }).catchError((e) => throw (e)));
   }
 
-  removeListener(String pid, List assistants) async {
+  Future<void> removeListener(String pid, List assistants) async {
     await _store.collection('posts').where('pid', isEqualTo: pid).getDocuments().then((docs) => _store
         .document(('posts/${docs.documents[0].documentID}'))
         .updateData({'assistants': assistants}).catchError((e) => print(e)));
@@ -70,13 +71,13 @@ class FirestoreManagement {
     return _store.collection('posts').snapshots();
   }
 
-  uploadProfilePic(String picUrl, User user) {
+  Future<void> uploadProfilePic(String picUrl, User user) {
     var userInfo = new UserUpdateInfo();
     userInfo.photoUrl = picUrl;
     user.profilePictureUrl = picUrl;
   }
 
-  Future updateUserData(String picUrl, String fullName) async {
+  Future<void> updateUserData(String picUrl, String fullName) async {
     var userInfo = new UserUpdateInfo();
     userInfo.photoUrl = picUrl;
     await _auth.currentUser().then((user) {
@@ -87,14 +88,14 @@ class FirestoreManagement {
   }
 
   Future<User> getAppUser(Future<FirebaseUser> currentUser) async {
-    User appUser = new User('', '', '', '', '', false);
+    User appUser = new User('', '', '', '', '', false, 0);
     DocumentSnapshot databaseUser;
     databaseUser = await getCurrentUser(currentUser);
 
     if (databaseUser.exists) {
       var data = databaseUser.data;
       appUser = new User(data['email'], data['password'], data['fullName'], data['profilePictureUrl'],
-          data['certificateUrl'], data['isCoach']);
+          data['certificateUrl'], data['isCoach'], data['picId']);
     }
     return appUser;
   }

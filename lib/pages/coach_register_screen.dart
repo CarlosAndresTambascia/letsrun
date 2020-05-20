@@ -21,7 +21,7 @@ class CoachRegisterScreen extends StatefulWidget {
 }
 
 class _CoachRegisterScreen extends State<CoachRegisterScreen> {
-  User _user = new User('', '', '', '', '', true);
+  User _user = new User('', '', '', '', '', true, 0);
   bool _passwordVisible = true;
   bool _loading = false;
   File _profilePicture;
@@ -30,7 +30,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
   final _auth = FirebaseAuth.instance;
   final _store = FirebaseStorage.instance;
   final _random = new Random();
-  var _randomPicsId;
+  int _randomPicsId;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _emailFocus = FocusNode();
   final _passwordFocus = FocusNode();
@@ -219,14 +219,10 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
     File selected = await ImagePicker.pickImage(source: source);
     if (isProfile) {
       setState(() => _profilePicture = selected);
-      _uploadProfileImage().whenComplete(() {
-        setState(() {});
-      });
+      _uploadProfileImage();
     } else {
       setState(() => _certificatePicture = selected);
-      _uploadCertificate().whenComplete(() {
-        setState(() {});
-      });
+      _uploadCertificate();
     }
   }
 
@@ -249,6 +245,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
     });
     StorageUploadTask task = storageReference.putFile(_certificatePicture);
     _user.certificateUrl = (await (await task.onComplete).ref.getDownloadURL());
+    _user.picId = _randomPicsId;
     setState(() => _loading = false);
   }
 
@@ -287,7 +284,6 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
   }
 
   String _handleAuthError(PlatformException e) {
-    print(e);
     switch (e.code) {
       case "ERROR_INVALID_EMAIL":
         return 'Formato de email invalido';
