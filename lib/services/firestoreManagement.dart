@@ -71,7 +71,7 @@ class FirestoreManagement {
     return _store.collection('posts').snapshots();
   }
 
-  Future<void> uploadProfilePic(String picUrl, User user) {
+  void uploadProfilePic(String picUrl, User user) {
     var userInfo = new UserUpdateInfo();
     userInfo.photoUrl = picUrl;
     user.profilePictureUrl = picUrl;

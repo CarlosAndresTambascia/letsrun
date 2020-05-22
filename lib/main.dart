@@ -29,8 +29,10 @@ class _MyAppState extends State<MyApp> {
         future: _getCurrentUser(context),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return LoadingBouncingGrid.square(
-              backgroundColor: Colors.white,
+            return MaterialApp(
+              home: LoadingBouncingGrid.square(
+                backgroundColor: Colors.white,
+              ),
             );
           } else {
             return MaterialApp(
@@ -41,7 +43,7 @@ class _MyAppState extends State<MyApp> {
                 accentColor: Color(0XFF233C63),
                 fontFamily: 'Poppins',
               ),
-              initialRoute: user == null ? WelcomeScreen.id : HomeScreen.id,
+              home: user == null ? WelcomeScreen() : HomeScreen(),
               routes: {
                 WelcomeScreen.id: (context) => WelcomeScreen(),
                 LoginScreen.id: (context) => LoginScreen(),
