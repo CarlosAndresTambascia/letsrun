@@ -110,7 +110,7 @@ class _SettingsState extends State<Settings> {
                     Visibility(
                       visible: _description.isNotEmpty,
                       child: InkWell(
-                        onTap: _addUserDescription(context),
+                        onTap: () => _addUserDescription(context),
                         child: Card(
                           color: Colors.white70,
                           elevation: 15.0,
