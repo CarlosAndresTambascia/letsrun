@@ -8,6 +8,7 @@ import 'package:letsrun/pages/maps.dart';
 import 'package:letsrun/pages/person_register_screen.dart';
 import 'package:letsrun/pages/registration_screen.dart';
 import 'package:letsrun/pages/welcome_screen.dart';
+import 'package:letsrun/plugins/Exception.dart';
 import 'package:loading_animations/loading_animations.dart';
 
 void main() => runApp(MyApp());
@@ -64,19 +65,7 @@ class _MyAppState extends State<MyApp> {
       user = actualUser;
     }).catchError((e) {
       setState(() {
-        showDialog(
-          context: context,
-          builder: (ctx) => AlertDialog(
-            title: Text('oh oh'),
-            content: Text('Hubo un problema, por favor intenta mas tarde'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Entendido'),
-                onPressed: () => Navigator.of(context).pop(),
-              )
-            ],
-          ),
-        );
+        Exception.showException(context);
       });
     });
   }

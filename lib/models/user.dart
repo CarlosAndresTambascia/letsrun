@@ -6,12 +6,14 @@ class User {
   String certificateUrl;
   bool isCoach;
   int picId;
+  String description;
 
-  User(this.email, this.password, this.fullName, this.profilePictureUrl, this.certificateUrl, this.isCoach, this.picId);
+  User(this.email, this.password, this.fullName, this.profilePictureUrl, this.certificateUrl, this.isCoach, this.picId,
+      this.description);
 
   @override
   String toString() {
-    return 'User{_email: $email, _password: $password, _fullName: $fullName, _profilePictureUrl: $profilePictureUrl, _certificateUrl: $certificateUrl, isCoach: $isCoach, picID: $picId}';
+    return 'User{_email: $email, _password: $password, _fullName: $fullName, _profilePictureUrl: $profilePictureUrl, _certificateUrl: $certificateUrl, isCoach: $isCoach, picID: $picId, description: $description}';
   }
 
   @override
@@ -25,6 +27,7 @@ class User {
           profilePictureUrl == other.profilePictureUrl &&
           certificateUrl == other.certificateUrl &&
           picId == other.picId &&
+          description == other.description &&
           isCoach == other.isCoach;
 
   @override
@@ -35,5 +38,6 @@ class User {
       profilePictureUrl.hashCode ^
       certificateUrl.hashCode ^
       picId.hashCode ^
+      description.hashCode ^
       isCoach.hashCode;
 }

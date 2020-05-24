@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:letsrun/pages/home_screen.dart';
 import 'package:letsrun/pages/welcome_screen.dart';
+import 'package:letsrun/plugins/Exception.dart';
 import 'package:letsrun/plugins/constants.dart';
 import 'package:letsrun/services/firestoreManagement.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -24,6 +25,7 @@ class _SettingsState extends State<Settings> {
   final _store = FirebaseStorage.instance;
   final _picId = HomeScreen.currentAppUser.picId;
   bool _loading = false;
+  String _description = '';
 
   @override
   Widget build(BuildContext context) {
@@ -79,34 +81,52 @@ class _SettingsState extends State<Settings> {
               ),
               Padding(
                 padding: EdgeInsets.only(top: 10.0),
-                child: Material(
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        width: 350,
-                        height: 300,
-                        child: Container(
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 35.0, left: 10.0, right: 10.0),
-                            child: TextField(
-                              style: TextStyle(color: Colors.black),
-                              textAlign: TextAlign.center,
-                              keyboardType: TextInputType.multiline,
-                              maxLength: 260,
-                              maxLines: 8,
-                              decoration: kDescriptionDecoration,
-                              //onChanged: (value) => _post.description = value,
-                            ),
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      width: 350,
+                      height: 300,
+                      child: Container(
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 35.0, left: 10.0, right: 10.0),
+                          child: TextField(
+                            style: TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                            autocorrect: true,
+                            keyboardType: TextInputType.multiline,
+                            maxLength: 260,
+                            maxLines: 8,
+                            decoration: kDescriptionDecoration.copyWith(
+                                hintText: 'Agregar informacion personal',
+                                fillColor: Colors.white,
+                                focusColor: Colors.white,
+                                hoverColor: Colors.white,
+                                hintStyle: TextStyle(color: Colors.white)),
+                            onChanged: (value) => setState(() => _description = value),
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(25.0),
-                  ),
-                  elevation: 5.0,
-                  color: Colors.white,
+                    ),
+                    Visibility(
+                      visible: _description.isNotEmpty,
+                      child: InkWell(
+                        onTap: _addUserDescription(context),
+                        child: Card(
+                          color: Colors.white70,
+                          elevation: 15.0,
+                          margin: EdgeInsets.all(20.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ListTile(
+                                title: Text('Agregar', textAlign: TextAlign.center),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               isCoach
@@ -199,6 +219,19 @@ class _SettingsState extends State<Settings> {
       Navigator.pop(context);
       Navigator.pushNamed(context, WelcomeScreen.id);
     }).catchError((e) => print(e));
+  }
+
+  _addUserDescription(BuildContext context) async {
+    try {
+      setState(() => _loading = true);
+      await FirestoreManagement().addUserDescription(_description);
+      setState(() => _loading = false);
+    } catch (e) {
+      setState(() {
+        _loading = false;
+        return Exception.showException(context);
+      });
+    }
   }
 }
 

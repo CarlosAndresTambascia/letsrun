@@ -18,7 +18,8 @@ class FirestoreManagement {
       'certificateUrl': appUser.certificateUrl,
       'password': appUser.password,
       'isCoach': appUser.isCoach,
-      'picId': appUser.picId
+      'picId': appUser.picId,
+      'description': appUser.description
     }).then((val) {
       Navigator.pop(context);
       Navigator.pushNamed(context, HomeScreen.id);
@@ -88,14 +89,14 @@ class FirestoreManagement {
   }
 
   Future<User> getAppUser(Future<FirebaseUser> currentUser) async {
-    User appUser = new User('', '', '', '', '', false, 0);
+    User appUser = new User('', '', '', '', '', false, 0, '');
     DocumentSnapshot databaseUser;
     databaseUser = await getCurrentUser(currentUser);
 
     if (databaseUser.exists) {
       var data = databaseUser.data;
       appUser = new User(data['email'], data['password'], data['fullName'], data['profilePictureUrl'],
-          data['certificateUrl'], data['isCoach'], data['picId']);
+          data['certificateUrl'], data['isCoach'], data['picId'], data['description']);
     }
     return appUser;
   }
@@ -108,6 +109,14 @@ class FirestoreManagement {
           .getDocuments()
           .then((docs) async => await _store.document('users/${docs.documents[0].documentID}').get())
           .catchError((e) => print(e));
+    });
+  }
+
+  Future<void> addUserDescription(String description) async {
+    await _auth.currentUser().then((user) {
+      _store.collection('users').where('uid', isEqualTo: user.uid).getDocuments().then((docs) => Firestore.instance
+          .document('users/${docs.documents[0].documentID}')
+          .updateData({'description': description}).catchError((e) => throw e));
     });
   }
 }

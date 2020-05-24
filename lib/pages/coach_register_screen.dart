@@ -21,7 +21,7 @@ class CoachRegisterScreen extends StatefulWidget {
 }
 
 class _CoachRegisterScreen extends State<CoachRegisterScreen> {
-  User _user = new User('', '', '', '', '', true, 0);
+  User _user = new User('', '', '', '', '', true, 0, '');
   bool _passwordVisible = true;
   bool _loading = false;
   File _profilePicture;
