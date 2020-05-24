@@ -113,15 +113,14 @@ class _NewPostState extends State<NewPost> {
                       decoration: ShapeDecoration(shape: CircleBorder(), color: Colors.white),
                       child: Padding(
                         padding: EdgeInsets.all(_circleBorderWidth),
-                        child: DecoratedBox(
-                          decoration: ShapeDecoration(
-                            shape: CircleBorder(),
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(
-                                HomeScreen.currentAppUser.profilePictureUrl,
-                              ),
-                            ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100.0),
+                          child: FadeInImage(
+                            width: 100,
+                            height: 100,
+                            placeholder: AssetImage('assets/img/defaultProfile.jpg'),
+                            image: NetworkImage(HomeScreen.currentAppUser.profilePictureUrl),
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),

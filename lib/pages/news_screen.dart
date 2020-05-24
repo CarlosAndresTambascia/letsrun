@@ -236,15 +236,14 @@ class CustomCircularProfileImage extends StatelessWidget {
       decoration: ShapeDecoration(shape: CircleBorder(), color: Colors.white),
       child: Padding(
         padding: EdgeInsets.all(_circleBorderWidth),
-        child: DecoratedBox(
-          decoration: ShapeDecoration(
-            shape: CircleBorder(),
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: NetworkImage(
-                post.profilePicUrl,
-              ),
-            ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(100.0),
+          child: FadeInImage(
+            width: 100,
+            height: 100,
+            placeholder: AssetImage('assets/img/defaultProfile.jpg'),
+            image: NetworkImage(post.profilePicUrl),
+            fit: BoxFit.cover,
           ),
         ),
       ),

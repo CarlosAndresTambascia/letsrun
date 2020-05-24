@@ -44,6 +44,8 @@ flutter:
     - assets/img/shoe.png
     - assets/img/cam.png
     - assets/img/cam2.png
+    - assets/img/defaultCertificate.png
+    - assets/img/defaultProfile.jpg
 
   fonts:
     - family: Bebas

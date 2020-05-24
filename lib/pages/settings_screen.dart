@@ -57,17 +57,16 @@ class _SettingsState extends State<Settings> {
                       shape: CircleBorder(),
                       child: CircleAvatar(
                         backgroundColor: Colors.grey[100],
-                        child: HomeScreen.currentAppUser.profilePictureUrl == "" ||
-                                HomeScreen.currentAppUser.profilePictureUrl == null
-                            ? Icon(
-                                Icons.add_a_photo,
-                                size: 35.0,
-                                color: Colors.black54,
-                              )
-                            : CircleAvatar(
-                                maxRadius: 90,
-                                backgroundImage: NetworkImage(HomeScreen.currentAppUser.profilePictureUrl),
-                              ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100.0),
+                          child: FadeInImage(
+                            width: 100,
+                            height: 100,
+                            placeholder: AssetImage('assets/img/defaultProfile.jpg'),
+                            image: NetworkImage(HomeScreen.currentAppUser.profilePictureUrl),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                         radius: 50.0,
                       )),
                 ),
@@ -119,23 +118,10 @@ class _SettingsState extends State<Settings> {
                           width: 300.0,
                           height: 200.0,
                           margin: EdgeInsets.only(top: 15.0),
-                          child: DecoratedBox(
-                            decoration: ShapeDecoration(
-                              shape: RoundedRectangleBorder(),
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: HomeScreen.currentAppUser.certificateUrl == "" ||
-                                        HomeScreen.currentAppUser.certificateUrl == null
-                                    ? Icon(
-                                        Icons.add_a_photo,
-                                        size: 35.0,
-                                        color: Colors.black54,
-                                      )
-                                    : NetworkImage(
-                                        HomeScreen.currentAppUser.certificateUrl,
-                                      ),
-                              ),
-                            ),
+                          child: FadeInImage(
+                            placeholder: AssetImage('assets/img/defaultCertificate.png'),
+                            image: NetworkImage(HomeScreen.currentAppUser.certificateUrl),
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
