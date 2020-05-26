@@ -36,6 +36,7 @@ class _SettingsState extends State<Settings> {
         key: _scaffoldKey,
         body: SingleChildScrollView(
           child: Container(
+            width: double.infinity,
             decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
                 Color(0XFF6a54b0),
@@ -43,125 +44,141 @@ class _SettingsState extends State<Settings> {
               ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
             ),
             height: MediaQuery.of(context).size.height,
-            child: Padding(
-              child: Column(children: <Widget>[
-                Align(
-                  alignment: Alignment.topRight,
-                  child: FloatingActionButton(
-                    onPressed: () => _logout(context),
-                    materialTapTargetSize: MaterialTapTargetSize.padded,
-                    backgroundColor: Colors.red,
-                    child: Icon(Icons.exit_to_app, size: 25.0),
-                    heroTag: 'exit',
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () => showDialog(context: context, builder: (_) => _askForSource(true)),
-                  child: AvatarGlow(
-                    endRadius: 90,
-                    duration: Duration(seconds: 2),
-                    glowColor: Colors.white24,
-                    repeat: true,
-                    repeatPauseDuration: Duration(seconds: 2),
-                    startDelay: Duration(seconds: 1),
-                    child: Material(
-                        elevation: 8.0,
-                        shape: CircleBorder(),
-                        child: CircleAvatar(
-                          backgroundColor: Colors.grey[100],
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100.0),
-                            child: FadeInImage(
-                              width: 100,
-                              height: 100,
-                              placeholder: AssetImage('assets/img/defaultProfile.jpg'),
-                              image: NetworkImage(HomeScreen.currentAppUser.profilePictureUrl),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          radius: 50.0,
-                        )),
-                  ),
-                ),
-                Text(
-                  HomeScreen.currentAppUser.fullName,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: 'Lobster', fontSize: 28.0, color: Colors.white, fontWeight: FontWeight.bold),
-                ),
+            child: Column(
+              children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only(top: 10.0),
+                  padding: EdgeInsets.all(23.0),
                   child: Column(
                     children: <Widget>[
-                      SizedBox(
-                        width: 350,
-                        height: 300,
-                        child: Container(
-                          child: Padding(
-                            padding: EdgeInsets.only(top: 35.0, left: 10.0, right: 10.0),
-                            child: TextField(
-                              style: TextStyle(color: Colors.white),
-                              textAlign: TextAlign.center,
-                              autocorrect: true,
-                              keyboardType: TextInputType.multiline,
-                              maxLength: 260,
-                              maxLines: 8,
-                              controller: textEditingController,
-                              decoration: kDescriptionDecoration.copyWith(
-                                  hintText: 'Agregar informacion personal',
-                                  fillColor: Colors.white,
-                                  focusColor: Colors.white,
-                                  hoverColor: Colors.white,
-                                  hintStyle: TextStyle(color: Colors.white)),
-                              onChanged: (value) => setState(() => _description = value),
-                            ),
-                          ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: FloatingActionButton(
+                          onPressed: () => _logout(context),
+                          materialTapTargetSize: MaterialTapTargetSize.padded,
+                          backgroundColor: Colors.red,
+                          child: Icon(Icons.exit_to_app, size: 25.0),
+                          heroTag: 'exit',
                         ),
                       ),
-                      Visibility(
-                        visible: _description.isNotEmpty,
-                        child: InkWell(
-                          onTap: () => _addUserDescription(context),
-                          child: Card(
-                            color: Colors.white70,
-                            elevation: 15.0,
-                            margin: EdgeInsets.all(20.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                ListTile(
-                                  title: Text('Agregar', textAlign: TextAlign.center),
+                      GestureDetector(
+                        onTap: () => showDialog(context: context, builder: (_) => _askForSource(true)),
+                        child: AvatarGlow(
+                          endRadius: 90,
+                          duration: Duration(seconds: 2),
+                          glowColor: Colors.white24,
+                          repeat: true,
+                          repeatPauseDuration: Duration(seconds: 2),
+                          startDelay: Duration(seconds: 1),
+                          child: Material(
+                              elevation: 8.0,
+                              shape: CircleBorder(),
+                              child: CircleAvatar(
+                                backgroundColor: Colors.grey[100],
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(100.0),
+                                  child: FadeInImage(
+                                    width: 100,
+                                    height: 100,
+                                    placeholder: AssetImage('assets/img/defaultProfile.jpg'),
+                                    image: NetworkImage(HomeScreen.currentAppUser.profilePictureUrl),
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                              ],
-                            ),
-                          ),
+                                radius: 50.0,
+                              )),
                         ),
+                      ),
+                      Text(
+                        HomeScreen.currentAppUser.fullName,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontFamily: 'Lobster', fontSize: 28.0, color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
                 ),
-                isCoach
-                    ? Expanded(
-                        child: GestureDetector(
-                          onTap: () => showDialog(context: context, builder: (_) => _askForSource(false)),
-                          child: Container(
-                            color: Colors.white70,
-                            width: 300.0,
-                            height: 200.0,
-                            margin: EdgeInsets.only(top: 15.0),
-                            child: FadeInImage(
-                              placeholder: AssetImage('assets/img/defaultCertificate.png'),
-                              image: NetworkImage(HomeScreen.currentAppUser.certificateUrl),
-                              fit: BoxFit.cover,
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(60.0),
+                        topLeft: Radius.circular(60.0),
+                      ),
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        Column(
+                          children: <Widget>[
+                            SizedBox(
+                              height: 300,
+                              child: Container(
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 35.0, left: 10.0, right: 10.0),
+                                  child: TextField(
+                                    style: TextStyle(color: Colors.black),
+                                    textAlign: TextAlign.center,
+                                    autocorrect: true,
+                                    keyboardType: TextInputType.multiline,
+                                    maxLength: 260,
+                                    maxLines: 8,
+                                    controller: textEditingController,
+                                    decoration: kDescriptionDecoration.copyWith(
+                                        hintText: 'Agregar informacion personal',
+                                        fillColor: Colors.black,
+                                        focusColor: Colors.black,
+                                        hoverColor: Colors.black,
+                                        hintStyle: TextStyle(color: Colors.black)),
+                                    onChanged: (value) => setState(() => _description = value),
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+                            Visibility(
+                              visible: _description.isNotEmpty,
+                              child: InkWell(
+                                onTap: () => _addUserDescription(context),
+                                child: Card(
+                                  color: Colors.white70,
+                                  elevation: 15.0,
+                                  margin: EdgeInsets.all(20.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      ListTile(
+                                        title: Text('Agregar', textAlign: TextAlign.center),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      )
-                    : SizedBox(),
-              ]),
-              padding: EdgeInsets.all(10.0),
+                        isCoach
+                            ? Expanded(
+                                child: GestureDetector(
+                                  onTap: () => showDialog(context: context, builder: (_) => _askForSource(false)),
+                                  child: Container(
+                                    color: Colors.white70,
+                                    width: 300.0,
+                                    height: 200.0,
+                                    margin: EdgeInsets.only(top: 15.0),
+                                    child: FadeInImage(
+                                      placeholder: AssetImage('assets/img/defaultCertificate.png'),
+                                      image: NetworkImage(HomeScreen.currentAppUser.certificateUrl),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : SizedBox(),
+                      ],
+                    ),
+                  ),
+                )
+              ],
             ),
-            padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 30.0),
           ),
         ),
       ),
