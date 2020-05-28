@@ -62,3 +62,8 @@ flutter:
       fonts:
         - asset: assets/fonts/lobster-regular.ttf
           weight: 700
+    - family: PTSansNarrow
+      fonts:
+        - asset: assets/fonts/PTSansNarrow-Bold.ttf
+        - asset: assets/fonts/PTSansNarrow-Regular.ttf
+          weight: 700

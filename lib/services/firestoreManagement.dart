@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:letsrun/models/post.dart';
 import 'package:letsrun/models/user.dart';
@@ -26,7 +27,8 @@ class FirestoreManagement {
     }).catchError((e) => print(e));
   }
 
-  Future<void> addPost(BuildContext context, Post post) {
+  Future<void> addPost(BuildContext context, Post post) async {
+    post.uid = await FirebaseAuth.instance.currentUser().then((user) => user.uid).catchError((e) => print(e));
     return _store.collection('/posts').add({
       'email': post.email,
       'latitudeStarting': post.latitudeStarting,
@@ -38,7 +40,8 @@ class FirestoreManagement {
       'dateTime': post.dateTime,
       'assistants': post.assistants,
       'fullName': post.fullName,
-      'pid': post.pid
+      'pid': post.pid,
+      'uid': post.uid
     }).then((val) {
       Navigator.pushNamed(context, HomeScreen.id);
     }).catchError((e) => print(e));
@@ -118,5 +121,21 @@ class FirestoreManagement {
           .document('users/${docs.documents[0].documentID}')
           .updateData({'description': description}).catchError((e) => throw e));
     });
+  }
+
+  Future<User> getCoachById(String uid) async {
+    User coach = new User('', '', '', '', '', false, 0, '');
+    DocumentSnapshot databaseUser = await _store
+        .collection('users')
+        .where('uid', isEqualTo: uid)
+        .getDocuments()
+        .then((docs) async => await _store.document('users/${docs.documents[0].documentID}').get())
+        .catchError((e) => print(e));
+    if (databaseUser.exists) {
+      var data = databaseUser.data;
+      coach = new User(data['email'], data['password'], data['fullName'], data['profilePictureUrl'],
+          data['certificateUrl'], data['isCoach'], data['picId'], data['description']);
+    }
+    return coach;
   }
 }

@@ -91,7 +91,10 @@ class _SettingsState extends State<Settings> {
                         HomeScreen.currentAppUser.fullName,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontFamily: 'Lobster', fontSize: 28.0, color: Colors.white, fontWeight: FontWeight.bold),
+                            fontFamily: 'PTSansNarrow',
+                            fontSize: 28.0,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),

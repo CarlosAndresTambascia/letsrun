@@ -18,7 +18,7 @@ class _NewPostState extends State<NewPost> {
   final double _circleRadius = 100.0;
   final double _circleBorderWidth = 5.0;
   Set<Marker> _markers = {};
-  Post _post = new Post('', 0, 0, 0, 0, '', '', '', DateTime.now(), []);
+  Post _post = new Post('', 0, 0, 0, 0, '', '', '', DateTime.now(), [], '');
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool _loading = false;
   final uuid = Uuid();

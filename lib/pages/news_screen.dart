@@ -4,14 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:letsrun/models/post.dart';
+import 'package:letsrun/models/user.dart';
+import 'package:letsrun/pages/coach_profile_screen.dart';
 import 'package:letsrun/pages/home_screen.dart';
 import 'package:letsrun/pages/post_map.dart';
 import 'package:letsrun/plugins/loading_widget.dart';
 import 'package:letsrun/services/firestoreManagement.dart';
 import 'package:like_button/like_button.dart';
 import 'package:readmore/readmore.dart';
-
-import 'coach_profile_screen.dart';
 
 class News extends StatefulWidget {
   @override
@@ -84,7 +84,7 @@ class PostWidget extends StatelessWidget {
                   PostDateTime(date: date, post: post),
                   CustomCard(post: post, circleRadius: _circleRadius),
                   GestureDetector(
-                    onTap: () => Navigator.pushNamed(context, CoachProfileScreen.id),
+                    onTap: () => _goToCoachProfile(context, post.uid),
                     child: CustomCircularProfileImage(
                         circleRadius: _circleRadius, circleBorderWidth: _circleBorderWidth, post: post),
                   )
@@ -172,8 +172,8 @@ class PostWidget extends StatelessWidget {
     );
   }
 
-  _goToMapWithCoordinates(
-      context, double latitudeStarting, double longitudeStarting, double latitudeEnd, double longitudeEnd) {
+  _goToMapWithCoordinates(BuildContext context, double latitudeStarting, double longitudeStarting, double latitudeEnd,
+      double longitudeEnd) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -194,6 +194,16 @@ class PostWidget extends StatelessWidget {
       await FirestoreManagement().addListener(post.pid, post.assistants);
       return true;
     }
+  }
+
+  _goToCoachProfile(BuildContext context, String uid) async {
+    User coach = await FirestoreManagement().getCoachById(uid);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CoachProfileScreen(coach),
+      ),
+    );
   }
 }
 

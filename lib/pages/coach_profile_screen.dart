@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:letsrun/models/user.dart';
 
 class CoachProfileScreen extends StatefulWidget {
   static String id = 'coach_profile_screen';
+  final User coach;
+
+  CoachProfileScreen(this.coach);
 
   @override
-  _CoachProfileScreenState createState() => _CoachProfileScreenState();
+  _CoachProfileScreenState createState() => _CoachProfileScreenState(coach: coach);
 }
 
 class _CoachProfileScreenState extends State<CoachProfileScreen> {
+  final User coach;
+  _CoachProfileScreenState({this.coach});
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -35,20 +42,17 @@ class _CoachProfileScreenState extends State<CoachProfileScreen> {
                         height: 150.0,
                         decoration: BoxDecoration(
                             color: Colors.red,
-                            image: DecorationImage(
-                                image: NetworkImage(
-                                    'https://pixel.nymag.com/imgs/daily/vulture/2017/06/14/14-tom-cruise.w700.h700.jpg'),
-                                fit: BoxFit.cover),
+                            image: DecorationImage(image: NetworkImage(coach.profilePictureUrl), fit: BoxFit.cover),
                             borderRadius: BorderRadius.all(Radius.circular(75.0)),
                             boxShadow: [BoxShadow(blurRadius: 7.0, color: Colors.black)])),
                     SizedBox(height: 90.0),
                     Text(
-                      'Tom Cruise',
+                      coach.fullName,
                       style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold, fontFamily: 'Montserrat'),
                     ),
                     SizedBox(height: 15.0),
                     Text(
-                      'Subscribe guys',
+                      coach.description,
                       style: TextStyle(fontSize: 17.0, fontStyle: FontStyle.italic, fontFamily: 'Montserrat'),
                     ),
                   ],
