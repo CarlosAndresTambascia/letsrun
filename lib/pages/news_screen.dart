@@ -11,6 +11,8 @@ import 'package:letsrun/services/firestoreManagement.dart';
 import 'package:like_button/like_button.dart';
 import 'package:readmore/readmore.dart';
 
+import 'coach_profile_screen.dart';
+
 class News extends StatefulWidget {
   @override
   _NewsState createState() => _NewsState();
@@ -81,8 +83,11 @@ class PostWidget extends StatelessWidget {
                 Stack(alignment: Alignment.topCenter, children: <Widget>[
                   PostDateTime(date: date, post: post),
                   CustomCard(post: post, circleRadius: _circleRadius),
-                  CustomCircularProfileImage(
-                      circleRadius: _circleRadius, circleBorderWidth: _circleBorderWidth, post: post)
+                  GestureDetector(
+                    onTap: () => Navigator.pushNamed(context, CoachProfileScreen.id),
+                    child: CustomCircularProfileImage(
+                        circleRadius: _circleRadius, circleBorderWidth: _circleBorderWidth, post: post),
+                  )
                 ]),
                 SizedBox(
                   height: 8.0,

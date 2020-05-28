@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:letsrun/pages/coach_profile_screen.dart';
 import 'package:letsrun/pages/coach_register_screen.dart';
 import 'package:letsrun/pages/home_screen.dart';
 import 'package:letsrun/pages/login_screen.dart';
@@ -53,7 +54,7 @@ class _MyAppState extends State<MyApp> {
                 PersonRegisterScreen.id: (context) => PersonRegisterScreen(),
                 HomeScreen.id: (context) => HomeScreen(),
                 Maps.id: (context) => Maps(),
-                //ChatScreen.id: (context) => ChatScreen(),
+                CoachProfileScreen.id: (context) => CoachProfileScreen(),
               },
             );
           }

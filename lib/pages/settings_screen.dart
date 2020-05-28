@@ -47,7 +47,7 @@ class _SettingsState extends State<Settings> {
             child: Column(
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.all(23.0),
+                  padding: EdgeInsets.all(25.0),
                   child: Column(
                     children: <Widget>[
                       Align(
@@ -57,7 +57,6 @@ class _SettingsState extends State<Settings> {
                           materialTapTargetSize: MaterialTapTargetSize.padded,
                           backgroundColor: Colors.red,
                           child: Icon(Icons.exit_to_app, size: 25.0),
-                          heroTag: 'exit',
                         ),
                       ),
                       GestureDetector(
@@ -100,7 +99,6 @@ class _SettingsState extends State<Settings> {
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
                       borderRadius: BorderRadius.only(
                         topRight: Radius.circular(60.0),
                         topLeft: Radius.circular(60.0),
@@ -111,24 +109,37 @@ class _SettingsState extends State<Settings> {
                         Column(
                           children: <Widget>[
                             SizedBox(
-                              height: 300,
+                              height: 230,
                               child: Container(
                                 child: Padding(
-                                  padding: EdgeInsets.only(top: 35.0, left: 10.0, right: 10.0),
+                                  padding: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
                                   child: TextField(
-                                    style: TextStyle(color: Colors.black),
+                                    style: TextStyle(color: Colors.white),
                                     textAlign: TextAlign.center,
                                     autocorrect: true,
                                     keyboardType: TextInputType.multiline,
                                     maxLength: 260,
-                                    maxLines: 8,
+                                    maxLines: 6,
                                     controller: textEditingController,
                                     decoration: kDescriptionDecoration.copyWith(
                                         hintText: 'Agregar informacion personal',
                                         fillColor: Colors.black,
-                                        focusColor: Colors.black,
-                                        hoverColor: Colors.black,
-                                        hintStyle: TextStyle(color: Colors.black)),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.white, width: 2.0),
+                                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.white, width: 2.0),
+                                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                                        ),
+                                        disabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.white, width: 2.0),
+                                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                                        ),
+                                        border: InputBorder.none,
+                                        focusColor: Colors.white,
+                                        hoverColor: Colors.white,
+                                        hintStyle: TextStyle(color: Colors.white)),
                                     onChanged: (value) => setState(() => _description = value),
                                   ),
                                 ),
@@ -141,7 +152,7 @@ class _SettingsState extends State<Settings> {
                                 child: Card(
                                   color: Colors.white70,
                                   elevation: 15.0,
-                                  margin: EdgeInsets.all(20.0),
+                                  margin: EdgeInsets.only(top: 10.0, bottom: 20.0, left: 40.0, right: 40.0),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
@@ -156,14 +167,13 @@ class _SettingsState extends State<Settings> {
                           ],
                         ),
                         isCoach
-                            ? Expanded(
+                            ? Container(
                                 child: GestureDetector(
                                   onTap: () => showDialog(context: context, builder: (_) => _askForSource(false)),
                                   child: Container(
                                     color: Colors.white70,
                                     width: 300.0,
                                     height: 200.0,
-                                    margin: EdgeInsets.only(top: 15.0),
                                     child: FadeInImage(
                                       placeholder: AssetImage('assets/img/defaultCertificate.png'),
                                       image: NetworkImage(HomeScreen.currentAppUser.certificateUrl),
@@ -282,7 +292,6 @@ class EditProfileButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 15.0,
-      margin: EdgeInsets.all(20.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
