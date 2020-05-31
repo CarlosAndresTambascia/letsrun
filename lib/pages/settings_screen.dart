@@ -1,22 +1,26 @@
 import 'dart:io';
 
 import 'package:avatar_glow/avatar_glow.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:letsrun/pages/home_screen.dart';
+import 'package:letsrun/locator.dart';
+import 'package:letsrun/models/user.dart';
 import 'package:letsrun/pages/welcome_screen.dart';
 import 'package:letsrun/plugins/constants.dart';
+import 'package:letsrun/services/authentication_service.dart';
 
 class Settings extends StatefulWidget {
+  final User currentAppUser;
+
+  Settings({@required this.currentAppUser});
+
   @override
   _SettingsState createState() => _SettingsState();
 }
 
 class _SettingsState extends State<Settings> {
   File _profilePicture;
-  final _auth = FirebaseAuth.instance;
-  final isCoach = HomeScreen.currentAppUser.isCoach;
+  final FirebaseAuthService _firebaseAuthService = locator<FirebaseAuthService>();
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +53,8 @@ class _SettingsState extends State<Settings> {
                     shape: CircleBorder(),
                     child: CircleAvatar(
                       backgroundColor: Colors.grey[100],
-                      child: HomeScreen.currentAppUser.profilePictureUrl == "" ||
-                              HomeScreen.currentAppUser.profilePictureUrl == null
+                      child: widget.currentAppUser.profilePictureUrl == "" ||
+                              widget.currentAppUser.profilePictureUrl == null
                           ? Icon(
                               Icons.add_a_photo,
                               size: 35.0,
@@ -58,14 +62,14 @@ class _SettingsState extends State<Settings> {
                             )
                           : CircleAvatar(
                               maxRadius: 90,
-                              backgroundImage: NetworkImage(HomeScreen.currentAppUser.profilePictureUrl),
+                              backgroundImage: NetworkImage(widget.currentAppUser.profilePictureUrl),
                             ),
                       radius: 50.0,
                     )),
               ),
             ),
             Text(
-              HomeScreen.currentAppUser.fullName,
+              widget.currentAppUser.fullName,
               textAlign: TextAlign.center,
               style: TextStyle(fontFamily: 'Lobster', fontSize: 28.0, color: Colors.white, fontWeight: FontWeight.bold),
             ),
@@ -101,7 +105,7 @@ class _SettingsState extends State<Settings> {
                 color: Colors.white,
               ),
             ),
-            isCoach
+            widget.currentAppUser.isCoach
                 ? Container(
                     width: 200.0,
                     height: 180.0,
@@ -112,15 +116,15 @@ class _SettingsState extends State<Settings> {
                           shape: RoundedRectangleBorder(),
                           image: DecorationImage(
                             fit: BoxFit.cover,
-                            image: HomeScreen.currentAppUser.certificateUrl == "" ||
-                                    HomeScreen.currentAppUser.certificateUrl == null
+                            image: widget.currentAppUser.certificateUrl == "" ||
+                                    widget.currentAppUser.certificateUrl == null
                                 ? Icon(
                                     Icons.add_a_photo,
                                     size: 35.0,
                                     color: Colors.black54,
                                   )
                                 : NetworkImage(
-                                    HomeScreen.currentAppUser.certificateUrl,
+                                    widget.currentAppUser.certificateUrl,
                                   ),
                           ),
                         ),
@@ -165,7 +169,7 @@ class _SettingsState extends State<Settings> {
   }
 
   _logout(BuildContext context) {
-    _auth.signOut().then((val) {
+    _firebaseAuthService.logout().then((val) {
       Navigator.pop(context);
       Navigator.pushNamed(context, WelcomeScreen.id);
     }).catchError((e) => print(e));

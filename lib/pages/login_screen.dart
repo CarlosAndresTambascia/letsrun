@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:letsrun/models/user.dart';
 import 'package:letsrun/pages/home_screen.dart';
+import 'package:letsrun/pages/root_screen.dart';
 import 'package:letsrun/plugins/constants.dart';
+import 'package:letsrun/services/authentication_service.dart';
+import 'package:letsrun/services/firestore_service.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:nice_button/NiceButton.dart';
+
+import '../locator.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';
@@ -15,13 +20,15 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreen extends State<LoginScreen> {
+  final FirebaseAuthService _firebaseAuthService = locator<FirebaseAuthService>();
+  final FirestoreService _firestoreService = locator<FirestoreService>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final FocusNode _passwordFocus = FocusNode();
   bool _loading = false;
   User _user = new User('', '', '', '', '', false);
   bool _passwordVisible = true;
-  final _formKey = GlobalKey<FormState>();
-  final _auth = FirebaseAuth.instance;
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  final _passwordFocus = FocusNode();
+  String _password; // TODO: This is a placeholder for a future fix
 
   @override
   void dispose() {
@@ -74,9 +81,9 @@ class _LoginScreen extends State<LoginScreen> {
                       obscureText: _passwordVisible ? true : false,
                       textAlign: TextAlign.center,
                       validator: _validateField,
-                      onChanged: (value) => _user.password = value,
+                      onChanged: (value) => _password = value,
                       decoration: kTextFieldDecoration.copyWith(
-                        hintText: 'Contrasena',
+                        hintText: 'Contraseña',
                         suffixIcon: IconButton(
                             icon: Icon(
                               _passwordVisible ? Icons.visibility : Icons.visibility_off,
@@ -118,13 +125,13 @@ class _LoginScreen extends State<LoginScreen> {
   _signIn(BuildContext context) async {
     if (_formKey.currentState.validate()) {
       setState(() => _loading = true);
-      var signInUser = await _auth
-          .signInWithEmailAndPassword(email: _user.email, password: _user.password)
+      final User signInUser = await _firebaseAuthService
+          .login(_user.email, _password)
+          .then((AuthResult authResult) => _firestoreService.getUser(authResult.user.uid))
           .catchError((e) => showExceptionError(context, _handleSingInError(e)));
       setState(() => _loading = false);
       if (signInUser != null) {
-        Navigator.pop(context);
-        Navigator.pushNamed(context, HomeScreen.id);
+        Navigator.pushReplacementNamed(context, HomeScreen.id, arguments: ScreenArguments(signInUser));
       }
     } else {
       showExceptionError(context, null);
@@ -137,7 +144,7 @@ class _LoginScreen extends State<LoginScreen> {
         return 'Formato de email invalido';
         break;
       case "ERROR_WRONG_PASSWORD":
-        return 'Contrasena incorrecta';
+        return 'Contraseña incorrecta';
         break;
       case "ERROR_USER_NOT_FOUND":
         return 'Usuario no encontrado';
@@ -149,7 +156,7 @@ class _LoginScreen extends State<LoginScreen> {
         return 'Demasiados intentos. Intenta mas tarde.';
         break;
       case "ERROR_OPERATION_NOT_ALLOWED":
-        return 'El email y contrasena no han sido habilitados aun.';
+        return 'El email y Contraseña no han sido habilitados aun.';
         break;
       default:
         return null;

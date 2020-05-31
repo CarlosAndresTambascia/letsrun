@@ -1,17 +1,21 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:letsrun/models/user.dart';
+import 'package:letsrun/pages/root_screen.dart';
 import 'package:letsrun/plugins/constants.dart';
+import 'package:letsrun/services/authentication_service.dart';
 import 'package:letsrun/services/firestore_service.dart';
+import 'package:letsrun/services/storage_service.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:nice_button/NiceButton.dart';
+
+import '../locator.dart';
+import 'home_screen.dart';
 
 class PersonRegisterScreen extends StatefulWidget {
   static const String id = 'person_register_screen';
@@ -20,24 +24,24 @@ class PersonRegisterScreen extends StatefulWidget {
   _PersonRegisterScreen createState() => _PersonRegisterScreen();
 }
 
+// TODO: merge common logic with CoachRegisterScreen
 class _PersonRegisterScreen extends State<PersonRegisterScreen> {
+  final FirebaseAuthService _firebaseAuthService = locator<FirebaseAuthService>();
+  final FirestoreService _firestoreService = locator<FirestoreService>();
+  final FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final FocusNode _passwordFocus = new FocusNode();
+  final FocusNode _emailFocus = new FocusNode();
   User _user = new User('', '', '', '', '', false);
   bool _passwordVisible = true;
   bool _loading = false;
   File _profilePicture;
-  final _auth = FirebaseAuth.instance;
-  final _store = FirebaseStorage.instance;
-  final _formKey = GlobalKey<FormState>();
-  final _random = new Random();
-  var _randomPicsId;
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  final _passwordFocus = new FocusNode();
-  final _emailFocus = new FocusNode();
+  String _password; // TODO: This is a placeholder for a future fix
 
   @override
   void initState() {
     super.initState();
-    _randomPicsId = 0 + _random.nextInt(5000 - 0);
   }
 
   @override
@@ -125,10 +129,10 @@ class _PersonRegisterScreen extends State<PersonRegisterScreen> {
                         obscureText: _passwordVisible ? true : false,
                         textAlign: TextAlign.center,
                         onChanged: (value) {
-                          _user.password = value;
+                          _password = value;
                         },
                         decoration: kTextFieldDecoration.copyWith(
-                          hintText: 'Contrasena',
+                          hintText: 'Contraseña',
                           suffixIcon: IconButton(
                               icon: Icon(
                                 _passwordVisible ? Icons.visibility : Icons.visibility_off,
@@ -201,33 +205,42 @@ class _PersonRegisterScreen extends State<PersonRegisterScreen> {
   }
 
   Future _uploadProfileImage() async {
-    var storageReference = _store.ref().child('profilePics/$_randomPicsId.jpg');
     setState(() {
       Navigator.pop(context);
       _loading = true;
     });
-    StorageUploadTask task = storageReference.putFile(_profilePicture);
-    FirestoreService().uploadProfilePic(await (await task.onComplete).ref.getDownloadURL(), _user);
+    final String picUrl = await _firebaseStorageService.uploadProfilePicture(_profilePicture);
+    var userInfo = new UserUpdateInfo();
+    userInfo.photoUrl = picUrl;
+    _user.profilePictureUrl = picUrl;
     setState(() => _loading = false);
   }
 
-  _register(BuildContext context) {
-    if (_formKey.currentState.validate() && _validateFields()) {
-      _auth
-          .createUserWithEmailAndPassword(email: _user.email, password: _user.password)
-          .catchError((e) => showExceptionError(context, _handleAuthError(e)))
-          .then((createdUser) async {
+  _register(BuildContext context) async {
+    try {
+      if (_formKey.currentState.validate() && _validateFields()) {
         setState(() => _loading = true);
-        await (FirestoreService().addUser(createdUser.user, context, _user));
+
+        final AuthResult authResult = await _firebaseAuthService.register(_user.email, _password);
+
+        final User newUser = new User(authResult.user.uid, _user.email, _user.fullName, _user.profilePictureUrl, _user.certificateUrl, _user.isCoach);
+
+        await _firestoreService.createUser(newUser);
+
         setState(() => _loading = false);
-      }).catchError((e) => showExceptionError(context, 'Hubo un problema al registrar al usuario'));
-    } else {
-      showExceptionError(context, null);
+
+        Navigator.pushReplacementNamed(context, HomeScreen.id, arguments: ScreenArguments(newUser));
+      } else {
+        showExceptionError(context, null);
+      }
+    } catch (e) {
+      showExceptionError(context, _handleAuthError(e));
+      setState(() => _loading = false);
     }
   }
 
   bool _validateFields() {
-    if (_user.email == "" || _user.password == "" || _user.profilePictureUrl == "" || _user.fullName == "") {
+    if (_user.email == "" || _password == "" || _user.profilePictureUrl == "" || _user.fullName == "") {
       return false;
     }
     return true;
@@ -248,7 +261,7 @@ class _PersonRegisterScreen extends State<PersonRegisterScreen> {
         return 'Formato de email invalido';
         break;
       case "ERROR_WEAK_PASSWORD":
-        return 'La contrasena es demasiado debil';
+        return 'La Contraseña es demasiado debil';
         break;
       case "ERROR_EMAIL_ALREADY_IN_USE":
         return 'El email ingresado ya esta registrado';

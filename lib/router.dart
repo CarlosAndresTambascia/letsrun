@@ -5,6 +5,7 @@ import 'package:letsrun/pages/login_screen.dart';
 import 'package:letsrun/pages/maps.dart';
 import 'package:letsrun/pages/person_register_screen.dart';
 import 'package:letsrun/pages/registration_screen.dart';
+import 'package:letsrun/pages/root_screen.dart';
 import 'package:letsrun/pages/welcome_screen.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -35,9 +36,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         viewToShow: PersonRegisterScreen(),
       );
     case HomeScreen.id:
+      final ScreenArguments arguments = settings.arguments;
       return _getPageRoute(
         routeName: settings.name,
-        viewToShow: HomeScreen(),
+        viewToShow: HomeScreen(
+          currentAppUser: arguments.user,
+        ),
       );
     case Maps.id:
       return _getPageRoute(

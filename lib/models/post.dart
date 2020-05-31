@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Post {
@@ -13,7 +15,20 @@ class Post {
   List<String> assistants;
   String fullName;
 
-  Post.fromData(Map<String, dynamic> data)
+  Post(
+    this.pid,
+    this.latitudeStarting,
+    this.latitudeEnd,
+    this.longitudeStarting,
+    this.longitudeEnd,
+    this.description,
+    this.email,
+    this.profilePicUrl,
+    this.dateTime,
+    this.assistants,
+  );
+
+  Post.fromMap(Map<String, dynamic> data)
       : pid = data['pid'],
         latitudeStarting = data['latitudeStarting'],
         latitudeEnd = data['latitudeEnd'],
@@ -26,8 +41,21 @@ class Post {
         dateTime = (data['dateTime'] as Timestamp).toDate(),
         assistants = data['assistants'].cast<String>();
 
-  Post(this.pid, this.latitudeStarting, this.latitudeEnd, this.longitudeStarting, this.longitudeEnd, this.description,
-      this.email, this.profilePicUrl, this.dateTime, this.assistants);
+  Map<String, dynamic> toJson() {
+    return {
+      'pid': pid,
+      'latitudeStarting': latitudeStarting,
+      'latitudeEnd': latitudeEnd,
+      'longitudeStarting': longitudeStarting,
+      'longitudeEnd': longitudeEnd,
+      'description': description,
+      'email': email,
+      'fullName': fullName,
+      'profilePicUrl': profilePicUrl,
+      'dateTime': dateTime.toString(),
+      'assistants': jsonEncode(assistants)
+    };
+  }
 
   @override
   String toString() {

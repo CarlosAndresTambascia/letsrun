@@ -2,11 +2,15 @@ import 'package:animated_card/animated_card.dart';
 import 'package:animated_card/animated_card_direction.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:letsrun/pages/home_screen.dart';
+import 'package:letsrun/models/user.dart';
 import 'package:letsrun/plugins/loading_widget.dart';
 import 'package:letsrun/services/firestore_service.dart';
 
 class NotificationsScreen extends StatefulWidget {
+  final User currentAppUser;
+
+  NotificationsScreen({@required this.currentAppUser});
+
   @override
   _NotificationsScreenState createState() => _NotificationsScreenState();
 }
@@ -14,14 +18,13 @@ class NotificationsScreen extends StatefulWidget {
 class _NotificationsScreenState extends State<NotificationsScreen> {
   Stream<QuerySnapshot> notificationsSnapshots;
   List<String> namesList = new List();
-  final bool isCoach = HomeScreen.currentAppUser.isCoach;
 
   @override
   void initState() {
     super.initState();
     namesList = new List();
-    notificationsSnapshots = isCoach
-        ? FirestoreService().getCoachNotificationsSnapshots()
+    notificationsSnapshots = widget.currentAppUser.isCoach
+        ? FirestoreService().getCoachNotificationsSnapshots(widget.currentAppUser)
         : FirestoreService().getNonCoachNotificationsSnapshots();
   }
 
@@ -33,7 +36,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         if (!snapshot.hasData) {
           return LoadingWidget();
         } else {
-          if (isCoach) {
+          if (widget.currentAppUser.isCoach) {
             _createAssistantsList(snapshot);
           } else {
             _createPostsUerNames(snapshot);
@@ -76,7 +79,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 padding: const EdgeInsets.only(top: 8.0),
                                 child: Column(
                                   children: <Widget>[
-                                    isCoach
+                                    widget.currentAppUser.isCoach
                                         ? RichText(
                                             text: TextSpan(
                                               text: namesList[index],

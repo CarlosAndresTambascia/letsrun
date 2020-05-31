@@ -30,6 +30,7 @@ dependencies:
   flutter_local_notifications: ^1.4.3
   intl: ^0.16.1
   firebase_messaging: ^6.0.15
+  get_it: ^4.0.2
 
 dev_dependencies:
   flutter_test:

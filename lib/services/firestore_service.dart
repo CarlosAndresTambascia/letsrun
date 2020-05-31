@@ -1,111 +1,41 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:letsrun/models/post.dart';
 import 'package:letsrun/models/user.dart';
-import 'package:letsrun/pages/home_screen.dart';
 
 class FirestoreService {
-  final _store = Firestore.instance;
+  final CollectionReference _usersCollectionReference = Firestore.instance.collection('users');
+  final CollectionReference _postsCollectionReference = Firestore.instance.collection('posts');
+  final StreamController<List<Post>> _postsController = StreamController<List<Post>>.broadcast();
 
-  Future addUser(FirebaseUser user, BuildContext context, User appUser) {
-    return _store.collection('/users').add({
-      'email': user.email,
-      'uid': user.uid,
-      'fullName': appUser.fullName,
-      'profilePictureUrl': appUser.profilePictureUrl,
-      'certificateUrl': appUser.certificateUrl,
-      'password': appUser.password,
-      'isCoach': appUser.isCoach
-    }).then((val) {
-      Navigator.pop(context);
-      Navigator.pushNamed(context, HomeScreen.id);
-    }).catchError((e) => print(e));
+  Future createUser(User user) async {
+    await _usersCollectionReference.document(user.uid).setData(user.toJson());
   }
 
-  Future addPost(BuildContext context, Post post) {
-    return _store.collection('/posts').add({
-      'email': post.email,
-      'latitudeStarting': post.latitudeStarting,
-      'latitudeEnd': post.latitudeEnd,
-      'longitudeStarting': post.longitudeStarting,
-      'longitudeEnd': post.longitudeEnd,
-      'description': post.description,
-      'profilePicUrl': post.profilePicUrl,
-      'dateTime': post.dateTime,
-      'assistants': post.assistants,
-      'fullName': post.fullName,
-      'pid': post.pid
-    }).then((val) {
-      Navigator.pushNamed(context, HomeScreen.id);
-    }).catchError((e) => print(e));
+  Future<User> getUser(String userId) async {
+    var userData = await _usersCollectionReference.document(userId).get();
+    return User.fromMap(userData.data);
   }
 
-  addListener(String pid, List assistants) async {
-    _store
-        .collection('posts')
-        .where('pid', isEqualTo: pid)
-        .getDocuments()
-        .then((docs) => _store.document(('posts/${docs.documents[0].documentID}')).updateData({
-              'assistants': assistants,
-            }).catchError((e) => print(e)));
+  Future createPost(Post post) async {
+    final DocumentReference documentReference = await _postsCollectionReference.add(post.toJson());
+    await _postsCollectionReference.document(documentReference.documentID).updateData({'pid': documentReference.documentID});
   }
 
-  removeListener(String pid, List assistants) async {
-    await _store.collection('posts').where('pid', isEqualTo: pid).getDocuments().then((docs) => _store
-        .document(('posts/${docs.documents[0].documentID}'))
-        .updateData({'assistants': assistants}).catchError((e) => print(e)));
+  Future updatePostAssistants(String pid, List assistants) async {
+    await _postsCollectionReference.document(pid).updateData({'assistants': assistants});
   }
 
   Stream<QuerySnapshot> getPostsSnapshots() {
-    return _store.collection('posts').orderBy("dateTime", descending: true).snapshots();
+    return _postsCollectionReference.orderBy("dateTime", descending: true).snapshots();
   }
 
-  Stream<QuerySnapshot> getCoachNotificationsSnapshots() {
-    return _store.collection('posts').where('email', isEqualTo: HomeScreen.currentAppUser.email).snapshots();
+  Stream<QuerySnapshot> getCoachNotificationsSnapshots(User currentAppUser) {
+    return _postsCollectionReference.where('email', isEqualTo: currentAppUser.email).snapshots();
   }
 
   Stream<QuerySnapshot> getNonCoachNotificationsSnapshots() {
-    return _store.collection('posts').snapshots();
-  }
-
-  uploadProfilePic(String picUrl, User user) {
-    var userInfo = new UserUpdateInfo();
-    userInfo.photoUrl = picUrl;
-    user.profilePictureUrl = picUrl;
-  }
-
-/*  Future updateUserData(String picUrl, String fullName) async {
-    var userInfo = new UserUpdateInfo();
-    userInfo.photoUrl = picUrl;
-    await _firebaseAuth.currentUser().then((user) {
-      _store.collection('users').where('uid', isEqualTo: user.uid).getDocuments().then((docs) => Firestore.instance
-          .document('users/${docs.documents[0].documentID}')
-          .updateData({'profilePictureUrl': picUrl, 'fullName': fullName}).catchError((e) => print(e)));
-    });
-  }*/
-
-  Future<User> getAppUser(Future<FirebaseUser> currentUser) async {
-    User appUser = new User('', '', '', '', '', false);
-    DocumentSnapshot databaseUser;
-    databaseUser = await getCurrentUser(currentUser);
-
-    if (databaseUser.exists) {
-      var data = databaseUser.data;
-      appUser = new User(data['email'], data['password'], data['fullName'], data['profilePictureUrl'],
-          data['certificateUrl'], data['isCoach']);
-    }
-    return appUser;
-  }
-
-  Future<DocumentSnapshot> getCurrentUser(Future<FirebaseUser> currentUser) {
-    return currentUser.then((user) async {
-      return await _store
-          .collection('users')
-          .where('uid', isEqualTo: user.uid)
-          .getDocuments()
-          .then((docs) async => await _store.document('users/${docs.documents[0].documentID}').get())
-          .catchError((e) => print(e));
-    });
+    return _postsCollectionReference.snapshots();
   }
 }

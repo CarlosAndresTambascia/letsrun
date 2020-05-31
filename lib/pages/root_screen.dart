@@ -1,74 +1,48 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:letsrun/models/user.dart';
 import 'package:letsrun/pages/home_screen.dart';
 import 'package:letsrun/pages/welcome_screen.dart';
 import 'package:letsrun/plugins/loading_widget.dart';
 import 'package:letsrun/services/authentication_service.dart';
+import 'package:letsrun/services/firestore_service.dart';
 
-enum AuthStatus {
-  NOT_DETERMINED,
-  NOT_LOGGED_IN,
-  LOGGED_IN,
-}
+import '../locator.dart';
 
 class RootView extends StatefulWidget {
-  RootView({@required this.auth});
-
-  final FirebaseAuthService auth;
-
   @override
   State<StatefulWidget> createState() => new _RootViewState();
 }
 
 class _RootViewState extends State<RootView> {
-  AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
-  String _userId = "";
+  final FirestoreService _firestoreService = locator<FirestoreService>();
+  final FirebaseAuthService _firebaseAuthService = locator<FirebaseAuthService>();
 
   @override
   void initState() {
     super.initState();
-    widget.auth.getCurrentUser().then((user) {
-      setState(() {
-        _userId = user?.uid;
-
-        if (_userId.length > 0 && _userId != null) {
-          authStatus = AuthStatus.LOGGED_IN;
-        } else {
-          authStatus = AuthStatus.NOT_LOGGED_IN;
-        }
-      });
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    switch (authStatus) {
-      case AuthStatus.NOT_LOGGED_IN:
-        return new WelcomeScreen();
-        break;
-      case AuthStatus.LOGGED_IN:
-        return new HomeScreen();
-        break;
-      case AuthStatus.NOT_DETERMINED:
-      default:
-        return new LoadingWidget();
+    handleAppStartup(context);
+    // TODO: Maybe there is a better way to show a loading screen.
+    return new LoadingWidget();
+  }
+
+  void handleAppStartup(BuildContext context) async {
+    final FirebaseUser firebaseUser = await _firebaseAuthService.getCurrentUser();
+    if (firebaseUser != null) {
+      final User user = await _firestoreService.getUser(firebaseUser.uid);
+      Navigator.pushReplacementNamed(context, HomeScreen.id, arguments: ScreenArguments(user));
+    } else {
+      Navigator.pushReplacementNamed(context, WelcomeScreen.id);
     }
   }
+}
 
-  void loginCallback() {
-    widget.auth.getCurrentUser().then((user) {
-      setState(() {
-        _userId = user.uid.toString();
-      });
-    });
-    setState(() {
-      authStatus = AuthStatus.LOGGED_IN;
-    });
-  }
+class ScreenArguments {
+  final User user;
 
-  void logoutCallback() {
-    setState(() {
-      authStatus = AuthStatus.NOT_LOGGED_IN;
-      _userId = "";
-    });
-  }
+  ScreenArguments(this.user);
 }

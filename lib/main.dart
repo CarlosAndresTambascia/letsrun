@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:letsrun/pages/root_screen.dart';
 import 'package:letsrun/router.dart';
-import 'package:letsrun/services/authentication_service.dart';
 
-void main() => runApp(LetsRunApp());
+import 'locator.dart';
+
+void main() {
+  // Register all the models and services before the app starts
+  setupLocator();
+
+  runApp(LetsRunApp());
+}
 
 class LetsRunApp extends StatelessWidget {
   @override
@@ -16,7 +22,7 @@ class LetsRunApp extends StatelessWidget {
         accentColor: Color(0XFF233C63),
         fontFamily: 'Poppins',
       ),
-      home: RootView(auth: new FirebaseAuthService()),
+      home: RootView(),
       onGenerateRoute: generateRoute,
     );
   }

@@ -3,8 +3,9 @@ import 'package:animated_card/animated_card_direction.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:letsrun/locator.dart';
 import 'package:letsrun/models/post.dart';
-import 'package:letsrun/pages/home_screen.dart';
+import 'package:letsrun/models/user.dart';
 import 'package:letsrun/pages/post_map.dart';
 import 'package:letsrun/plugins/loading_widget.dart';
 import 'package:letsrun/services/firestore_service.dart';
@@ -12,24 +13,26 @@ import 'package:like_button/like_button.dart';
 import 'package:readmore/readmore.dart';
 
 class News extends StatefulWidget {
+  final User currentAppUser;
+
+  News({@required this.currentAppUser});
+
   @override
   _NewsState createState() => _NewsState();
 }
 
 class _NewsState extends State<News> {
-  Stream<QuerySnapshot> postsSnapshots;
-  String currentUserFullName = HomeScreen.currentAppUser.fullName;
+  final FirestoreService _firestoreService = locator<FirestoreService>();
 
   @override
   void initState() {
     super.initState();
-    postsSnapshots = FirestoreService().getPostsSnapshots();
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: postsSnapshots,
+      stream: _firestoreService.getPostsSnapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return LoadingWidget();
@@ -38,7 +41,7 @@ class _NewsState extends State<News> {
             itemCount: snapshot.data.documents.length,
             itemBuilder: (context, index) {
               return PostWidget(
-                  post: Post.fromData(snapshot.data.documents[index].data), currentUserFullName: currentUserFullName);
+                  post: Post.fromMap(snapshot.data.documents[index].data), currentUserFullName: widget.currentAppUser.fullName);
             },
           );
         }
@@ -180,11 +183,11 @@ class PostWidget extends StatelessWidget {
   Future<bool> _onSubscribe() async {
     if (_isSubscribed) {
       post.assistants.remove(currentUserFullName);
-      await FirestoreService().addListener(post.pid, post.assistants);
+      await FirestoreService().updatePostAssistants(post.pid, post.assistants);
       return false;
     } else {
       post.assistants.add(currentUserFullName);
-      await FirestoreService().addListener(post.pid, post.assistants);
+      await FirestoreService().updatePostAssistants(post.pid, post.assistants);
       return true;
     }
   }

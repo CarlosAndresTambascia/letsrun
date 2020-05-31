@@ -1,27 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:letsrun/locator.dart';
 import 'package:letsrun/models/post.dart';
+import 'package:letsrun/models/user.dart';
+import 'package:letsrun/pages/home_screen.dart';
+import 'package:letsrun/pages/root_screen.dart';
 import 'package:letsrun/plugins/constants.dart';
 import 'package:letsrun/services/firestore_service.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:uuid/uuid.dart';
 
-import 'home_screen.dart';
 import 'maps.dart';
 
 class NewPost extends StatefulWidget {
+  final User currentAppUser;
+
+  NewPost({@required this.currentAppUser});
+
   @override
   _NewPostState createState() => _NewPostState();
 }
 
 class _NewPostState extends State<NewPost> {
+  final FirestoreService _firestoreService = locator<FirestoreService>();
   final double _circleRadius = 100.0;
   final double _circleBorderWidth = 5.0;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final uuid = Uuid();
   Set<Marker> _markers = {};
   Post _post = new Post('', 0, 0, 0, 0, '', '', '', DateTime.now(), []);
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool _loading = false;
-  final uuid = Uuid();
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +127,7 @@ class _NewPostState extends State<NewPost> {
                             image: DecorationImage(
                               fit: BoxFit.cover,
                               image: NetworkImage(
-                                HomeScreen.currentAppUser.profilePictureUrl,
+                                widget.currentAppUser.profilePictureUrl,
                               ),
                             ),
                           ),
@@ -173,17 +181,16 @@ class _NewPostState extends State<NewPost> {
   }
 
   _postIt() {
-    _post.email = HomeScreen.currentAppUser.email;
-    _post.fullName = HomeScreen.currentAppUser.fullName;
-    _post.profilePicUrl = HomeScreen.currentAppUser.profilePictureUrl;
+    _post.email = widget.currentAppUser.email;
+    _post.fullName = widget.currentAppUser.fullName;
+    _post.profilePicUrl = widget.currentAppUser.profilePictureUrl;
     _post.dateTime = DateTime.now();
     _post.assistants = [];
-    _post.pid = uuid.v1();
     if (_validatePostFields()) {
       setState(() => _loading = true);
-      FirestoreService()
-          .addPost(context, _post)
-          .catchError(() => showExceptionError(context, 'Hubo un problema al crear el post, intente mas tarde.'));
+      _firestoreService.createPost(_post).then((val) {
+        Navigator.pushNamed(context, HomeScreen.id, arguments: ScreenArguments(widget.currentAppUser));
+      }).catchError(() => showExceptionError(context, 'Hubo un problema al crear el post, intente mas tarde.'));
       setState(() => _loading = false);
     } else {
       showExceptionError(context, null);
