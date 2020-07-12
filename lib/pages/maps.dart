@@ -30,6 +30,7 @@ class _MapsState extends State<Maps> {
     return ModalProgressHUD(
       color: Theme.of(context).primaryColor,
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
             title: Text('Selecciona la ruta'),

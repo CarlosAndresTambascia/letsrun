@@ -38,6 +38,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
   @override
   void initState() {
     super.initState();
+    _loading = false;
     _randomPicsId = 0 + _random.nextInt(5000 - 0);
   }
 
@@ -45,6 +46,7 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
   void dispose() {
     _emailFocus.dispose();
     _passwordFocus.dispose();
+    _loading = false;
     super.dispose();
   }
 
@@ -219,10 +221,10 @@ class _CoachRegisterScreen extends State<CoachRegisterScreen> {
     File selected = await ImagePicker.pickImage(source: source);
     if (isProfile) {
       setState(() => _profilePicture = selected);
-      _uploadProfileImage();
+      _uploadProfileImage().catchError((e) => setState(() => _loading = false));
     } else {
       setState(() => _certificatePicture = selected);
-      _uploadCertificate();
+      _uploadCertificate().catchError((e) => setState(() => _loading = false));
     }
   }
 

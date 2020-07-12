@@ -226,10 +226,10 @@ class _SettingsState extends State<Settings> {
     File selected = await ImagePicker.pickImage(source: source);
     if (isProfile) {
       setState(() => _profilePicture = selected);
-      _uploadProfileImage();
+      _uploadProfileImage().catchError((e) => setState(() => _loading = false));
     } else {
       setState(() => _certificatePicture = selected);
-      _uploadCertificate();
+      _uploadCertificate().catchError((e) => setState(() => _loading = false));
     }
   }
 

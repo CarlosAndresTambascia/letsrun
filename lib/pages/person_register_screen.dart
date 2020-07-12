@@ -195,9 +195,7 @@ class _PersonRegisterScreen extends State<PersonRegisterScreen> {
   Future<void> _pickImage(ImageSource source) async {
     File selected = await ImagePicker.pickImage(source: source);
     setState(() => _profilePicture = selected);
-    _uploadProfileImage().whenComplete(() {
-      setState(() {});
-    });
+    _uploadProfileImage().catchError((e) => setState(() => _loading = false));
   }
 
   Future _uploadProfileImage() async {

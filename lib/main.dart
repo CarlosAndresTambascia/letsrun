@@ -31,12 +31,14 @@ class _MyAppState extends State<MyApp> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return MaterialApp(
+              debugShowCheckedModeBanner: false,
               home: LoadingBouncingGrid.square(
                 backgroundColor: Colors.white,
               ),
             );
           } else {
             return MaterialApp(
+              debugShowCheckedModeBanner: false,
               title: 'Lets Run',
               theme: ThemeData(
                 primarySwatch: Colors.blue,
