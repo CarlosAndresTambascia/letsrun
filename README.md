@@ -1,4 +1,4 @@
-# letsrun
+# Let's run!
 
 This application is the final project of our career as developers.
 
