@@ -21,7 +21,7 @@ class PersonRegisterScreen extends StatefulWidget {
 }
 
 class _PersonRegisterScreen extends State<PersonRegisterScreen> {
-  User _user = new User('', '', '', '', '', false);
+  User _user = new User('', '', '', '', '', false, 0, '');
   bool _passwordVisible = true;
   bool _loading = false;
   File _profilePicture;
@@ -195,9 +195,7 @@ class _PersonRegisterScreen extends State<PersonRegisterScreen> {
   Future<void> _pickImage(ImageSource source) async {
     File selected = await ImagePicker.pickImage(source: source);
     setState(() => _profilePicture = selected);
-    _uploadProfileImage().whenComplete(() {
-      setState(() {});
-    });
+    _uploadProfileImage().catchError((e) => setState(() => _loading = false));
   }
 
   Future _uploadProfileImage() async {

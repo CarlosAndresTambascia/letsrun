@@ -18,7 +18,7 @@ class _NewPostState extends State<NewPost> {
   final double _circleRadius = 100.0;
   final double _circleBorderWidth = 5.0;
   Set<Marker> _markers = {};
-  Post _post = new Post('', 0, 0, 0, 0, '', '', '', DateTime.now(), []);
+  Post _post = new Post('', 0, 0, 0, 0, '', '', '', DateTime.now(), [], '');
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool _loading = false;
   final uuid = Uuid();
@@ -113,15 +113,14 @@ class _NewPostState extends State<NewPost> {
                       decoration: ShapeDecoration(shape: CircleBorder(), color: Colors.white),
                       child: Padding(
                         padding: EdgeInsets.all(_circleBorderWidth),
-                        child: DecoratedBox(
-                          decoration: ShapeDecoration(
-                            shape: CircleBorder(),
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(
-                                HomeScreen.currentAppUser.profilePictureUrl,
-                              ),
-                            ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100.0),
+                          child: FadeInImage(
+                            width: 100,
+                            height: 100,
+                            placeholder: AssetImage('assets/img/defaultProfile.jpg'),
+                            image: NetworkImage(HomeScreen.currentAppUser.profilePictureUrl),
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),

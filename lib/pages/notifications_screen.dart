@@ -92,10 +92,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                             text: TextSpan(
                                               text: namesList[index],
                                               style: TextStyle(
-                                                  fontWeight: FontWeight.bold, color: Colors.black, fontSize: 14.0),
+                                                  fontWeight: FontWeight.bold, color: Colors.black, fontSize: 12.0),
                                               children: [
                                                 TextSpan(
-                                                    text: ' hizo una nueva publicacion.',
+                                                    text: ' hizo un post.',
                                                     style: TextStyle(fontWeight: FontWeight.normal))
                                               ],
                                             ),

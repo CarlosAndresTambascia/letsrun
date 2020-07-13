@@ -56,6 +56,7 @@ class _PostMapState extends State<PostMap> {
     return ModalProgressHUD(
       color: Theme.of(context).primaryColor,
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: Scaffold(
           appBar: AppBar(
             title: Text('Esta es la ruta'),

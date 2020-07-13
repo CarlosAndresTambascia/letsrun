@@ -8,6 +8,7 @@ import 'package:letsrun/pages/maps.dart';
 import 'package:letsrun/pages/person_register_screen.dart';
 import 'package:letsrun/pages/registration_screen.dart';
 import 'package:letsrun/pages/welcome_screen.dart';
+import 'package:letsrun/plugins/Exception.dart';
 import 'package:loading_animations/loading_animations.dart';
 
 void main() => runApp(MyApp());
@@ -22,24 +23,22 @@ class _MyAppState extends State<MyApp> {
   FirebaseUser user;
 
   @override
-  void initState() {
-    super.initState();
-    _getCurrentUser();
-  }
-
-  @override
   Widget build(BuildContext context) {
     WidgetsFlutterBinding.ensureInitialized();
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return FutureBuilder(
-        future: _getCurrentUser(),
+        future: _getCurrentUser(context),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return LoadingBouncingGrid.square(
-              backgroundColor: Colors.white,
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              home: LoadingBouncingGrid.square(
+                backgroundColor: Colors.white,
+              ),
             );
           } else {
             return MaterialApp(
+              debugShowCheckedModeBanner: false,
               title: 'Lets Run',
               theme: ThemeData(
                 primarySwatch: Colors.blue,
@@ -47,7 +46,7 @@ class _MyAppState extends State<MyApp> {
                 accentColor: Color(0XFF233C63),
                 fontFamily: 'Poppins',
               ),
-              initialRoute: user == null ? WelcomeScreen.id : HomeScreen.id,
+              home: user == null ? WelcomeScreen() : HomeScreen(),
               routes: {
                 WelcomeScreen.id: (context) => WelcomeScreen(),
                 LoginScreen.id: (context) => LoginScreen(),
@@ -55,17 +54,20 @@ class _MyAppState extends State<MyApp> {
                 CoachRegisterScreen.id: (context) => CoachRegisterScreen(),
                 PersonRegisterScreen.id: (context) => PersonRegisterScreen(),
                 HomeScreen.id: (context) => HomeScreen(),
-                Maps.id: (context) => Maps(),
-                //ChatScreen.id: (context) => ChatScreen(),
+                Maps.id: (context) => Maps()
               },
             );
           }
         });
   }
 
-  Future<FirebaseUser> _getCurrentUser() {
-    return FirebaseAuth.instance.currentUser().then((actualUser) {
+  Future<FirebaseUser> _getCurrentUser(context) async {
+    return await FirebaseAuth.instance.currentUser().then((actualUser) {
       user = actualUser;
-    }).catchError((e) => print(e));
+    }).catchError((e) {
+      setState(() {
+        Exception.showException(context);
+      });
+    });
   }
 }

@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:letsrun/models/post.dart';
+import 'package:letsrun/models/user.dart';
+import 'package:letsrun/pages/coach_profile_screen.dart';
 import 'package:letsrun/pages/home_screen.dart';
 import 'package:letsrun/pages/post_map.dart';
 import 'package:letsrun/plugins/loading_widget.dart';
@@ -81,8 +83,11 @@ class PostWidget extends StatelessWidget {
                 Stack(alignment: Alignment.topCenter, children: <Widget>[
                   PostDateTime(date: date, post: post),
                   CustomCard(post: post, circleRadius: _circleRadius),
-                  CustomCircularProfileImage(
-                      circleRadius: _circleRadius, circleBorderWidth: _circleBorderWidth, post: post)
+                  GestureDetector(
+                    onTap: () => _goToCoachProfile(context, post.uid),
+                    child: CustomCircularProfileImage(
+                        circleRadius: _circleRadius, circleBorderWidth: _circleBorderWidth, post: post),
+                  )
                 ]),
                 SizedBox(
                   height: 8.0,
@@ -167,8 +172,8 @@ class PostWidget extends StatelessWidget {
     );
   }
 
-  _goToMapWithCoordinates(
-      context, double latitudeStarting, double longitudeStarting, double latitudeEnd, double longitudeEnd) {
+  _goToMapWithCoordinates(BuildContext context, double latitudeStarting, double longitudeStarting, double latitudeEnd,
+      double longitudeEnd) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -180,13 +185,25 @@ class PostWidget extends StatelessWidget {
   Future<bool> _onSubscribe() async {
     if (_isSubscribed) {
       post.assistants.remove(currentUserFullName);
-      await FirestoreManagement().addListener(post.pid, post.assistants);
+      try {
+        await FirestoreManagement().addListener(post.pid, post.assistants);
+      } catch (e) {}
       return false;
     } else {
       post.assistants.add(currentUserFullName);
       await FirestoreManagement().addListener(post.pid, post.assistants);
       return true;
     }
+  }
+
+  _goToCoachProfile(BuildContext context, String uid) async {
+    User coach = await FirestoreManagement().getCoachById(uid);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CoachProfileScreen(coach),
+      ),
+    );
   }
 }
 
@@ -234,15 +251,14 @@ class CustomCircularProfileImage extends StatelessWidget {
       decoration: ShapeDecoration(shape: CircleBorder(), color: Colors.white),
       child: Padding(
         padding: EdgeInsets.all(_circleBorderWidth),
-        child: DecoratedBox(
-          decoration: ShapeDecoration(
-            shape: CircleBorder(),
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: NetworkImage(
-                post.profilePicUrl,
-              ),
-            ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(100.0),
+          child: FadeInImage(
+            width: 100,
+            height: 100,
+            placeholder: AssetImage('assets/img/defaultProfile.jpg'),
+            image: NetworkImage(post.profilePicUrl),
+            fit: BoxFit.cover,
           ),
         ),
       ),
